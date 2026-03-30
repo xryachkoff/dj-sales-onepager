@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dream Job — Генератор One Pager</title>
+  <link rel="stylesheet" href="vendor/fonts/onest.css">
+  <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ========== UPLOAD VIEW ========== -->
+  <div id="uploadView" class="upload-page">
+    <div class="upload-logo">Dream Job</div>
+    <h1 class="upload-title">Генератор Sales One Pager</h1>
+    <p class="upload-subtitle">Загрузите JSON из бота и получите готовый отчёт</p>
+
+    <!-- Instructions -->
+    <div class="instructions">
+      <h3><i class="fas fa-robot" style="color:var(--blue);margin-right:6px;"></i> Как получить данные</h3>
+      <p>Отправьте команду в боте <a href="https://t.me/DJSales_bot" target="_blank">@DJSales_bot</a>:</p>
+      <code>/onepager
+Работодатель: dj_id_работодателя
+Конкуренты: dj_id_1, dj_id_2, dj_id_3
+Квантиль:
+Группа:</code>
+      <p><strong>4 ID компаний:</strong> 1 целевая (на которую делаем отчёт) + 3 конкурента.</p>
+      <p>Конкуренты желательно платящие клиенты DJ — по ним больше данных для сравнения.</p>
+      <p class="note">Квантиль/Группа — необязательные поля. G1 = 10, G5 = 50, G5.5 = 55</p>
+    </div>
+
+    <!-- Error Message -->
+    <div id="errorMsg" class="error-msg"></div>
+
+    <!-- Drop Zone -->
+    <div id="dropZone" class="drop-zone">
+      <input type="file" id="fileInput" accept=".json">
+      <div class="drop-zone-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+      <div class="drop-zone-text" id="dropText">Перетащите JSON файл или нажмите для выбора</div>
+      <div class="drop-zone-hint">Формат: .json из бота /onepager</div>
+    </div>
+
+    <!-- Preview Card -->
+    <div id="previewCard" class="preview-card">
+      <div style="font-size:12px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Отчёт будет по компании</div>
+      <div id="previewCompany" class="preview-company"></div>
+      <div style="font-size:12px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Конкуренты</div>
+      <div id="previewRivals" class="preview-rivals"></div>
+    </div>
+
+    <!-- Generate Button -->
+    <button id="generateBtn" class="generate-btn" disabled>Сделать отчёт</button>
+  </div>
+
+  <!-- ========== REPORT VIEW ========== -->
+  <div id="reportView" class="report-view">
+    <div class="report-toolbar">
+      <div class="report-toolbar-left">
+        <button id="backBtn" class="toolbar-btn"><i class="fas fa-arrow-left" style="margin-right:6px;"></i>Назад</button>
+        <span id="reportCompanyName" style="font-weight:600;color:var(--text-2);font-size:13px;"></span>
+      </div>
+      <button id="exportBtn" class="toolbar-btn primary"><i class="fas fa-download" style="margin-right:6px;"></i>Скачать HTML</button>
+    </div>
+    <div id="reportContainer" class="report-container"></div>
+  </div>
+
+  <script src="vendor/echarts.min.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
