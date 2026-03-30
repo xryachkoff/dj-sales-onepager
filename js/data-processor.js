@@ -59,9 +59,16 @@ export function buildVals(json) {
   const cy = json.category_yandex;
   const ysrc = json.yandex_src ? json.yandex_src.data : null;
 
-  const targetIdx = 0;
-  const rivalIndices = [1, 2, 3];
-  const companyName = rep.name[targetIdx];
+  // Determine target company by target_company_id
+  const targetId = json.target_company_id;
+  const targetIdx = rep.employer_id.indexOf(targetId);
+  if (targetIdx === -1) {
+    throw new Error(`Компания target_company_id=${targetId} не найдена в reputation.data.employer_id`);
+  }
+  const rivalIndices = rep.employer_id
+    .map((_, i) => i)
+    .filter(i => i !== targetIdx);
+  const companyName = json.target_company_name || rep.name[targetIdx];
 
   // Handle both field name variants
   const feedbackKey = rep.total_feedback_pecr !== undefined ? 'total_feedback_pecr' : 'total_feedback_perc';

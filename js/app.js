@@ -86,20 +86,30 @@ function validateData(data) {
   if (missing.length > 0) {
     throw new Error(`Отсутствуют обязательные данные: ${missing.join(', ')}`);
   }
-  if (!data.reputation.data || !data.reputation.data.name || data.reputation.data.name.length < 4) {
-    throw new Error('В данных репутации должно быть 4 компании (целевая + 3 конкурента)');
+  if (!data.target_company_id) {
+    throw new Error('Отсутствует обязательное поле target_company_id');
+  }
+  if (!data.reputation.data || !data.reputation.data.employer_id) {
+    throw new Error('Отсутствуют данные reputation.data.employer_id');
+  }
+  if (data.reputation.data.employer_id.indexOf(data.target_company_id) === -1) {
+    throw new Error(`target_company_id=${data.target_company_id} не найден в reputation.data.employer_id`);
   }
 }
 
 function showPreview(data) {
   const rep = data.reputation.data;
+  const targetId = data.target_company_id;
+  const targetIdx = rep.employer_id.indexOf(targetId);
+  const targetName = data.target_company_name || rep.name[targetIdx];
 
   // Target company
-  previewCompany.textContent = rep.name[0];
+  previewCompany.textContent = targetName;
 
-  // Rivals
+  // Rivals — all except target
   previewRivals.innerHTML = '';
-  for (let i = 1; i <= 3; i++) {
+  rep.employer_id.forEach((id, i) => {
+    if (i === targetIdx) return;
     const isPaying = rep.work[i] === 1;
     const rival = document.createElement('div');
     rival.className = 'preview-rival';
@@ -110,12 +120,12 @@ function showPreview(data) {
       </span>
     `;
     previewRivals.appendChild(rival);
-  }
+  });
 
   // Show card, update drop zone
   previewCard.classList.add('visible');
   dropZone.classList.add('has-file');
-  dropText.textContent = `Файл загружен: ${rep.name[0]}`;
+  dropText.textContent = `Файл загружен: ${targetName}`;
   generateBtn.disabled = false;
 }
 
