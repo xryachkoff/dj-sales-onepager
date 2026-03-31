@@ -248,6 +248,16 @@ body {
   background: var(--blue);
 }
 
+/* ===== Version Tag ===== */
+.version-tag {
+  position: fixed;
+  bottom: 12px;
+  right: 16px;
+  font-size: 11px;
+  color: var(--text-3);
+  opacity: 0.6;
+}
+
 /* ===== Error Message ===== */
 .error-msg {
   background: var(--red-dim);
