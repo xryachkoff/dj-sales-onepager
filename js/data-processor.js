@@ -24,6 +24,7 @@ export function fmtRating(n) {
 }
 
 export function deltaClass(val, invert = false) {
+  if (val == null || isNaN(val)) return 'delta-neutral';
   if ((val > 0 && !invert) || (val < 0 && invert)) return 'delta-pos';
   if ((val < 0 && !invert) || (val > 0 && invert)) return 'delta-neg';
   return 'delta-neutral';
@@ -42,6 +43,24 @@ function sortVacancyData(vacancy) {
     month_period: pairs.map(p => p.month),
     vacancy_count: pairs.map(p => p.count)
   };
+}
+
+/** Safe toFixed — returns '—' if value is null/undefined/NaN */
+function safeFix(n, decimals) {
+  if (n == null || isNaN(n)) return '—';
+  return n.toFixed(decimals);
+}
+
+/** Safe delta string with +/- prefix */
+function safeDelta(n, decimals) {
+  if (n == null || isNaN(n)) return '—';
+  return (n >= 0 ? '+' : '') + n.toFixed(decimals);
+}
+
+/** Safe delta with suffix (e.g. ' п.п.') */
+function safeDeltaSuffix(n, decimals, suffix) {
+  if (n == null || isNaN(n)) return '—';
+  return `${n >= 0 ? '+' : ''}${n.toFixed(decimals)}${suffix}`;
 }
 
 // ==================== MAIN FUNCTION ====================
@@ -113,7 +132,7 @@ export function buildVals(json) {
   vals.ind_rating_alltime_ind = fmtRating(ratings.total_rating[1]);
   vals.ind_rating_alltime_payed = fmtRating(ratings.total_rating[2]);
   d = ratings.total_rating[0] - ratings.total_rating[1];
-  vals.delta_rating_alltime = d >= 0 ? `+${d.toFixed(2)}` : d.toFixed(2);
+  vals.delta_rating_alltime = safeDelta(d, 2);
   vals.delta_rating_alltime_class = deltaClass(d);
 
   // Rating 12m
@@ -121,23 +140,23 @@ export function buildVals(json) {
   vals.ind_rating_12m_ind = fmtRating(ratings.rating_year[1]);
   vals.ind_rating_12m_payed = fmtRating(ratings.rating_year[2]);
   d = ratings.rating_year[0] - ratings.rating_year[1];
-  vals.delta_rating_12m = d >= 0 ? `+${d.toFixed(2)}` : d.toFixed(2);
+  vals.delta_rating_12m = safeDelta(d, 2);
   vals.delta_rating_12m_class = deltaClass(d);
 
   // Neg share (invert=true)
-  vals.ind_neg_share_comp = fmtPct(ratings.review_year_neg[0] * 100);
+  vals.ind_neg_share_comp = fmtPct(ratings.review_year_neg[0] == null ? null : ratings.review_year_neg[0] * 100);
   vals.ind_neg_share_ind = fmtPct(ratings.review_year_neg[1] * 100);
   vals.ind_neg_share_payed = fmtPct(ratings.review_year_neg[2] * 100);
-  d = (ratings.review_year_neg[0] - ratings.review_year_neg[1]) * 100;
-  vals.delta_neg_share = `${d >= 0 ? '+' : ''}${d.toFixed(1)} п.п.`;
+  d = (ratings.review_year_neg[0] == null) ? NaN : (ratings.review_year_neg[0] - ratings.review_year_neg[1]) * 100;
+  vals.delta_neg_share = safeDeltaSuffix(d, 1, ' п.п.');
   vals.delta_neg_share_class = deltaClass(d, true);
 
   // Pos share
-  vals.ind_pos_share_comp = fmtPct(ratings.review_year_pos[0] * 100);
+  vals.ind_pos_share_comp = fmtPct(ratings.review_year_pos[0] == null ? null : ratings.review_year_pos[0] * 100);
   vals.ind_pos_share_ind = fmtPct(ratings.review_year_pos[1] * 100);
   vals.ind_pos_share_payed = fmtPct(ratings.review_year_pos[2] * 100);
-  d = (ratings.review_year_pos[0] - ratings.review_year_pos[1]) * 100;
-  vals.delta_pos_share = `${d >= 0 ? '+' : ''}${d.toFixed(1)} п.п.`;
+  d = (ratings.review_year_pos[0] == null) ? NaN : (ratings.review_year_pos[0] - ratings.review_year_pos[1]) * 100;
+  vals.delta_pos_share = safeDeltaSuffix(d, 1, ' п.п.');
   vals.delta_pos_share_class = deltaClass(d);
 
   // Reviews total
@@ -161,7 +180,7 @@ export function buildVals(json) {
   vals.ind_current_rating_ind = fmtRating(ratings.rating_position_one[1]);
   vals.ind_current_rating_payed = fmtRating(ratings.rating_position_one[2]);
   d = ratings.rating_position_one[0] - ratings.rating_position_one[1];
-  vals.delta_current_rating = d >= 0 ? `+${d.toFixed(2)}` : d.toFixed(2);
+  vals.delta_current_rating = safeDelta(d, 2);
   vals.delta_current_rating_class = deltaClass(d);
 
   // Former employees rating
@@ -169,7 +188,7 @@ export function buildVals(json) {
   vals.ind_former_rating_ind = fmtRating(ratings.rating_position_two[1]);
   vals.ind_former_rating_payed = fmtRating(ratings.rating_position_two[2]);
   d = ratings.rating_position_two[0] - ratings.rating_position_two[1];
-  vals.delta_former_rating = d >= 0 ? `+${d.toFixed(2)}` : d.toFixed(2);
+  vals.delta_former_rating = safeDelta(d, 2);
   vals.delta_former_rating_class = deltaClass(d);
 
   // ===== Section 4: Hiring =====
@@ -179,11 +198,11 @@ export function buildVals(json) {
   d = hh.open_vacancies[0] - hh.open_vacancies[1];
   vals.hire_delta_vac = d >= 0 ? `+${fmtNum(d)}` : fmtNum(d);
   vals.hire_delta_vac_class = 'delta-neutral';
-  vals.hire_response_comp = hh.response_stat[0].toFixed(2);
-  vals.hire_response_ind = hh.response_stat[1].toFixed(2);
-  vals.hire_response_payed = hh.response_stat[2].toFixed(2);
+  vals.hire_response_comp = safeFix(hh.response_stat[0], 2);
+  vals.hire_response_ind = safeFix(hh.response_stat[1], 2);
+  vals.hire_response_payed = safeFix(hh.response_stat[2], 2);
   d = hh.response_stat[0] - hh.response_stat[1];
-  vals.hire_delta_response = d >= 0 ? `+${d.toFixed(2)}` : d.toFixed(2);
+  vals.hire_delta_response = safeDelta(d, 2);
   vals.hire_delta_response_class = deltaClass(d);
 
   // ===== Section 5: Traffic =====
@@ -192,10 +211,10 @@ export function buildVals(json) {
     const totalViews = tyData.view_cnt.reduce((a, b) => a + b, 0);
     vals.traffic_views_year = fmtNum(totalViews);
     vals.traffic_new_pct = fmtPct(ty.new_users_percent);
-    vals.traffic_depth = ty.depth.toFixed(2);
-    vals.traffic_depth_avg = cy.depth.toFixed(2);
-    vals.traffic_avg_time = `${ty.avg_time.toFixed(1)} мин`;
-    vals.traffic_avg_time_avg = `${cy.avg_time.toFixed(1)} мин`;
+    vals.traffic_depth = safeFix(ty.depth, 2);
+    vals.traffic_depth_avg = safeFix(cy.depth, 2);
+    vals.traffic_avg_time = ty.avg_time != null ? `${ty.avg_time.toFixed(1)} мин` : '—';
+    vals.traffic_avg_time_avg = cy.avg_time != null ? `${cy.avg_time.toFixed(1)} мин` : '—';
   }
 
   // ===== Section 6: Sources =====
@@ -204,7 +223,7 @@ export function buildVals(json) {
     const srcNames = ysrc.source_category;
     let sourceHh = '0%', sourceDirect = '0%', sourceInternal = '0%';
     srcNames.forEach((name, i) => {
-      const pct = `${srcPercents[i].toFixed(1)}%`;
+      const pct = srcPercents[i] != null ? `${srcPercents[i].toFixed(1)}%` : '0%';
       const lower = name.toLowerCase();
       if (lower.includes('hh') || lower.includes('ссылк')) {
         sourceHh = pct;

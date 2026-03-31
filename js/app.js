@@ -185,12 +185,10 @@ generateBtn.addEventListener('click', async () => {
     reportView.classList.add('visible');
     reportCompanyName.textContent = companyName;
 
-    // Initialize charts
-    setTimeout(() => {
-      if (chartData) {
-        chartInstances = initCharts(chartData);
-      }
-    }, 100);
+    // Initialize charts — retry logic is inside initCharts
+    if (chartData) {
+      chartInstances = initCharts(chartData);
+    }
 
   } catch (err) {
     showError(`Ошибка генерации: ${err.message}`);

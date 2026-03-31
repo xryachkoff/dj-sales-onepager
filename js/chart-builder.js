@@ -22,6 +22,11 @@ const baseAxisStyle = {
   splitLine: { lineStyle: { color: colors.grid } }
 };
 
+/** Safe number — returns 0 for null/NaN */
+function safe(n) {
+  return (n == null || isNaN(n)) ? 0 : +n;
+}
+
 /**
  * Format month string "2025-03-01" or "2025-03" → "2025-03"
  */
@@ -36,20 +41,20 @@ export function buildRadarOption(chartData) {
   const { ratings, ratingAll } = chartData;
 
   const radarComp = [
-    +ratings.total_rating[0].toFixed(2),
-    +ratings.rating_year[0].toFixed(2),
-    +ratings.review_year_pos[0].toFixed(3),
-    +(ratings.reviews_count[0] / 1000).toFixed(3),
-    +ratings.rating_position_one[0].toFixed(2),
-    +ratings.rating_position_two[0].toFixed(2),
+    +safe(ratings.total_rating[0]).toFixed(2),
+    +safe(ratings.rating_year[0]).toFixed(2),
+    +safe(ratings.review_year_pos[0]).toFixed(3),
+    +(safe(ratings.reviews_count[0]) / 1000).toFixed(3),
+    +safe(ratings.rating_position_one[0]).toFixed(2),
+    +safe(ratings.rating_position_two[0]).toFixed(2),
   ];
   const radarInd = [
-    +ratings.total_rating[1].toFixed(2),
-    +ratings.rating_year[1].toFixed(2),
-    +ratings.review_year_pos[1].toFixed(3),
-    +(ratings.reviews_count[1] / 1000).toFixed(3),
-    +ratings.rating_position_one[1].toFixed(2),
-    +ratings.rating_position_two[1].toFixed(2),
+    +safe(ratings.total_rating[1]).toFixed(2),
+    +safe(ratings.rating_year[1]).toFixed(2),
+    +safe(ratings.review_year_pos[1]).toFixed(3),
+    +(safe(ratings.reviews_count[1]) / 1000).toFixed(3),
+    +safe(ratings.rating_position_one[1]).toFixed(2),
+    +safe(ratings.rating_position_two[1]).toFixed(2),
   ];
 
   // Adjust radar max for reviews
@@ -228,7 +233,33 @@ export function buildTrafficOption(chartData) {
 }
 
 /**
+ * Initialize a single chart with retry logic.
+ * Waits until the container has visible dimensions before initializing.
+ */
+function initChartWithRetry(el, optionBuilder, chartData, charts, maxRetries = 10) {
+  let attempts = 0;
+  function tryInit() {
+    attempts++;
+    if (el.offsetWidth > 0 && el.offsetHeight > 0) {
+      try {
+        const chart = echarts.init(el);
+        chart.setOption(optionBuilder(chartData));
+        charts.push(chart);
+      } catch (e) {
+        console.warn('Chart init error:', e);
+      }
+    } else if (attempts < maxRetries) {
+      requestAnimationFrame(tryInit);
+    } else {
+      console.warn('Chart container not visible after retries:', el.id);
+    }
+  }
+  tryInit();
+}
+
+/**
  * Initialize all charts in the DOM after report HTML is injected.
+ * Uses retry logic to ensure containers have proper dimensions.
  * Returns chart instances for cleanup.
  */
 export function initCharts(chartData) {
@@ -236,23 +267,17 @@ export function initCharts(chartData) {
 
   const radarEl = document.getElementById('chart-industry-radar');
   if (radarEl) {
-    const chart = echarts.init(radarEl);
-    chart.setOption(buildRadarOption(chartData));
-    charts.push(chart);
+    initChartWithRetry(radarEl, buildRadarOption, chartData, charts);
   }
 
   const hiringEl = document.getElementById('chart-hiring-dynamics');
   if (hiringEl) {
-    const chart = echarts.init(hiringEl);
-    chart.setOption(buildHiringOption(chartData));
-    charts.push(chart);
+    initChartWithRetry(hiringEl, buildHiringOption, chartData, charts);
   }
 
   const trafficEl = document.getElementById('chart-traffic');
-  if (trafficEl) {
-    const chart = echarts.init(trafficEl);
-    chart.setOption(buildTrafficOption(chartData));
-    charts.push(chart);
+  if (trafficEl && chartData.tyData) {
+    initChartWithRetry(trafficEl, buildTrafficOption, chartData, charts);
   }
 
   // Resize handler
@@ -268,17 +293,35 @@ export function initCharts(chartData) {
 export function generateChartScript(chartData) {
   const radarOpt = JSON.stringify(buildRadarOption(chartData));
   const hiringOpt = JSON.stringify(buildHiringOption(chartData));
-  const trafficOpt = JSON.stringify(buildTrafficOption(chartData));
+
+  let trafficInit = '';
+  if (chartData.tyData) {
+    const trafficOpt = JSON.stringify(buildTrafficOption(chartData));
+    trafficInit = `
+  var trafficEl = document.getElementById('chart-traffic');
+  if (trafficEl) { var c3 = echarts.init(trafficEl); c3.setOption(${trafficOpt}); window.addEventListener('resize', function() { c3.resize(); }); }`;
+  }
 
   return `
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var radarEl = document.getElementById('chart-industry-radar');
-  if (radarEl) { var c = echarts.init(radarEl); c.setOption(${radarOpt}); window.addEventListener('resize', function() { c.resize(); }); }
-  var hiringEl = document.getElementById('chart-hiring-dynamics');
-  if (hiringEl) { var c2 = echarts.init(hiringEl); c2.setOption(${hiringOpt}); window.addEventListener('resize', function() { c2.resize(); }); }
-  var trafficEl = document.getElementById('chart-traffic');
-  if (trafficEl) { var c3 = echarts.init(trafficEl); c3.setOption(${trafficOpt}); window.addEventListener('resize', function() { c3.resize(); }); }
+  function initWhenReady(el, opt) {
+    if (!el) return;
+    var attempts = 0;
+    function tryInit() {
+      attempts++;
+      if (el.offsetWidth > 0 && el.offsetHeight > 0) {
+        var c = echarts.init(el);
+        c.setOption(opt);
+        window.addEventListener('resize', function() { c.resize(); });
+      } else if (attempts < 20) {
+        requestAnimationFrame(tryInit);
+      }
+    }
+    tryInit();
+  }
+  initWhenReady(document.getElementById('chart-industry-radar'), ${radarOpt});
+  initWhenReady(document.getElementById('chart-hiring-dynamics'), ${hiringOpt});${trafficInit}
 });
 <\/script>`;
 }
