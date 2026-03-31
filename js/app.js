@@ -2,7 +2,7 @@
  * App.js — Main application module: upload, report generation, export.
  */
 import { buildVals } from './data-processor.js';
-import { fillTemplate, cleanUnfilledPlaceholders, injectResources } from './template-engine.js';
+import { fillTemplate, cleanUnfilledPlaceholders, injectResources, injectResourcesInline } from './template-engine.js';
 import { initCharts, generateChartScript } from './chart-builder.js';
 
 // State
@@ -217,45 +217,49 @@ backBtn.addEventListener('click', () => {
 
 // ==================== EXPORT ====================
 
-exportBtn.addEventListener('click', () => {
+exportBtn.addEventListener('click', async () => {
   if (!filledHtml || !chartData) return;
 
-  // Build export HTML with CDN resources and embedded chart scripts
-  let exportHtml = filledHtml;
+  exportBtn.disabled = true;
+  exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i>Сборка...';
 
-  // Re-fetch template and fill again with CDN paths for export
-  fetch('template/report-template.html')
-    .then(r => r.text())
-    .then(template => {
-      const result = buildVals(parsedData);
-      const vals = result.vals;
+  try {
+    // Re-fetch template and fill
+    const response = await fetch('template/report-template.html');
+    if (!response.ok) throw new Error('Не удалось загрузить шаблон');
+    let template = await response.text();
 
-      template = fillTemplate(template, vals);
-      const cleaned = cleanUnfilledPlaceholders(template);
-      template = cleaned.html;
+    const result = buildVals(parsedData);
+    const vals = result.vals;
 
-      // CDN resources for export
-      template = injectResources(template, 'cdn');
+    template = fillTemplate(template, vals);
+    const cleaned = cleanUnfilledPlaceholders(template);
+    template = cleaned.html;
 
-      // Inject chart scripts
-      const chartScript = generateChartScript(chartData);
-      template = template.replace('{{CHART_SCRIPTS}}', chartScript);
+    // Embed all resources inline (fonts, CSS, JS — fully self-contained)
+    template = await injectResourcesInline(template);
 
-      // Download
-      const blob = new Blob([template], { type: 'text/html;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${companyName} - Sales One Pager.html`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    })
-    .catch(err => {
-      console.error('Export error:', err);
-      alert('Ошибка при экспорте: ' + err.message);
-    });
+    // Inject chart scripts
+    const chartScript = generateChartScript(chartData);
+    template = template.replace('{{CHART_SCRIPTS}}', chartScript);
+
+    // Download
+    const blob = new Blob([template], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${companyName} - Sales One Pager.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error('Export error:', err);
+    alert('Ошибка при экспорте: ' + err.message);
+  } finally {
+    exportBtn.disabled = false;
+    exportBtn.innerHTML = '<i class="fas fa-download" style="margin-right:6px;"></i>Скачать HTML';
+  }
 });
 
 // ==================== HELPERS ====================
