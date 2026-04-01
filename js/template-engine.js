@@ -134,10 +134,14 @@ async function buildInlineFACss() {
   const woff2Refs = [...cssText.matchAll(/url\([^)]*?(fa-[^)]+?\.woff2)[^)]*?\)/g)];
   const uniqueFiles = [...new Set(woff2Refs.map(m => m[1]))];
 
-  // Fetch all woff2 files in parallel
+  // Fetch all woff2 files in parallel (skip missing files like fa-v4compatibility)
   const base64Map = {};
   await Promise.all(uniqueFiles.map(async (filename) => {
-    base64Map[filename] = await fetchBase64(`vendor/fontawesome/webfonts/${filename}`);
+    try {
+      base64Map[filename] = await fetchBase64(`vendor/fontawesome/webfonts/${filename}`);
+    } catch (e) {
+      console.warn(`Skipping missing font: ${filename}`);
+    }
   }));
 
   // Replace url references with data URIs
