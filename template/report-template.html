@@ -450,12 +450,22 @@
     border: 1px solid var(--border);
   }
   .position-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-size: 13px;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 16px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--border);
+  }
+  .position-card-rating {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    white-space: nowrap;
+    margin-left: 8px;
   }
   .topic-row {
     margin-bottom: 14px;
@@ -1080,7 +1090,7 @@
     <div class="position-cards-grid">
       <!-- Position 1 -->
       <div class="position-card">
-        <div class="position-card-header">{{pos1_name}}</div>
+        <div class="position-card-header"><span>{{pos1_name}}</span><span class="position-card-rating">★ {{pos1_rating}}</span></div>
         <div class="topic-row">
           <div class="topic-row-top">
             <span class="topic-row-name">{{pos1_topic1_name}}</span>
@@ -1107,7 +1117,7 @@
 
       <!-- Position 2 -->
       <div class="position-card">
-        <div class="position-card-header">{{pos2_name}}</div>
+        <div class="position-card-header"><span>{{pos2_name}}</span><span class="position-card-rating">★ {{pos2_rating}}</span></div>
         <div class="topic-row">
           <div class="topic-row-top">
             <span class="topic-row-name">{{pos2_topic1_name}}</span>
@@ -1134,7 +1144,7 @@
 
       <!-- Position 3 -->
       <div class="position-card">
-        <div class="position-card-header">{{pos3_name}}</div>
+        <div class="position-card-header"><span>{{pos3_name}}</span><span class="position-card-rating">★ {{pos3_rating}}</span></div>
         <div class="topic-row">
           <div class="topic-row-top">
             <span class="topic-row-name">{{pos3_topic1_name}}</span>
@@ -1161,7 +1171,7 @@
 
       <!-- Position 4 -->
       <div class="position-card">
-        <div class="position-card-header">{{pos4_name}}</div>
+        <div class="position-card-header"><span>{{pos4_name}}</span><span class="position-card-rating">★ {{pos4_rating}}</span></div>
         <div class="topic-row">
           <div class="topic-row-top">
             <span class="topic-row-name">{{pos4_topic1_name}}</span>
@@ -1188,7 +1198,7 @@
 
       <!-- Position 5 -->
       <div class="position-card">
-        <div class="position-card-header">{{pos5_name}}</div>
+        <div class="position-card-header"><span>{{pos5_name}}</span><span class="position-card-rating">★ {{pos5_rating}}</span></div>
         <div class="topic-row">
           <div class="topic-row-top">
             <span class="topic-row-name">{{pos5_topic1_name}}</span>

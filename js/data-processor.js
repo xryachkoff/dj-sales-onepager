@@ -248,9 +248,11 @@ export function buildVals(json) {
   if (topic.vacancy_name) {
     const positions = topic.vacancy_name;
     const topicsList = topic['0'] || topic.topics || [];
+    const posRatings = topic.total_rating || [];
     positions.forEach((pos, idx) => {
       const i = idx + 1;
       vals[`pos${i}_name`] = pos;
+      vals[`pos${i}_rating`] = posRatings[idx] != null ? posRatings[idx].toFixed(2) : '—';
       const topicsDict = topicsList[idx] || {};
       const sorted = Object.entries(topicsDict).sort((a, b) => b[1] - a[1]);
       for (let j = 1; j <= 3; j++) {
