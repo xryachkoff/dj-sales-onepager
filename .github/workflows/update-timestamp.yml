@@ -1,0 +1,25 @@
+name: Update version timestamp
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '.github/**'
+
+jobs:
+  update-timestamp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update timestamp in index.html
+        run: |
+          STAMP=$(TZ=Europe/Moscow date '+%d.%m.%Y %H:%M')
+          sed -i "s/Обновлено: .* MSK/Обновлено: ${STAMP} MSK/" index.html
+          echo "Updated to ${STAMP} MSK"
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet index.html || (git add index.html && git commit -m "Update version timestamp [skip ci]" && git push)
