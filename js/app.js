@@ -298,6 +298,7 @@ exportPdfBtn.addEventListener('click', async () => {
     const printWindow = window.open('', '_blank');
     printWindow.document.write(template);
     printWindow.document.close();
+    printWindow.document.title = `${companyName} - Sales One Pager`;
 
     // Wait for charts to render, then print
     printWindow.onload = () => {

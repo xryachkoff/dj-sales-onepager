@@ -765,11 +765,18 @@
     @page { size: A4 landscape; margin: 10mm; }
     body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     .page { padding: 0; max-width: 100%; }
+    .header { padding: 30px 0 20px; margin-bottom: 30px; }
     .slide { page-break-after: always; padding: 20px 0; }
     .slide:last-child { page-break-after: auto; }
     .divider { display: none; }
     .chart-box { height: 260px !important; }
     .ai-conclusion details[open] .ai-conclusion-body { display: block; }
+    .card-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .card-grid-3 { grid-template-columns: 1fr; }
+    .ai-conclusion, .chart-container, .data-table,
+    .kpi-card, .tariff-card, .source-card, .result-card,
+    .position-card { page-break-inside: avoid; }
+    .tooltip-hint-print { display: inline !important; }
   }
 
 </style>
@@ -782,9 +789,8 @@
   <!-- ========== HEADER ========== -->
   <div class="header">
     <div class="header-logo">Dream Job</div>
-    <h1>Эффективный найм и управление<br>HR-брендом через отзывы</h1>
+    <h1>Эффективный найм и управление<br>HR-брендом для {{company_name}}</h1>
     <div class="header-sub">Персонализированный отчёт по данным Dream Job</div>
-    <div class="header-company">{{company_name}}</div>
     <div style="margin-top:10px;color:var(--text-3);font-size:13px;">{{report_date}}</div>
   </div>
 
@@ -910,7 +916,7 @@
         <div class="data-cell">Компания</div>
         <div class="data-cell">Индустрия</div>
         <div class="data-cell">DJ клиенты</div>
-        <div class="data-cell tooltip-cell">Разница<span class="tooltip-text">Разница между вашей компанией и средним по индустрии</span></div>
+        <div class="data-cell tooltip-cell">Разница <span class="tooltip-hint-print" style="display:none;font-size:10px;font-weight:400;color:var(--text-3);">(vs индустрия)</span><span class="tooltip-text">Разница между вашей компанией и средним по индустрии</span></div>
       </div>
       <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
         <div class="data-cell">Оценка за все время</div>
@@ -1002,7 +1008,7 @@
         <div class="data-cell">Компания</div>
         <div class="data-cell">Индустрия</div>
         <div class="data-cell">DJ клиенты</div>
-        <div class="data-cell tooltip-cell">Разница<span class="tooltip-text">Разница между вашей компанией и средним по индустрии</span></div>
+        <div class="data-cell tooltip-cell">Разница <span class="tooltip-hint-print" style="display:none;font-size:10px;font-weight:400;color:var(--text-3);">(vs индустрия)</span><span class="tooltip-text">Разница между вашей компанией и средним по индустрии</span></div>
       </div>
       <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
         <div class="data-cell">Открытые вакансии сейчас</div>

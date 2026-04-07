@@ -68,11 +68,12 @@ export function buildRadarOption(chartData) {
   return {
     tooltip: {},
     legend: {
-      bottom: 0,
+      bottom: 8,
       textStyle: { color: colors.text2, fontSize: 11 },
       data: ['Компания', 'Индустрия']
     },
     radar: {
+      center: ['50%', '45%'],
       indicator: [
         { name: 'Рейтинг (все)', max: 5 },
         { name: 'Рейтинг (12 мес)', max: 5 },
