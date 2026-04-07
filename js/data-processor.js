@@ -98,6 +98,7 @@ export function buildVals(json) {
 
   // ===== General =====
   vals.company_name = companyName;
+  vals.company_url = `https://dreamjob.ru/employers/${rep.employer_id[targetIdx]}`;
   vals.report_date = formatRussianDate(new Date());
 
   // ===== Section 2: Reputation =====
@@ -112,6 +113,7 @@ export function buildVals(json) {
   rivalIndices.forEach((ri, idx) => {
     const i = idx + 1;
     vals[`rival${i}_name`] = rep.name[ri];
+    vals[`rival${i}_url`] = `https://dreamjob.ru/employers/${rep.employer_id[ri]}`;
     vals[`rival${i}_vacancies`] = fmtNum(rep.open_vacancies[ri]);
     vals[`rival${i}_rating`] = fmtRating(rep.total_rating[ri]);
     vals[`rival${i}_reviews`] = fmtNum(rep.reviews_count[ri]);
@@ -221,20 +223,20 @@ export function buildVals(json) {
   if (ysrc) {
     const srcPercents = ysrc.percent;
     const srcNames = ysrc.source_category;
-    let sourceHh = '0%', sourceDirect = '0%', sourceInternal = '0%';
+    let sourceHh = '0%', sourceSearch = '0%', sourceInternal = '0%';
     srcNames.forEach((name, i) => {
       const pct = srcPercents[i] != null ? `${srcPercents[i].toFixed(1)}%` : '0%';
       const lower = name.toLowerCase();
       if (lower.includes('hh') || lower.includes('ссылк')) {
         sourceHh = pct;
       } else if (lower.includes('поиск')) {
-        sourceDirect = pct;
+        sourceSearch = pct;
       } else if (lower.includes('внутренн')) {
         sourceInternal = pct;
       }
     });
     vals.source_hh_pct = sourceHh;
-    vals.source_direct_pct = sourceDirect;
+    vals.source_search_pct = sourceSearch;
     vals.source_internal_pct = sourceInternal;
   }
 

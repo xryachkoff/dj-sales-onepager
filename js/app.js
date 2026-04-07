@@ -27,6 +27,7 @@ const reportContainer = document.getElementById('reportContainer');
 const reportCompanyName = document.getElementById('reportCompanyName');
 const backBtn = document.getElementById('backBtn');
 const exportBtn = document.getElementById('exportBtn');
+const exportPdfBtn = document.getElementById('exportPdfBtn');
 
 // ==================== FILE UPLOAD ====================
 
@@ -259,6 +260,57 @@ exportBtn.addEventListener('click', async () => {
   } finally {
     exportBtn.disabled = false;
     exportBtn.innerHTML = '<i class="fas fa-download" style="margin-right:6px;"></i>Скачать HTML';
+  }
+});
+
+// ==================== PDF EXPORT ====================
+
+exportPdfBtn.addEventListener('click', async () => {
+  if (!filledHtml || !chartData) return;
+
+  exportPdfBtn.disabled = true;
+  exportPdfBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i>Сборка PDF...';
+
+  try {
+    // Re-fetch template and fill
+    const response = await fetch('template/report-template.html');
+    if (!response.ok) throw new Error('Не удалось загрузить шаблон');
+    let template = await response.text();
+
+    const result = buildVals(parsedData);
+    const vals = result.vals;
+
+    template = fillTemplate(template, vals);
+    const cleaned = cleanUnfilledPlaceholders(template);
+    template = cleaned.html;
+
+    // Embed all resources inline
+    template = await injectResourcesInline(template);
+
+    // Inject chart scripts with light theme colors
+    const chartScript = generateChartScript(chartData, true);
+    template = template.replace('{{CHART_SCRIPTS}}', chartScript);
+
+    // Add light-theme class to body
+    template = template.replace('<body>', '<body class="light-theme">');
+
+    // Open in new window and trigger print
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(template);
+    printWindow.document.close();
+
+    // Wait for charts to render, then print
+    printWindow.onload = () => {
+      setTimeout(() => {
+        printWindow.print();
+      }, 1500);
+    };
+  } catch (err) {
+    console.error('PDF export error:', err);
+    alert('Ошибка при экспорте PDF: ' + err.message);
+  } finally {
+    exportPdfBtn.disabled = false;
+    exportPdfBtn.innerHTML = '<i class="fas fa-file-pdf" style="margin-right:6px;"></i>Скачать PDF';
   }
 });
 

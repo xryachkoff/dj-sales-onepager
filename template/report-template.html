@@ -37,6 +37,28 @@
     --radius-sm: 10px;
   }
 
+  /* ===== LIGHT THEME ===== */
+  .light-theme {
+    --bg: #ffffff;
+    --surface: #f5f5f7;
+    --card: #ffffff;
+    --card2: #f0f0f5;
+    --border: rgba(0,0,0,0.10);
+    --border-hover: rgba(0,0,0,0.18);
+    --text: #1a1a2e;
+    --text-2: #5a5a6c;
+    --text-3: #9a9aac;
+    --blue: #2563EB;
+    --blue-bright: #3B82F6;
+    --blue-glow: rgba(37,99,235,0.10);
+    --green: #16A34A;
+    --green-dim: rgba(22,163,74,0.10);
+    --amber: #D97706;
+    --amber-dim: rgba(217,119,6,0.10);
+    --red: #DC2626;
+    --red-dim: rgba(220,38,38,0.10);
+  }
+
   html { scroll-behavior: smooth; }
 
   body {
@@ -305,6 +327,44 @@
     height: 320px;
   }
 
+  /* ===== DJ LINKS ===== */
+  .dj-link {
+    color: var(--text);
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+  }
+  .dj-link:hover {
+    color: var(--blue-bright);
+  }
+
+  /* ===== TOOLTIPS ===== */
+  .tooltip-cell {
+    position: relative;
+    cursor: help;
+  }
+  .tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    right: 0;
+    background: var(--card2);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 400;
+    white-space: nowrap;
+    z-index: 10;
+    border: 1px solid var(--border);
+    transition: opacity 0.15s;
+    pointer-events: none;
+  }
+  .tooltip-cell:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
+
   /* ===== DELTA BADGES ===== */
   .delta-badge {
     display: inline-block;
@@ -334,6 +394,9 @@
     border-radius: var(--radius);
     padding: 24px;
   }
+  .ai-conclusion details { border: none; }
+  .ai-conclusion details summary { list-style: none; cursor: pointer; }
+  .ai-conclusion details summary::-webkit-details-marker { display: none; }
   .ai-conclusion-header {
     display: flex;
     align-items: center;
@@ -342,8 +405,17 @@
     font-weight: 600;
     color: var(--blue-bright);
     font-size: 14px;
+    user-select: none;
   }
   .ai-conclusion-header i { font-size: 16px; }
+  .ai-toggle-icon {
+    margin-left: auto;
+    transition: transform 0.2s;
+    font-size: 12px !important;
+  }
+  details:not([open]) .ai-toggle-icon {
+    transform: rotate(180deg);
+  }
   .ai-conclusion-body {
     color: var(--text);
     font-size: 14px;
@@ -688,6 +760,18 @@
     .pain-grid { grid-template-columns: 1fr; }
   }
 
+  /* ===== PRINT / PDF ===== */
+  @media print {
+    @page { size: A4 landscape; margin: 10mm; }
+    body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 0; max-width: 100%; }
+    .slide { page-break-after: always; padding: 20px 0; }
+    .slide:last-child { page-break-after: auto; }
+    .divider { display: none; }
+    .chart-box { height: 260px !important; }
+    .ai-conclusion details[open] .ai-conclusion-body { display: block; }
+  }
+
 </style>
 
 <body>
@@ -750,10 +834,10 @@
         <div class="data-cell">Отзывы</div>
         <div class="data-cell">Работа с отзывами</div>
         <div class="data-cell">% ответов</div>
-        <div class="data-cell">% нерек.</div>
+        <div class="data-cell">% не рекомендуют</div>
       </div>
       <div class="data-row company-row">
-        <div class="data-cell"><strong>{{company_name}}</strong></div>
+        <div class="data-cell"><strong><a href="{{company_url}}" target="_blank" class="dj-link">{{company_name}}</a></strong></div>
         <div class="data-cell">{{comp_vacancies}}</div>
         <div class="data-cell">{{comp_rating}}</div>
         <div class="data-cell">{{comp_reviews}}</div>
@@ -762,7 +846,7 @@
         <div class="data-cell">{{comp_notrec_pct}}</div>
       </div>
       <div class="data-row">
-        <div class="data-cell">{{rival1_name}}</div>
+        <div class="data-cell"><a href="{{rival1_url}}" target="_blank" class="dj-link">{{rival1_name}}</a></div>
         <div class="data-cell">{{rival1_vacancies}}</div>
         <div class="data-cell">{{rival1_rating}}</div>
         <div class="data-cell">{{rival1_reviews}}</div>
@@ -771,7 +855,7 @@
         <div class="data-cell">{{rival1_notrec_pct}}</div>
       </div>
       <div class="data-row">
-        <div class="data-cell">{{rival2_name}}</div>
+        <div class="data-cell"><a href="{{rival2_url}}" target="_blank" class="dj-link">{{rival2_name}}</a></div>
         <div class="data-cell">{{rival2_vacancies}}</div>
         <div class="data-cell">{{rival2_rating}}</div>
         <div class="data-cell">{{rival2_reviews}}</div>
@@ -780,7 +864,7 @@
         <div class="data-cell">{{rival2_notrec_pct}}</div>
       </div>
       <div class="data-row">
-        <div class="data-cell">{{rival3_name}}</div>
+        <div class="data-cell"><a href="{{rival3_url}}" target="_blank" class="dj-link">{{rival3_name}}</a></div>
         <div class="data-cell">{{rival3_vacancies}}</div>
         <div class="data-cell">{{rival3_rating}}</div>
         <div class="data-cell">{{rival3_reviews}}</div>
@@ -801,8 +885,10 @@
 
     <!-- AI Conclusion -->
     <div class="ai-conclusion">
-      <div class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты</div>
-      <div class="ai-conclusion-body">{{ai_conclusion_reputation}}</div>
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_reputation}}</div>
+      </details>
     </div>
 
   </section>
@@ -824,7 +910,7 @@
         <div class="data-cell">Компания</div>
         <div class="data-cell">Индустрия</div>
         <div class="data-cell">DJ клиенты</div>
-        <div class="data-cell">Дельта</div>
+        <div class="data-cell tooltip-cell">Разница<span class="tooltip-text">Разница между вашей компанией и средним по индустрии</span></div>
       </div>
       <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
         <div class="data-cell">Оценка за все время</div>
@@ -891,8 +977,10 @@
     </div>
 
     <div class="ai-conclusion">
-      <div class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты</div>
-      <div class="ai-conclusion-body">{{ai_conclusion_industry}}</div>
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_industry}}</div>
+      </details>
     </div>
 
   </section>
@@ -914,7 +1002,7 @@
         <div class="data-cell">Компания</div>
         <div class="data-cell">Индустрия</div>
         <div class="data-cell">DJ клиенты</div>
-        <div class="data-cell">Дельта</div>
+        <div class="data-cell tooltip-cell">Разница<span class="tooltip-text">Разница между вашей компанией и средним по индустрии</span></div>
       </div>
       <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
         <div class="data-cell">Открытые вакансии сейчас</div>
@@ -938,8 +1026,10 @@
     </div>
 
     <div class="ai-conclusion">
-      <div class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты</div>
-      <div class="ai-conclusion-body">{{ai_conclusion_hiring}}</div>
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_hiring}}</div>
+      </details>
     </div>
 
   </section>
@@ -985,8 +1075,10 @@
     </div>
 
     <div class="ai-conclusion">
-      <div class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты</div>
-      <div class="ai-conclusion-body">{{ai_conclusion_traffic}}</div>
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_traffic}}</div>
+      </details>
     </div>
 
   </section>
@@ -1006,21 +1098,21 @@
         <div class="source-pct">{{source_hh_pct}}</div>
         <div class="source-info">
           <h4>Переходы с hh.ru и по ссылкам</h4>
-          <p>Кандидаты, которым понравилась вакансия и которые изучают компанию перед откликом. Самая горячая аудитория.</p>
+          <p>Кандидаты, которым понравилась вакансия на hh.ru, переходят на Dream Job, чтобы изучить отзывы и принять решение об отклике. Самая горячая аудитория.</p>
         </div>
       </div>
       <div class="source-card">
-        <div class="source-pct" style="color:var(--green);">{{source_direct_pct}}</div>
+        <div class="source-pct" style="color:var(--green);">{{source_search_pct}}</div>
         <div class="source-info">
-          <h4>Прямые заходы</h4>
-          <p>Тёплые кандидаты и текущие сотрудники, активно изучающие информацию о компании.</p>
+          <h4>Из поисковых систем</h4>
+          <p>Кандидаты ищут информацию о компании в Яндекс или Google — например, «{{company_name}} отзывы сотрудников» или «работа в {{company_name}}».</p>
         </div>
       </div>
       <div class="source-card">
         <div class="source-pct" style="color:var(--amber);">{{source_internal_pct}}</div>
         <div class="source-info">
           <h4>Внутренние переходы</h4>
-          <p>Навигация внутри Dream Job — пользователи сравнивают вашу компанию с другими.</p>
+          <p>Навигация внутри Dream Job — например, переход через блок «Похожие компании» или сравнение работодателей.</p>
         </div>
       </div>
     </div>
@@ -1035,8 +1127,10 @@
     </div>
 
     <div class="ai-conclusion">
-      <div class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты</div>
-      <div class="ai-conclusion-body">{{ai_conclusion_sources}}</div>
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_sources}}</div>
+      </details>
     </div>
 
   </section>
@@ -1071,8 +1165,10 @@
     </div>
 
     <div class="ai-conclusion">
-      <div class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевой вывод</div>
-      <div class="ai-conclusion-body">{{ai_conclusion_highlights}}</div>
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевой вывод <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_highlights}}</div>
+      </details>
     </div>
 
   </section>
@@ -1225,8 +1321,10 @@
     </div>
 
     <div class="ai-conclusion">
-      <div class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты</div>
-      <div class="ai-conclusion-body">{{ai_conclusion_topics}}</div>
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_topics}}</div>
+      </details>
     </div>
 
   </section>

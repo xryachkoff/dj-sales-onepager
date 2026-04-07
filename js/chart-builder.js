@@ -113,10 +113,10 @@ export function buildRadarOption(chartData) {
  * Build hiring dynamics chart option for Section 4.
  */
 export function buildHiringOption(chartData) {
-  const { vacancy, repCat } = chartData;
+  const { vacancy, hh } = chartData;
   const months = vacancy.month_period.map(fmtMonth);
   const companyData = vacancy.vacancy_count.map(v => Math.round(v));
-  const indAvg = Math.round(repCat.open_vacancies[0]);
+  const indAvg = Math.round(hh.open_vacancies[1]);
   const industryData = months.map(() => indAvg);
 
   return {
@@ -146,11 +146,10 @@ export function buildHiringOption(chartData) {
         name: 'Индустрия (средн.)',
         type: 'line',
         data: industryData,
-        lineStyle: { color: colors.amber, width: 2 },
+        lineStyle: { color: colors.amber, width: 2, type: 'dashed' },
         itemStyle: { color: colors.amber },
-        symbol: 'circle',
-        symbolSize: 6,
-        smooth: true
+        symbol: 'none',
+        smooth: false
       }
     ]
   };
@@ -290,7 +289,7 @@ export function initCharts(chartData) {
 /**
  * Generate the chart initialization script for export (self-contained HTML).
  */
-export function generateChartScript(chartData) {
+export function generateChartScript(chartData, lightTheme = false) {
   const radarOpt = JSON.stringify(buildRadarOption(chartData));
   const hiringOpt = JSON.stringify(buildHiringOption(chartData));
 
@@ -302,12 +301,25 @@ export function generateChartScript(chartData) {
   if (trafficEl) { var c3 = echarts.init(trafficEl); c3.setOption(${trafficOpt}); window.addEventListener('resize', function() { c3.resize(); }); }`;
   }
 
+  // Light theme: patch tooltip and axis colors in the generated script
+  const lightPatch = lightTheme ? `
+  function patchLight(opt) {
+    if (opt.tooltip) { opt.tooltip.backgroundColor = '#ffffff'; opt.tooltip.borderColor = 'rgba(0,0,0,0.1)'; opt.tooltip.textStyle = { color: '#1a1a2e' }; }
+    if (opt.legend) { opt.legend.textStyle = { color: '#5a5a6c', fontSize: 11 }; }
+    if (opt.xAxis) { opt.xAxis.axisLabel = { color: '#5a5a6c', fontSize: 11 }; opt.xAxis.splitLine = { lineStyle: { color: 'rgba(0,0,0,0.06)' } }; opt.xAxis.axisLine = { lineStyle: { color: 'rgba(0,0,0,0.06)' } }; }
+    if (opt.yAxis) { opt.yAxis.axisLabel = { color: '#5a5a6c', fontSize: 11 }; opt.yAxis.splitLine = { lineStyle: { color: 'rgba(0,0,0,0.06)' } }; opt.yAxis.axisLine = { lineStyle: { color: 'rgba(0,0,0,0.06)' } }; }
+    if (opt.radar) { opt.radar.axisName = { color: '#5a5a6c' }; opt.radar.splitLine = { lineStyle: { color: 'rgba(0,0,0,0.08)' } }; opt.radar.splitArea = { areaStyle: { color: ['rgba(0,0,0,0.02)', 'rgba(0,0,0,0.04)'] } }; }
+    return opt;
+  }` : '';
+
+  const patchCall = lightTheme ? 'opt = patchLight(opt); ' : '';
+
   return `
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {${lightPatch}
   function initWhenReady(el, opt) {
     if (!el) return;
-    var attempts = 0;
+    ${patchCall}var attempts = 0;
     function tryInit() {
       attempts++;
       if (el.offsetWidth > 0 && el.offsetHeight > 0) {
