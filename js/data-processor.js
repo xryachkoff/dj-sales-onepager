@@ -251,6 +251,16 @@ export function buildVals(json) {
     const positions = topic.vacancy_name;
     const topicsList = topic['0'] || topic.topics || [];
     const posRatings = topic.total_rating || [];
+
+    // Average rating across open vacancies
+    const validRatings = posRatings.filter(r => r != null && !isNaN(r));
+    if (validRatings.length > 0) {
+      const avg = validRatings.reduce((s, v) => s + v, 0) / validRatings.length;
+      vals.topic_avg_rating = avg.toFixed(1).replace('.', ',');
+    } else {
+      vals.topic_avg_rating = '—';
+    }
+
     positions.forEach((pos, idx) => {
       const i = idx + 1;
       vals[`pos${i}_name`] = pos;

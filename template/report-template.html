@@ -153,6 +153,18 @@
     margin-bottom: 24px;
     padding-left: 52px;
   }
+  .topic-avg-line {
+    color: var(--text-2);
+    font-size: 13px;
+    margin-top: -16px;
+    margin-bottom: 24px;
+    padding-left: 52px;
+  }
+  .topic-avg-line strong {
+    color: var(--blue);
+    font-size: 16px;
+    font-weight: 700;
+  }
 
   /* ===== CARDS ===== */
   .card {
@@ -1189,6 +1201,7 @@
       <h2 class="slide-title">О чём говорят сотрудники в открытых отзывах</h2>
     </div>
     <p class="slide-subtitle">Семантический анализ негативных отзывов · топ-3 темы по каждой должности</p>
+    <p class="topic-avg-line"><strong>{{topic_avg_rating}}</strong> рейтинг DJ у ваших открытых вакансий</p>
 
     <div class="position-cards-grid">
       <!-- Position 1 -->
