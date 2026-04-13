@@ -294,8 +294,8 @@ exportPdfBtn.addEventListener('click', async () => {
     // Add light-theme class to body
     template = template.replace('<body>', '<body class="light-theme">');
 
-    // Open in new window and trigger print
-    const printWindow = window.open('', '_blank');
+    // Open in full-size window so CSS grids render correctly before print
+    const printWindow = window.open('', '_blank', `width=${screen.width},height=${screen.height}`);
     printWindow.document.write(template);
     printWindow.document.close();
     printWindow.document.title = `${companyName} - Sales One Pager`;
