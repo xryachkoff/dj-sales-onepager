@@ -774,20 +774,81 @@
 
   /* ===== PRINT / PDF ===== */
   @media print {
-    @page { size: A4 landscape; margin: 10mm; }
-    body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @page { size: A4 landscape; margin: 8mm; }
+    body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 12px; }
     .page { padding: 0; max-width: 100%; }
-    .header { padding: 30px 0 20px; margin-bottom: 30px; }
-    .slide { page-break-after: always; padding: 20px 0; }
+
+    /* Header compact */
+    .header { padding: 20px 0 16px; margin-bottom: 20px; }
+
+    /* Slides: each on its own page, compact padding */
+    .slide { page-break-after: always; padding: 12px 0; }
     .slide:last-child { page-break-after: auto; }
     .divider { display: none; }
-    .chart-box { height: 260px !important; }
-    .ai-conclusion details[open] .ai-conclusion-body { display: block; }
-    .card-grid-4 { grid-template-columns: repeat(2, 1fr); }
-    .card-grid-3 { grid-template-columns: 1fr; }
+
+    /* Tighter spacing */
+    .slide-header { margin-bottom: 8px; }
+    .slide-subtitle { margin-bottom: 12px; margin-top: -14px; font-size: 12px; }
+    .slide-title { font-size: 20px; }
+    .slide-number { font-size: 16px; width: 36px; height: 36px; line-height: 36px; }
+
+    /* AI conclusions: collapsed in PDF to save space */
+    .ai-conclusion details[open] > .ai-conclusion-body { display: none; }
+    .ai-conclusion .ai-conclusion-header { font-size: 11px; padding: 6px 12px; }
+    .ai-conclusion .ai-toggle-icon { display: none; }
+
+    /* Charts smaller */
+    .chart-box { height: 220px !important; }
+    .chart-container { margin-top: 10px !important; }
+
+    /* Tables compact */
+    .data-row { padding: 6px 0; font-size: 12px; }
+    .data-table { margin-bottom: 10px; }
+
+    /* Cards compact */
+    .card { padding: 14px; margin-bottom: 10px; }
+    .kpi-card { padding: 12px; }
+    .kpi-value { font-size: 22px; }
+    .kpi-label { font-size: 11px; }
+
+    /* Grids */
+    .card-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .card-grid-3 { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+
+    /* Tariff cards compact */
+    .tariff-card { padding: 14px; }
+    .tariff-name { font-size: 14px; }
+    .tariff-price { font-size: 18px; }
+
+    /* Source cards compact */
+    .source-card { padding: 12px 16px; }
+    .source-card p { font-size: 11px; margin-top: 2px; }
+    .source-pct { font-size: 22px; }
+
+    /* Position cards compact */
+    .position-cards-grid { gap: 10px; }
+    .position-card { padding: 10px 12px; }
+    .topic-row { margin-bottom: 4px; }
+
+    /* Summary items compact */
+    .summary-grid { gap: 10px; }
+    .summary-item { padding: 10px 14px; font-size: 12px; }
+
+    /* Results compact */
+    .result-card { padding: 14px; }
+    .result-value { font-size: 24px; }
+
+    /* CTA compact */
+    .cta-section { padding: 16px; margin-top: 14px; }
+
+    /* Prevent page breaks inside blocks */
     .ai-conclusion, .chart-container, .data-table,
     .kpi-card, .tariff-card, .source-card, .result-card,
-    .position-card { page-break-inside: avoid; }
+    .position-card, .summary-grid, .summary-item,
+    .card, .cta-section, .card-grid, .card-grid-3, .card-grid-4,
+    .position-cards-grid { page-break-inside: avoid; }
+
+    /* Tooltip visible in PDF */
     .tooltip-hint-print { display: inline !important; }
   }
 
