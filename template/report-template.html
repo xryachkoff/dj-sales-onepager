@@ -845,12 +845,11 @@
     /* CTA compact */
     .cta-section { padding: 16px; margin-top: 14px; }
 
-    /* Prevent page breaks inside blocks */
+    /* Prevent page breaks inside individual blocks (NOT grid containers) */
     .ai-conclusion, .chart-container, .data-table,
     .kpi-card, .tariff-card, .source-card, .result-card,
-    .position-card, .summary-grid, .summary-item,
-    .card, .cta-section, .card-grid, .card-grid-3, .card-grid-4,
-    .position-cards-grid { page-break-inside: avoid; }
+    .position-card, .summary-item,
+    .card, .cta-section { page-break-inside: avoid; }
 
     /* Tooltip visible in PDF */
     .tooltip-hint-print { display: inline !important; }
