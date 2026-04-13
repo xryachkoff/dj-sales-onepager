@@ -792,10 +792,13 @@
     .slide-title { font-size: 20px; }
     .slide-number { font-size: 16px; width: 36px; height: 36px; line-height: 36px; }
 
-    /* AI conclusions: collapsed in PDF to save space */
-    .ai-conclusion details[open] > .ai-conclusion-body { display: none; }
+    /* AI conclusions: smaller font, allow page break before if needed */
+    .ai-conclusion { font-size: 11px; margin-top: 10px; }
     .ai-conclusion .ai-conclusion-header { font-size: 11px; padding: 6px 12px; }
+    .ai-conclusion .ai-conclusion-body { font-size: 11px; line-height: 1.4; padding: 8px 12px; }
     .ai-conclusion .ai-toggle-icon { display: none; }
+    .ai-conclusion details[open] > .ai-conclusion-body { display: block; }
+    .ai-conclusion { page-break-before: auto; page-break-inside: avoid; }
 
     /* Charts smaller */
     .chart-box { height: 220px !important; }
