@@ -814,10 +814,11 @@
     .kpi-value { font-size: 22px; }
     .kpi-label { font-size: 11px; }
 
-    /* Grids */
-    .card-grid-4 { grid-template-columns: repeat(4, 1fr) !important; gap: 10px; }
-    .card-grid-3 { grid-template-columns: repeat(3, 1fr) !important; gap: 10px; }
-    .card-grid-2 { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
+    /* Grids → flexbox for print (CSS Grid breaks in print engines) */
+    .card-grid { display: flex !important; flex-wrap: wrap; gap: 10px; }
+    .card-grid-4 > * { flex: 1 1 22%; min-width: 0; }
+    .card-grid-3 > * { flex: 1 1 30%; min-width: 0; }
+    .card-grid-2 > * { flex: 1 1 45%; min-width: 0; }
 
     /* Tariff cards compact */
     .tariff-card { padding: 14px; }
@@ -829,13 +830,15 @@
     .source-card p { font-size: 11px; margin-top: 2px; }
     .source-pct { font-size: 22px; }
 
-    /* Position cards compact */
-    .position-cards-grid { gap: 10px; }
+    /* Position cards compact — flexbox for print */
+    .position-cards-grid { display: flex !important; flex-wrap: wrap; gap: 10px; }
+    .position-cards-grid > * { flex: 1 1 30%; min-width: 0; }
     .position-card { padding: 10px 12px; }
     .topic-row { margin-bottom: 4px; }
 
-    /* Summary items compact */
-    .summary-grid { gap: 10px; }
+    /* Summary items compact — flexbox for print */
+    .summary-grid { display: flex !important; flex-wrap: wrap; gap: 10px; }
+    .summary-grid > * { flex: 1 1 45%; min-width: 0; }
     .summary-item { padding: 10px 14px; font-size: 12px; }
 
     /* Results compact */
