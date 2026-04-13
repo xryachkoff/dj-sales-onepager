@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dream Job — Sales One Pager</title>
+{{FONT_CSS}}
+{{FA_CSS}}
+{{ECHARTS_SRC}}
+
+
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #060608;
+    --surface: #0f0f12;
+    --card: #15151a;
+    --card2: #1c1c22;
+    --border: rgba(255,255,255,0.08);
+    --border-hover: rgba(255,255,255,0.15);
+    --text: #ededf0;
+    --text-2: #9a9aac;
+    --text-3: #5a5a6c;
+    --blue: #3B82F6;
+    --blue-bright: #60A5FA;
+    --blue-glow: rgba(59,130,246,0.15);
+    --green: #22C55E;
+    --green-dim: rgba(34,197,94,0.15);
+    --amber: #F59E0B;
+    --amber-dim: rgba(245,158,11,0.15);
+    --red: #EF4444;
+    --red-dim: rgba(239,68,68,0.15);
+    --font-display: 'Onest', system-ui, sans-serif;
+    --font-body: 'Onest', system-ui, sans-serif;
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  /* ===== LIGHT THEME ===== */
+  .light-theme {
+    --bg: #ffffff;
+    --surface: #f5f5f7;
+    --card: #ffffff;
+    --card2: #f0f0f5;
+    --border: rgba(0,0,0,0.10);
+    --border-hover: rgba(0,0,0,0.18);
+    --text: #1a1a2e;
+    --text-2: #5a5a6c;
+    --text-3: #9a9aac;
+    --blue: #2563EB;
+    --blue-bright: #3B82F6;
+    --blue-glow: rgba(37,99,235,0.10);
+    --green: #16A34A;
+    --green-dim: rgba(22,163,74,0.10);
+    --amber: #D97706;
+    --amber-dim: rgba(217,119,6,0.10);
+    --red: #DC2626;
+    --red-dim: rgba(220,38,38,0.10);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 14px;
+    min-height: 100vh;
+  }
+
+  /* ===== LAYOUT ===== */
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 60px;
+  }
+  .header-logo {
+    font-size: 13px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--blue);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-family: var(--font-display);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .header-sub {
+    color: var(--text-2);
+    font-size: 15px;
+  }
+  .header-company {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 20px;
+    background: var(--blue-glow);
+    border: 1px solid rgba(59,130,246,0.3);
+    border-radius: 100px;
+    color: var(--blue-bright);
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  /* ===== SECTIONS ===== */
+  .slide {
+    margin-bottom: 64px;
+    animation: fadeUp 0.5s ease both;
+  }
+  .slide-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .slide-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--blue-glow);
+    color: var(--blue);
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .slide-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text);
+  }
+  .slide-subtitle {
+    color: var(--text-2);
+    font-size: 14px;
+    margin-top: -20px;
+    margin-bottom: 24px;
+    padding-left: 52px;
+  }
+  .topic-avg-line {
+    color: var(--text-2);
+    font-size: 13px;
+    margin-top: -16px;
+    margin-bottom: 24px;
+    padding-left: 52px;
+  }
+  .topic-avg-line strong {
+    color: var(--blue);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--border-hover); }
+
+  .card-grid {
+    display: grid;
+    gap: 16px;
+  }
+  .card-grid-3 { grid-template-columns: repeat(3, 1fr); }
+  .card-grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .card-grid-2 { grid-template-columns: repeat(2, 1fr); }
+
+  /* ===== KPI CARDS ===== */
+  .kpi-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+  }
+  .kpi-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    font-size: 18px;
+  }
+  .kpi-icon.blue { background: var(--blue-glow); color: var(--blue); }
+  .kpi-icon.green { background: var(--green-dim); color: var(--green); }
+  .kpi-icon.amber { background: var(--amber-dim); color: var(--amber); }
+  .kpi-icon.red { background: var(--red-dim); color: var(--red); }
+  .kpi-value {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 6px;
+  }
+  .kpi-label {
+    color: var(--text-2);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  /* ===== DATA TABLE (CSS Grid) ===== */
+  .data-table {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .data-row {
+    display: grid;
+    grid-template-columns: 2fr repeat(6, 1fr);
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    transition: background 0.15s;
+  }
+  .data-row:last-child { border-bottom: none; }
+  .data-row:hover { background: rgba(255,255,255,0.02); }
+  .data-row.header-row {
+    background: var(--surface);
+    font-weight: 600;
+    color: var(--text-2);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .data-row.company-row {
+    background: rgba(59,130,246,0.06);
+    border-left: 3px solid var(--blue);
+    font-weight: 600;
+  }
+  .data-row.industry-row {
+    background: rgba(245,158,11,0.04);
+    border-left: 3px solid var(--amber);
+    font-style: italic;
+    color: var(--text-2);
+  }
+  .data-cell { text-align: center; }
+  .data-cell:first-child { text-align: left; }
+  .badge-yes {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--green-dim);
+    color: var(--green);
+  }
+  .badge-no {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--red-dim);
+    color: var(--red);
+  }
+
+  /* ===== COMPARISON PAIRS ===== */
+  .metric-pair {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+  }
+  .metric-pair-label {
+    font-size: 12px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .metric-pair-values {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+  }
+  .metric-val {
+    text-align: center;
+  }
+  .metric-val .num {
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .metric-val .label {
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: 4px;
+  }
+  .metric-val.company .num { color: var(--blue); }
+  .metric-val.industry .num { color: var(--amber); }
+  .metric-bar {
+    flex: 1;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+  }
+  .metric-bar-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    border-radius: 3px;
+  }
+
+  /* ===== CHART CONTAINERS ===== */
+  .chart-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .chart-box {
+    width: 100%;
+    height: 320px;
+  }
+
+  /* ===== DJ LINKS ===== */
+  .dj-link {
+    color: var(--text);
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+  }
+  .dj-link:hover {
+    color: var(--blue-bright);
+  }
+
+  /* ===== TOOLTIPS ===== */
+  .tooltip-cell {
+    position: relative;
+    cursor: help;
+  }
+  .tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    right: 0;
+    background: var(--card2);
+    color: var(--text);
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 400;
+    white-space: nowrap;
+    z-index: 10;
+    border: 1px solid var(--border);
+    transition: opacity 0.15s;
+    pointer-events: none;
+  }
+  .tooltip-cell:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  /* ===== DELTA BADGES ===== */
+  .delta-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .delta-neg {
+    background: var(--red-dim);
+    color: var(--red);
+  }
+  .delta-pos {
+    background: var(--green-dim);
+    color: var(--green);
+  }
+  .delta-neutral {
+    background: rgba(255,255,255,0.06);
+    color: var(--text-3);
+  }
+
+  /* ===== AI CONCLUSION ===== */
+  .ai-conclusion {
+    margin-top: 24px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(34,197,94,0.05));
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+  .ai-conclusion details { border: none; }
+  .ai-conclusion details summary { list-style: none; cursor: pointer; }
+  .ai-conclusion details summary::-webkit-details-marker { display: none; }
+  .ai-conclusion-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    font-weight: 600;
+    color: var(--blue-bright);
+    font-size: 14px;
+    user-select: none;
+  }
+  .ai-conclusion-header i { font-size: 16px; }
+  .ai-toggle-icon {
+    margin-left: auto;
+    transition: transform 0.2s;
+    font-size: 12px !important;
+  }
+  details:not([open]) .ai-toggle-icon {
+    transform: rotate(180deg);
+  }
+  .ai-conclusion-body {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .ai-conclusion-body ul {
+    list-style: none;
+    padding: 0;
+  }
+  .ai-conclusion-body li {
+    padding: 6px 0 6px 20px;
+    position: relative;
+  }
+  .ai-conclusion-body li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 14px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--blue);
+  }
+  .ai-conclusion-body > p {
+    margin-top: 16px !important;
+    padding: 14px 18px;
+    background: rgba(59,130,246,0.10);
+    border-left: 3px solid var(--blue);
+    border-radius: 0 8px 8px 0;
+    color: var(--text) !important;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+
+  /* ===== TARIFF CARDS ===== */
+  .tariff-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    text-align: center;
+    position: relative;
+  }
+  .tariff-card.recommended {
+    border-color: rgba(59,130,246,0.4);
+    box-shadow: 0 0 40px rgba(59,130,246,0.1);
+  }
+  .tariff-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 16px;
+    border-radius: 100px;
+    background: var(--blue);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .tariff-name {
+    font-family: var(--font-display);
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .tariff-price {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--blue-bright);
+    margin-bottom: 20px;
+  }
+  .tariff-price span { font-size: 14px; font-weight: 400; color: var(--text-3); }
+  .tariff-savings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .tariff-saving-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+  }
+  .tariff-saving-row .val {
+    font-weight: 700;
+    color: var(--green);
+  }
+
+  /* ===== POSITION CARDS (section 8) ===== */
+  .position-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .position-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px;
+    border: 1px solid var(--border);
+  }
+  .position-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .position-card-rating {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    white-space: nowrap;
+    margin-left: 8px;
+  }
+  .topic-row {
+    margin-bottom: 14px;
+  }
+  .topic-row-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .topic-row-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .topic-row-pct {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--red);
+  }
+  .topic-row-bar {
+    height: 4px;
+    background: var(--surface);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .topic-row-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--red);
+  }
+  .topics-lock {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-3);
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ===== SUMMARY SECTION (section 7) ===== */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .summary-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .summary-item i {
+    color: var(--amber);
+    font-size: 16px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .summary-item-text {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.5;
+  }
+  .summary-item-text strong {
+    color: var(--text);
+  }
+
+  /* ===== SOURCE CARDS ===== */
+  .source-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .source-pct {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--blue);
+    flex-shrink: 0;
+    min-width: 60px;
+  }
+  .source-info h4 { font-size: 14px; margin-bottom: 4px; }
+  .source-info p { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+
+  /* ===== RESULTS GRID ===== */
+  .result-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+  }
+  .result-value {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--green);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .result-label {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.4;
+  }
+
+  /* ===== BENEFITS LIST ===== */
+  .benefits-list {
+    list-style: none;
+    padding: 0;
+  }
+  .benefits-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+  }
+  .benefits-list li:last-child { border-bottom: none; }
+  .benefits-list li i {
+    color: var(--green);
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+
+  /* ===== PAIN POINTS ===== */
+  .pain-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .pain-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    background: var(--red-dim);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    color: var(--text);
+  }
+  .pain-item i { color: var(--red); margin-top: 2px; flex-shrink: 0; }
+  .pain-result {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 16px;
+    background: var(--green-dim);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+  }
+  .pain-result i { color: var(--green); margin-top: 2px; flex-shrink: 0; }
+
+  /* ===== CTA ===== */
+  .cta-section {
+    text-align: center;
+    margin-top: 40px;
+    padding: 40px;
+    background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(34,197,94,0.05));
+    border: 1px solid rgba(59,130,246,0.2);
+    border-radius: var(--radius);
+  }
+  .cta-section h3 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    margin-bottom: 12px;
+  }
+  .cta-section p {
+    color: var(--text-2);
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+  .cta-btn {
+    display: inline-block;
+    padding: 14px 36px;
+    background: var(--blue);
+    color: #fff;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .cta-btn:hover { background: #2563EB; transform: translateY(-1px); }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .card-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .data-row { font-size: 12px; padding: 12px 14px; }
+  }
+  @media (max-width: 768px) {
+    .page { padding: 24px 16px 60px; }
+    .header h1 { font-size: 26px; }
+    .slide-title { font-size: 20px; }
+    .card-grid-3, .card-grid-4, .card-grid-2 { grid-template-columns: 1fr; }
+    .data-row { grid-template-columns: 1.5fr repeat(6, 1fr); font-size: 11px; padding: 10px 10px; }
+    .pain-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ===== PRINT / PDF ===== */
+  @media print {
+    @page { size: A4 landscape; margin: 10mm; }
+    body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .page { padding: 0; max-width: 100%; }
+    .header { padding: 30px 0 20px; margin-bottom: 30px; }
+    .slide { page-break-after: always; padding: 20px 0; }
+    .slide:last-child { page-break-after: auto; }
+    .divider { display: none; }
+    .chart-box { height: 260px !important; }
+    .ai-conclusion details[open] .ai-conclusion-body { display: block; }
+    .card-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    .card-grid-3 { grid-template-columns: 1fr; }
+    .ai-conclusion, .chart-container, .data-table,
+    .kpi-card, .tariff-card, .source-card, .result-card,
+    .position-card { page-break-inside: avoid; }
+    .tooltip-hint-print { display: inline !important; }
+  }
+
+</style>
+
+<body>
+
+
+<div class="page">
+
+  <!-- ========== HEADER ========== -->
+  <div class="header">
+    <div class="header-logo">Dream Job</div>
+    <h1>Эффективный найм и управление<br>HR-брендом через отзывы</h1>
+    <div class="header-sub">Персонализированный отчёт по данным Dream Job</div>
+    <div class="header-company">{{company_name}}</div>
+    <div style="margin-top:10px;color:var(--text-3);font-size:13px;">{{report_date}}</div>
+  </div>
+
+
+  <!-- ========== СЕКЦИЯ 1: ОБЗОР РЫНКА ========== -->
+  <section class="slide" id="slide-1">
+    <div class="slide-header">
+      <span class="slide-number">01</span>
+      <h2 class="slide-title">Рынок в целом</h2>
+    </div>
+    <p class="slide-subtitle">Управление репутацией — стандарт рынка с 2022 года</p>
+
+    <div class="card-grid card-grid-3">
+      <div class="kpi-card">
+        <div class="kpi-icon blue"><i class="fas fa-users"></i></div>
+        <div class="kpi-value">9 из 10</div>
+        <div class="kpi-label">соискателей принимают решения<br>с помощью отзывов</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon green"><i class="fas fa-building"></i></div>
+        <div class="kpi-value">> 2 000</div>
+        <div class="kpi-label">компаний активно работают<br>с Dream Job</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon amber"><i class="fas fa-chart-line"></i></div>
+        <div class="kpi-value">+23%</div>
+        <div class="kpi-label">рост конверсии в отклик<br>при работе с DJ</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ========== СЕКЦИЯ 2: РЕПУТАЦИЯ ========== -->
+  <section class="slide" id="slide-2">
+    <div class="slide-header">
+      <span class="slide-number">02</span>
+      <h2 class="slide-title">Ваша ситуация с репутацией</h2>
+    </div>
+    <p class="slide-subtitle">Сравнение с ключевыми конкурентами и индустрией</p>
+
+    <div class="data-table">
+      <div class="data-row header-row">
+        <div class="data-cell">Компания</div>
+        <div class="data-cell">Вакансии hh.ru</div>
+        <div class="data-cell">Рейтинг</div>
+        <div class="data-cell">Отзывы</div>
+        <div class="data-cell">Работа с отзывами</div>
+        <div class="data-cell">% ответов</div>
+        <div class="data-cell">% не рекомендуют</div>
+      </div>
+      <div class="data-row company-row">
+        <div class="data-cell"><strong><a href="{{company_url}}" target="_blank" class="dj-link">{{company_name}}</a></strong></div>
+        <div class="data-cell">{{comp_vacancies}}</div>
+        <div class="data-cell">{{comp_rating}}</div>
+        <div class="data-cell">{{comp_reviews}}</div>
+        <div class="data-cell"><span class="{{comp_dj_class}}">{{comp_dj}}</span></div>
+        <div class="data-cell">{{comp_answered_pct}}</div>
+        <div class="data-cell">{{comp_notrec_pct}}</div>
+      </div>
+      <div class="data-row">
+        <div class="data-cell"><a href="{{rival1_url}}" target="_blank" class="dj-link">{{rival1_name}}</a></div>
+        <div class="data-cell">{{rival1_vacancies}}</div>
+        <div class="data-cell">{{rival1_rating}}</div>
+        <div class="data-cell">{{rival1_reviews}}</div>
+        <div class="data-cell"><span class="{{rival1_dj_class}}">{{rival1_dj}}</span></div>
+        <div class="data-cell">{{rival1_answered_pct}}</div>
+        <div class="data-cell">{{rival1_notrec_pct}}</div>
+      </div>
+      <div class="data-row">
+        <div class="data-cell"><a href="{{rival2_url}}" target="_blank" class="dj-link">{{rival2_name}}</a></div>
+        <div class="data-cell">{{rival2_vacancies}}</div>
+        <div class="data-cell">{{rival2_rating}}</div>
+        <div class="data-cell">{{rival2_reviews}}</div>
+        <div class="data-cell"><span class="{{rival2_dj_class}}">{{rival2_dj}}</span></div>
+        <div class="data-cell">{{rival2_answered_pct}}</div>
+        <div class="data-cell">{{rival2_notrec_pct}}</div>
+      </div>
+      <div class="data-row">
+        <div class="data-cell"><a href="{{rival3_url}}" target="_blank" class="dj-link">{{rival3_name}}</a></div>
+        <div class="data-cell">{{rival3_vacancies}}</div>
+        <div class="data-cell">{{rival3_rating}}</div>
+        <div class="data-cell">{{rival3_reviews}}</div>
+        <div class="data-cell"><span class="{{rival3_dj_class}}">{{rival3_dj}}</span></div>
+        <div class="data-cell">{{rival3_answered_pct}}</div>
+        <div class="data-cell">{{rival3_notrec_pct}}</div>
+      </div>
+      <div class="data-row industry-row">
+        <div class="data-cell">Индустрия в среднем</div>
+        <div class="data-cell">—</div>
+        <div class="data-cell">{{industry_rating}}</div>
+        <div class="data-cell">{{industry_reviews}}</div>
+        <div class="data-cell">—</div>
+        <div class="data-cell">{{industry_answered_pct}}</div>
+        <div class="data-cell">{{industry_notrec_pct}}</div>
+      </div>
+    </div>
+
+    <!-- AI Conclusion -->
+    <div class="ai-conclusion">
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_reputation}}</div>
+      </details>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ========== СЕКЦИЯ 3: ИНДУСТРИЯ ========== -->
+  <section class="slide" id="slide-3">
+    <div class="slide-header">
+      <span class="slide-number">03</span>
+      <h2 class="slide-title">Сравнение с индустрией</h2>
+    </div>
+    <p class="slide-subtitle">Ключевые показатели: компания vs среднее по индустрии</p>
+
+    <!-- Full comparison table -->
+    <div class="data-table">
+      <div class="data-row header-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
+        <div class="data-cell">Показатель</div>
+        <div class="data-cell">Компания</div>
+        <div class="data-cell">Индустрия</div>
+        <div class="data-cell">DJ клиенты</div>
+        <div class="data-cell tooltip-cell">Разница <span class="tooltip-hint-print" style="display:none;font-size:10px;font-weight:400;color:var(--text-3);">(vs индустрия)</span><span class="tooltip-text">Разница между вашей компанией и средним по индустрии</span></div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
+        <div class="data-cell">Оценка за все время</div>
+        <div class="data-cell"><strong>{{ind_rating_alltime_comp}}</strong></div>
+        <div class="data-cell">{{ind_rating_alltime_ind}}</div>
+        <div class="data-cell">{{ind_rating_alltime_payed}}</div>
+        <div class="data-cell"><span class="delta-badge {{delta_rating_alltime_class}}">{{delta_rating_alltime}}</span></div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
+        <div class="data-cell">Оценка за последние 12 мес</div>
+        <div class="data-cell"><strong>{{ind_rating_12m_comp}}</strong></div>
+        <div class="data-cell">{{ind_rating_12m_ind}}</div>
+        <div class="data-cell">{{ind_rating_12m_payed}}</div>
+        <div class="data-cell"><span class="delta-badge {{delta_rating_12m_class}}">{{delta_rating_12m}}</span></div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
+        <div class="data-cell">Доля отзывов 1–3 (негатив)</div>
+        <div class="data-cell"><strong>{{ind_neg_share_comp}}</strong></div>
+        <div class="data-cell">{{ind_neg_share_ind}}</div>
+        <div class="data-cell">{{ind_neg_share_payed}}</div>
+        <div class="data-cell"><span class="delta-badge {{delta_neg_share_class}}">{{delta_neg_share}}</span></div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
+        <div class="data-cell">Доля отзывов 3–5 (позитив)</div>
+        <div class="data-cell"><strong>{{ind_pos_share_comp}}</strong></div>
+        <div class="data-cell">{{ind_pos_share_ind}}</div>
+        <div class="data-cell">{{ind_pos_share_payed}}</div>
+        <div class="data-cell"><span class="delta-badge {{delta_pos_share_class}}">{{delta_pos_share}}</span></div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
+        <div class="data-cell">Количество отзывов (все время)</div>
+        <div class="data-cell"><strong>{{ind_reviews_total_comp}}</strong></div>
+        <div class="data-cell">{{ind_reviews_total_ind}}</div>
+        <div class="data-cell">{{ind_reviews_total_payed}}</div>
+        <div class="data-cell"><span class="delta-badge {{delta_reviews_total_class}}">{{delta_reviews_total}}</span></div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
+        <div class="data-cell">Количество отзывов (12 мес)</div>
+        <div class="data-cell"><strong>{{ind_reviews_12m_comp}}</strong></div>
+        <div class="data-cell">{{ind_reviews_12m_ind}}</div>
+        <div class="data-cell">{{ind_reviews_12m_payed}}</div>
+        <div class="data-cell"><span class="delta-badge {{delta_reviews_12m_class}}">{{delta_reviews_12m}}</span></div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
+        <div class="data-cell">Оценка текущих сотрудников</div>
+        <div class="data-cell"><strong>{{ind_current_rating_comp}}</strong></div>
+        <div class="data-cell">{{ind_current_rating_ind}}</div>
+        <div class="data-cell">{{ind_current_rating_payed}}</div>
+        <div class="data-cell"><span class="delta-badge {{delta_current_rating_class}}">{{delta_current_rating}}</span></div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
+        <div class="data-cell">Оценка бывших сотрудников</div>
+        <div class="data-cell"><strong>{{ind_former_rating_comp}}</strong></div>
+        <div class="data-cell">{{ind_former_rating_ind}}</div>
+        <div class="data-cell">{{ind_former_rating_payed}}</div>
+        <div class="data-cell"><span class="delta-badge {{delta_former_rating_class}}">{{delta_former_rating}}</span></div>
+      </div>
+    </div>
+
+    <!-- Radar chart below -->
+    <div class="chart-container" style="margin-top:20px;">
+      <div style="font-size:13px;color:var(--text-2);margin-bottom:12px;">Паутинка: компания vs индустрия</div>
+      <div id="chart-industry-radar" class="chart-box"></div>
+    </div>
+
+    <div class="ai-conclusion">
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_industry}}</div>
+      </details>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ========== СЕКЦИЯ 4: АКТИВНОСТЬ НАЙМА ========== -->
+  <section class="slide" id="slide-4">
+    <div class="slide-header">
+      <span class="slide-number">04</span>
+      <h2 class="slide-title">Активность найма на hh.ru</h2>
+    </div>
+    <p class="slide-subtitle">Растёт конкуренция за найм ключевых специалистов</p>
+
+    <!-- Comparison table -->
+    <div class="data-table">
+      <div class="data-row header-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
+        <div class="data-cell">Показатель</div>
+        <div class="data-cell">Компания</div>
+        <div class="data-cell">Индустрия</div>
+        <div class="data-cell">DJ клиенты</div>
+        <div class="data-cell tooltip-cell">Разница <span class="tooltip-hint-print" style="display:none;font-size:10px;font-weight:400;color:var(--text-3);">(vs индустрия)</span><span class="tooltip-text">Разница между вашей компанией и средним по индустрии</span></div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
+        <div class="data-cell">Открытые вакансии сейчас</div>
+        <div class="data-cell"><strong>{{hire_open_vac_comp}}</strong></div>
+        <div class="data-cell">{{hire_open_vac_ind}}</div>
+        <div class="data-cell">{{hire_open_vac_payed}}</div>
+        <div class="data-cell"><span class="delta-badge {{hire_delta_vac_class}}">{{hire_delta_vac}}</span></div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
+        <div class="data-cell">Откликов на вакансию</div>
+        <div class="data-cell"><strong>{{hire_response_comp}}</strong></div>
+        <div class="data-cell">{{hire_response_ind}}</div>
+        <div class="data-cell">{{hire_response_payed}}</div>
+        <div class="data-cell"><span class="delta-badge {{hire_delta_response_class}}">{{hire_delta_response}}</span></div>
+      </div>
+    </div>
+
+    <div class="chart-container" style="margin-top:20px;">
+      <div style="font-size:13px;color:var(--text-2);margin-bottom:12px;">Динамика вакансий за последние 12 месяцев</div>
+      <div id="chart-hiring-dynamics" class="chart-box"></div>
+    </div>
+
+    <div class="ai-conclusion">
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_hiring}}</div>
+      </details>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ========== СЕКЦИЯ 5: ТРАФИК ========== -->
+  <section class="slide" id="slide-5">
+    <div class="slide-header">
+      <span class="slide-number">05</span>
+      <h2 class="slide-title">Трафик</h2>
+    </div>
+    <p class="slide-subtitle">Оцените, сколько соискателей заходят на вашу страницу и откуда они приходят</p>
+
+    <div class="card-grid card-grid-4">
+      <div class="kpi-card">
+        <div class="kpi-icon blue"><i class="fas fa-eye"></i></div>
+        <div class="kpi-value">{{traffic_views_year}}</div>
+        <div class="kpi-label">просмотров за год</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon green"><i class="fas fa-user-plus"></i></div>
+        <div class="kpi-value">{{traffic_new_pct}}</div>
+        <div class="kpi-label">доля новых посетителей</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon amber"><i class="fas fa-layer-group"></i></div>
+        <div class="kpi-value">{{traffic_depth}}</div>
+        <div class="kpi-label tooltip-cell">страниц за посещение <i class="fas fa-question-circle" style="font-size:11px;color:var(--text-3);cursor:help;"></i><span class="tooltip-text" style="white-space:normal;width:240px;left:0;right:auto;">Количество просмотренных страниц на сайте (конкуренты или доп. вкладки о компании: о компании / зарплаты / собеседования / блоги)</span></div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text-3);background:rgba(255,255,255,0.04);padding:4px 10px;border-radius:6px;display:inline-block;">среднее по DJ: {{traffic_depth_avg}}</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon blue"><i class="fas fa-clock"></i></div>
+        <div class="kpi-value">{{traffic_avg_time}}</div>
+        <div class="kpi-label">Время просмотра страницы</div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text-3);background:rgba(255,255,255,0.04);padding:4px 10px;border-radius:6px;display:inline-block;">среднее по DJ: {{traffic_avg_time_avg}}</div>
+      </div>
+    </div>
+
+    <div class="chart-container" style="margin-top:20px;">
+      <div style="font-size:13px;color:var(--text-2);margin-bottom:12px;">Динамика трафика по месяцам</div>
+      <div id="chart-traffic" class="chart-box"></div>
+    </div>
+
+    <div class="ai-conclusion">
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_traffic}}</div>
+      </details>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ========== СЕКЦИЯ 6: ИСТОЧНИКИ ТРАФИКА ========== -->
+  <section class="slide" id="slide-6">
+    <div class="slide-header">
+      <span class="slide-number">06</span>
+      <h2 class="slide-title">Источники трафика</h2>
+    </div>
+    <p class="slide-subtitle">На Dream Job формируется мнение о компании и принимается решение об отклике</p>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="source-card">
+        <div class="source-pct">{{source_hh_pct}}</div>
+        <div class="source-info">
+          <h4>Переходы с hh.ru и по ссылкам</h4>
+          <p>Кандидаты, которым понравилась вакансия на hh.ru, переходят на Dream Job, чтобы изучить отзывы и принять решение об отклике. Самая горячая аудитория.</p>
+        </div>
+      </div>
+      <div class="source-card">
+        <div class="source-pct" style="color:var(--green);">{{source_search_pct}}</div>
+        <div class="source-info">
+          <h4>Из поисковых систем</h4>
+          <p>Кандидаты ищут информацию о компании в Яндекс или Google — например, «{{company_name}} отзывы сотрудников» или «работа в {{company_name}}».</p>
+        </div>
+      </div>
+      <div class="source-card">
+        <div class="source-pct" style="color:var(--amber);">{{source_internal_pct}}</div>
+        <div class="source-info">
+          <h4>Внутренние переходы</h4>
+          <p>Навигация внутри Dream Job — например, переход через блок «Похожие компании» или сравнение работодателей.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Widget callout -->
+    <div class="card" style="margin-top:16px;border-left:3px solid var(--blue);display:flex;align-items:center;gap:16px;">
+      <div style="flex-shrink:0;width:44px;height:44px;border-radius:12px;background:var(--blue-glow);display:flex;align-items:center;justify-content:center;"><i class="fas fa-award" style="color:var(--blue);font-size:18px;"></i></div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2px;">Расширенный виджет на hh.ru</div>
+        <div style="font-size:13px;color:var(--text-2);">Награды, ответы на отзывы и медиа-контент усиливают доверие и улучшают образ компании для соискателей в самой критичной точке принятия решения.</div>
+      </div>
+    </div>
+
+    <div class="ai-conclusion">
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_sources}}</div>
+      </details>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ========== СЕКЦИЯ 7: КЛЮЧЕВЫЕ ТОЧКИ ВНИМАНИЯ ========== -->
+  <section class="slide" id="slide-7">
+    <div class="slide-header">
+      <span class="slide-number">07</span>
+      <h2 class="slide-title">Ключевые точки внимания</h2>
+    </div>
+    <p class="slide-subtitle">Сводка главных факторов риска из анализа выше</p>
+
+    <div class="summary-grid">
+      <div class="summary-item">
+        <i class="fas fa-triangle-exclamation"></i>
+        <div class="summary-item-text">{{summary_reputation}}</div>
+      </div>
+      <div class="summary-item">
+        <i class="fas fa-triangle-exclamation"></i>
+        <div class="summary-item-text">{{summary_hiring}}</div>
+      </div>
+      <div class="summary-item">
+        <i class="fas fa-triangle-exclamation"></i>
+        <div class="summary-item-text">{{summary_traffic}}</div>
+      </div>
+      <div class="summary-item">
+        <i class="fas fa-triangle-exclamation"></i>
+        <div class="summary-item-text">{{summary_negative}}</div>
+      </div>
+    </div>
+
+    <div class="ai-conclusion">
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевой вывод <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_highlights}}</div>
+      </details>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ========== СЕКЦИЯ 8: ТОПИКИ И ДОЛЖНОСТИ ========== -->
+  <section class="slide" id="slide-8">
+    <div class="slide-header">
+      <span class="slide-number">08</span>
+      <h2 class="slide-title">О чём говорят сотрудники в открытых отзывах</h2>
+    </div>
+    <p class="slide-subtitle">Семантический анализ негативных отзывов · топ-3 темы по каждой должности</p>
+    <p class="topic-avg-line"><strong>{{topic_avg_rating}}</strong> рейтинг DJ у ваших открытых вакансий</p>
+
+    <div class="position-cards-grid">
+      <!-- Position 1 -->
+      <div class="position-card" style="{{pos1_display}}">
+        <div class="position-card-header"><span>{{pos1_name}}</span><span class="position-card-rating">★ {{pos1_rating}}</span></div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos1_topic1_name}}</span>
+            <span class="topic-row-pct">{{pos1_topic1_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos1_topic1_pct}}%;"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos1_topic2_name}}</span>
+            <span class="topic-row-pct">{{pos1_topic2_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos1_topic2_pct}}%;"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos1_topic3_name}}</span>
+            <span class="topic-row-pct">{{pos1_topic3_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos1_topic3_pct}}%;"></div></div>
+        </div>
+        <div class="topics-lock"><i class="fas fa-lock"></i> Ещё {{pos1_more_count}} тем в полном отчёте</div>
+      </div>
+
+      <!-- Position 2 -->
+      <div class="position-card">
+        <div class="position-card-header"><span>{{pos2_name}}</span><span class="position-card-rating">★ {{pos2_rating}}</span></div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos2_topic1_name}}</span>
+            <span class="topic-row-pct">{{pos2_topic1_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos2_topic1_pct}}%;"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos2_topic2_name}}</span>
+            <span class="topic-row-pct">{{pos2_topic2_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos2_topic2_pct}}%;"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos2_topic3_name}}</span>
+            <span class="topic-row-pct">{{pos2_topic3_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos2_topic3_pct}}%;"></div></div>
+        </div>
+        <div class="topics-lock" style="{{pos2_more_display}}"><i class="fas fa-lock"></i> Ещё {{pos2_more_count}} тем в полном отчёте</div>
+      </div>
+
+      <!-- Position 3 -->
+      <div class="position-card" style="{{pos3_display}}">
+        <div class="position-card-header"><span>{{pos3_name}}</span><span class="position-card-rating">★ {{pos3_rating}}</span></div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos3_topic1_name}}</span>
+            <span class="topic-row-pct">{{pos3_topic1_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos3_topic1_pct}}%;"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos3_topic2_name}}</span>
+            <span class="topic-row-pct">{{pos3_topic2_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos3_topic2_pct}}%;"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos3_topic3_name}}</span>
+            <span class="topic-row-pct">{{pos3_topic3_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos3_topic3_pct}}%;"></div></div>
+        </div>
+        <div class="topics-lock" style="{{pos3_more_display}}"><i class="fas fa-lock"></i> Ещё {{pos3_more_count}} тем в полном отчёте</div>
+      </div>
+
+      <!-- Position 4 -->
+      <div class="position-card" style="{{pos4_display}}">
+        <div class="position-card-header"><span>{{pos4_name}}</span><span class="position-card-rating">★ {{pos4_rating}}</span></div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos4_topic1_name}}</span>
+            <span class="topic-row-pct">{{pos4_topic1_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos4_topic1_pct}}%;"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos4_topic2_name}}</span>
+            <span class="topic-row-pct">{{pos4_topic2_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos4_topic2_pct}}%;"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos4_topic3_name}}</span>
+            <span class="topic-row-pct">{{pos4_topic3_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos4_topic3_pct}}%;"></div></div>
+        </div>
+        <div class="topics-lock"><i class="fas fa-lock"></i> Ещё {{pos4_more_count}} тем в полном отчёте</div>
+      </div>
+
+      <!-- Position 5 -->
+      <div class="position-card">
+        <div class="position-card-header"><span>{{pos5_name}}</span><span class="position-card-rating">★ {{pos5_rating}}</span></div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos5_topic1_name}}</span>
+            <span class="topic-row-pct">{{pos5_topic1_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos5_topic1_pct}}%;"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos5_topic2_name}}</span>
+            <span class="topic-row-pct">{{pos5_topic2_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos5_topic2_pct}}%;"></div></div>
+        </div>
+        <div class="topic-row">
+          <div class="topic-row-top">
+            <span class="topic-row-name">{{pos5_topic3_name}}</span>
+            <span class="topic-row-pct">{{pos5_topic3_pct}}%</span>
+          </div>
+          <div class="topic-row-bar"><div class="topic-row-bar-fill" style="width:{{pos5_topic3_pct}}%;"></div></div>
+        </div>
+        <div class="topics-lock"><i class="fas fa-lock"></i> Ещё {{pos5_more_count}} тем в полном отчёте</div>
+      </div>
+    </div>
+
+    <div class="ai-conclusion">
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_topics}}</div>
+      </details>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ========== СЕКЦИЯ 9: ПРОГНОЗ ЭКОНОМИИ ========== -->
+  <section class="slide" id="slide-9">
+    <div class="slide-header">
+      <span class="slide-number">09</span>
+      <h2 class="slide-title">Примерный прогноз</h2>
+    </div>
+    <p class="slide-subtitle">Данные основаны на публичной информации о штате, количестве вакансий и исследованиях Dream Job</p>
+
+    <!-- Tariff cards -->
+    <div class="card-grid card-grid-3">
+      <div class="tariff-card">
+        <div class="tariff-name">Стандарт</div>
+        <div class="tariff-price">{{tariff_standard_price}} <span>&#8381;/год</span></div>
+        <div class="tariff-savings">
+          <div class="tariff-saving-row">
+            <span>Примерный прогноз</span>
+            <span class="val">{{tariff_standard_savings}} &#8381;</span>
+          </div>
+          <div class="tariff-saving-row" style="background:var(--blue-glow);border:1px solid rgba(59,130,246,0.2);">
+            <span style="font-weight:600;">ROI</span>
+            <span class="val" style="color:var(--blue-bright);font-size:15px;">{{tariff_standard_roi}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="tariff-card recommended">
+        <div class="tariff-badge">Рекомендуем</div>
+        <div class="tariff-name">Оптимум</div>
+        <div class="tariff-price">{{tariff_optimum_price}} <span>&#8381;/год</span></div>
+        <div class="tariff-savings">
+          <div class="tariff-saving-row">
+            <span>Примерный прогноз</span>
+            <span class="val">{{tariff_optimum_savings}} &#8381;</span>
+          </div>
+          <div class="tariff-saving-row" style="background:var(--blue-glow);border:1px solid rgba(59,130,246,0.2);">
+            <span style="font-weight:600;">ROI</span>
+            <span class="val" style="color:var(--blue-bright);font-size:15px;">{{tariff_optimum_roi}}</span>
+          </div>
+        </div>
+      </div>
+      <div class="tariff-card">
+        <div class="tariff-name">Премиум</div>
+        <div class="tariff-price">{{tariff_premium_price}} <span>&#8381;/год</span></div>
+        <div class="tariff-savings">
+          <div class="tariff-saving-row">
+            <span>Примерный прогноз</span>
+            <span class="val">{{tariff_premium_savings}} &#8381;</span>
+          </div>
+          <div class="tariff-saving-row" style="background:var(--blue-glow);border:1px solid rgba(59,130,246,0.2);">
+            <span style="font-weight:600;">ROI</span>
+            <span class="val" style="color:var(--blue-bright);font-size:15px;">{{tariff_premium_roi}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ========== СЕКЦИЯ 10: ИТОГИ И CTA ========== -->
+  <section class="slide" id="slide-10">
+    <div class="slide-header">
+      <span class="slide-number">10</span>
+      <h2 class="slide-title">Что даст работа с Dream Job</h2>
+    </div>
+    <p class="slide-subtitle">Профессиональная работа с Dream Job позволяет добиться следующих результатов</p>
+
+    <div class="card-grid card-grid-4">
+      <div class="result-card">
+        <div class="result-value">x3</div>
+        <div class="result-label">Отклики через отзывы</div>
+        <a href="https://hh.ru/article/kak-prokachat-najm-cherez-otzyvy-i-uvelichit-kolichestvo-otklikov-v-3-raza" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;color:var(--blue-bright);text-decoration:none;opacity:0.8;">кейс ТЛК-Групп &rarr;</a>
+      </div>
+      <div class="result-card">
+        <div class="result-value">+47%</div>
+        <div class="result-label">Конверсия в отклик</div>
+        <a href="https://hh.ru/article/kak-otzyvy-pomogli-strahovoj-kompanii-soglasie-uvelichit-konversiyu-prosmotrov-v-otkliki-na-47" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;color:var(--blue-bright);text-decoration:none;opacity:0.8;">кейс Согласие &rarr;</a>
+      </div>
+      <div class="result-card">
+        <div class="result-value">+34%</div>
+        <div class="result-label">Принятые офферы</div>
+        <a href="https://astrakhan.hh.ru/article/kak-kompaniya-dorogi-i-mosty-za-6-mesyacev-uvelichila-kolichestvo-prinyatyh-oferov-na-34" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;color:var(--blue-bright);text-decoration:none;opacity:0.8;">кейс Дороги и Мосты &rarr;</a>
+      </div>
+      <div class="result-card">
+        <div class="result-value">20%</div>
+        <div class="result-label">Влияния в рейтинге<br>работодателей hh.ru</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:24px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+        <div>
+          <div style="font-size:13px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Проблемы сейчас</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="pain-item"><i class="fas fa-xmark"></i> Конкуренты работают с репутацией</div>
+            <div class="pain-item"><i class="fas fa-xmark"></i> HR-бренд ниже рынка</div>
+            <div class="pain-item"><i class="fas fa-xmark"></i> Высокая конкуренция за отклики</div>
+            <div class="pain-item"><i class="fas fa-xmark"></i> Риски негативного восприятия</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:13px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">После работы с Dream Job</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="pain-result"><i class="fas fa-check"></i> Сильный HR-бренд в индустрии</div>
+            <div class="pain-result"><i class="fas fa-check"></i> Больше релевантных откликов</div>
+            <div class="pain-result"><i class="fas fa-check"></i> Более эффективный и быстрый найм</div>
+            <div class="pain-result"><i class="fas fa-check"></i> Системная работа с репутацией</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <h3>Готовы усилить свой HR-бренд?</h3>
+      <p>Напишите персональному менеджеру или свяжитесь с нами</p>
+      <a href="mailto:clients@dreamjob.ru" class="cta-btn">clients@dreamjob.ru</a>
+    </div>
+  </section>
+
+</div>
+
+{{CHART_SCRIPTS}}
+
+</body>
+</html>
