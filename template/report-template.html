@@ -814,11 +814,12 @@
     .kpi-value { font-size: 22px; }
     .kpi-label { font-size: 11px; }
 
-    /* Grids → flexbox for print (CSS Grid breaks in print engines) */
-    .card-grid { display: flex !important; flex-wrap: wrap; gap: 10px; }
-    .card-grid-4 > * { flex: 1 1 22%; min-width: 0; }
-    .card-grid-3 > * { flex: 1 1 30%; min-width: 0; }
-    .card-grid-2 > * { flex: 1 1 45%; min-width: 0; }
+    /* Grids → inline-block for print (most reliable in print engines) */
+    .card-grid { display: block !important; font-size: 0; }
+    .card-grid > * { display: inline-block !important; vertical-align: top; font-size: 12px; box-sizing: border-box; margin: 4px; }
+    .card-grid-4 > * { width: calc(25% - 10px); }
+    .card-grid-3 > * { width: calc(33.33% - 10px); }
+    .card-grid-2 > * { width: calc(50% - 10px); }
 
     /* Tariff cards compact */
     .tariff-card { padding: 14px; }
@@ -830,15 +831,15 @@
     .source-card p { font-size: 11px; margin-top: 2px; }
     .source-pct { font-size: 22px; }
 
-    /* Position cards compact — flexbox for print */
-    .position-cards-grid { display: flex !important; flex-wrap: wrap; gap: 10px; }
-    .position-cards-grid > * { flex: 1 1 30%; min-width: 0; }
+    /* Position cards compact — inline-block for print */
+    .position-cards-grid { display: block !important; font-size: 0; }
+    .position-cards-grid > * { display: inline-block !important; vertical-align: top; font-size: 12px; box-sizing: border-box; width: calc(33.33% - 10px); margin: 4px; }
     .position-card { padding: 10px 12px; }
     .topic-row { margin-bottom: 4px; }
 
-    /* Summary items compact — flexbox for print */
-    .summary-grid { display: flex !important; flex-wrap: wrap; gap: 10px; }
-    .summary-grid > * { flex: 1 1 45%; min-width: 0; }
+    /* Summary items compact — inline-block for print */
+    .summary-grid { display: block !important; font-size: 0; }
+    .summary-grid > * { display: inline-block !important; vertical-align: top; font-size: 12px; box-sizing: border-box; width: calc(50% - 10px); margin: 4px; }
     .summary-item { padding: 10px 14px; font-size: 12px; }
 
     /* Results compact */
