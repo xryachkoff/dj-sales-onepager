@@ -758,12 +758,12 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ===== RESPONSIVE ===== */
-  @media (max-width: 1024px) {
+  /* ===== RESPONSIVE (screen only — не ломает PDF) ===== */
+  @media screen and (max-width: 1024px) {
     .card-grid-4 { grid-template-columns: repeat(2, 1fr); }
     .data-row { font-size: 12px; padding: 12px 14px; }
   }
-  @media (max-width: 768px) {
+  @media screen and (max-width: 768px) {
     .page { padding: 24px 16px 60px; }
     .header h1 { font-size: 26px; }
     .slide-title { font-size: 20px; }
@@ -815,8 +815,9 @@
     .kpi-label { font-size: 11px; }
 
     /* Grids */
-    .card-grid-4 { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .card-grid-3 { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .card-grid-4 { grid-template-columns: repeat(4, 1fr) !important; gap: 10px; }
+    .card-grid-3 { grid-template-columns: repeat(3, 1fr) !important; gap: 10px; }
+    .card-grid-2 { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
 
     /* Tariff cards compact */
     .tariff-card { padding: 14px; }
