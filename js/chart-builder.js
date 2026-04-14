@@ -111,6 +111,62 @@ export function buildRadarOption(chartData) {
 }
 
 /**
+ * Build criteria radar chart option — per-criterion ratings breakdown.
+ */
+export function buildCriteriaRadarOption(chartData) {
+  const { ratingAll } = chartData;
+
+  const criteria = [
+    { key: 'salary_rating', name: 'Зарплата' },
+    { key: 'career_rating', name: 'Карьера' },
+    { key: 'managment_rating', name: 'Руководство' },
+    { key: 'team_rating', name: 'Команда' },
+    { key: 'workplace_rating', name: 'Рабочее место' },
+    { key: 'rest_recovery_rating', name: 'Отдых' },
+  ];
+
+  const compData = criteria.map(c => +safe(ratingAll[c.key]?.[0]).toFixed(2));
+  const indData = criteria.map(c => +safe(ratingAll[c.key]?.[1]).toFixed(2));
+
+  return {
+    tooltip: {},
+    legend: {
+      bottom: 8,
+      textStyle: { color: colors.text2, fontSize: 11 },
+      data: ['Компания', 'Индустрия']
+    },
+    radar: {
+      center: ['50%', '45%'],
+      indicator: criteria.map(c => ({ name: c.name, max: 5 })),
+      shape: 'circle',
+      splitArea: { areaStyle: { color: ['rgba(59,130,246,0.02)', 'rgba(59,130,246,0.04)'] } },
+      axisLine: { lineStyle: { color: colors.grid } },
+      splitLine: { lineStyle: { color: colors.grid } },
+      axisName: { color: colors.text3, fontSize: 11 }
+    },
+    series: [{
+      type: 'radar',
+      data: [
+        {
+          value: compData,
+          name: 'Компания',
+          lineStyle: { color: colors.blue, width: 2 },
+          areaStyle: { color: 'rgba(59,130,246,0.15)' },
+          itemStyle: { color: colors.blue }
+        },
+        {
+          value: indData,
+          name: 'Индустрия',
+          lineStyle: { color: colors.amber, width: 2 },
+          areaStyle: { color: 'rgba(245,158,11,0.1)' },
+          itemStyle: { color: colors.amber }
+        }
+      ]
+    }]
+  };
+}
+
+/**
  * Build hiring dynamics chart option for Section 4.
  */
 export function buildHiringOption(chartData) {
@@ -270,6 +326,11 @@ export function initCharts(chartData) {
     initChartWithRetry(radarEl, buildRadarOption, chartData, charts);
   }
 
+  const criteriaRadarEl = document.getElementById('chart-criteria-radar');
+  if (criteriaRadarEl) {
+    initChartWithRetry(criteriaRadarEl, buildCriteriaRadarOption, chartData, charts);
+  }
+
   const hiringEl = document.getElementById('chart-hiring-dynamics');
   if (hiringEl) {
     initChartWithRetry(hiringEl, buildHiringOption, chartData, charts);
@@ -292,6 +353,7 @@ export function initCharts(chartData) {
  */
 export function generateChartScript(chartData, lightTheme = false) {
   const radarOpt = JSON.stringify(buildRadarOption(chartData));
+  const criteriaRadarOpt = JSON.stringify(buildCriteriaRadarOption(chartData));
   const hiringOpt = JSON.stringify(buildHiringOption(chartData));
 
   let trafficInit = '';
@@ -334,6 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {${lightPatch}
     tryInit();
   }
   initWhenReady(document.getElementById('chart-industry-radar'), ${radarOpt});
+  initWhenReady(document.getElementById('chart-criteria-radar'), ${criteriaRadarOpt});
   initWhenReady(document.getElementById('chart-hiring-dynamics'), ${hiringOpt});${trafficInit}
 });
 <\/script>`;

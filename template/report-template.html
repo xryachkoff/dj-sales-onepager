@@ -1040,10 +1040,16 @@
       </div>
     </div>
 
-    <!-- Radar chart below -->
-    <div class="chart-container" style="margin-top:20px;">
-      <div style="font-size:13px;color:var(--text-2);margin-bottom:12px;">Паутинка: компания vs индустрия</div>
-      <div id="chart-industry-radar" class="chart-box"></div>
+    <!-- Radar charts side by side -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px;">
+      <div class="chart-container">
+        <div style="font-size:13px;color:var(--text-2);margin-bottom:12px;">Общие показатели</div>
+        <div id="chart-industry-radar" class="chart-box"></div>
+      </div>
+      <div class="chart-container">
+        <div style="font-size:13px;color:var(--text-2);margin-bottom:12px;">Оценки по критериям</div>
+        <div id="chart-criteria-radar" class="chart-box"></div>
+      </div>
     </div>
 
     <div class="ai-conclusion">
