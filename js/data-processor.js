@@ -277,9 +277,10 @@ export function buildVals(json) {
         }
       }
       vals[`pos${i}_more_count`] = String(Math.max(0, sorted.length - 3));
-      // Hide card if no topics at all
-      vals[`pos${i}_display`] = sorted.length === 0 ? 'display:none' : '';
-      // Hide "Ещё 0 тем" when count is 0
+      // Hide card if no meaningful data: no position name, or no topics with non-zero values
+      const hasRealTopics = sorted.some(([, pct]) => pct > 0);
+      vals[`pos${i}_display`] = (!pos || !hasRealTopics) ? 'display:none' : '';
+      // Hide "Ещё N тем" when count is 0
       vals[`pos${i}_more_display`] = sorted.length <= 3 ? 'display:none' : '';
     });
   }
