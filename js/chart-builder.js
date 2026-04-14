@@ -73,7 +73,8 @@ export function buildRadarOption(chartData) {
       data: ['Компания', 'Индустрия']
     },
     radar: {
-      center: ['50%', '45%'],
+      center: ['50%', '48%'],
+      radius: '60%',
       indicator: [
         { name: 'Рейтинг (все)', max: 5 },
         { name: 'Рейтинг (12 мес)', max: 5 },
@@ -136,7 +137,8 @@ export function buildCriteriaRadarOption(chartData) {
       data: ['Компания', 'Индустрия']
     },
     radar: {
-      center: ['50%', '45%'],
+      center: ['50%', '48%'],
+      radius: '60%',
       indicator: criteria.map(c => ({ name: c.name, max: 5 })),
       shape: 'circle',
       splitArea: { areaStyle: { color: ['rgba(59,130,246,0.02)', 'rgba(59,130,246,0.04)'] } },
