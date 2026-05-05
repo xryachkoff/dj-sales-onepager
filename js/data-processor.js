@@ -212,6 +212,7 @@ export function buildVals(json) {
     const tyData = ty.data;
     const totalViews = tyData.view_cnt.reduce((a, b) => a + b, 0);
     vals.traffic_views_year = fmtNum(totalViews);
+    vals.traffic_dj_views = fmtNum(totalViews);
     vals.traffic_new_pct = fmtPct(ty.new_users_percent);
     vals.traffic_depth = safeFix(ty.depth, 2);
     vals.traffic_depth_avg = safeFix(cy.depth, 2);
@@ -220,6 +221,10 @@ export function buildVals(json) {
   }
 
   // ===== Section 6: Sources =====
+  // Conversion rate from hh.ru widget view to DJ click (~10%)
+  const HH_WIDGET_CONVERSION_RATE = 0.10;
+  let hhSourcePct = 0;
+
   if (ysrc) {
     const srcPercents = ysrc.percent;
     const srcNames = ysrc.source_category;
@@ -229,6 +234,7 @@ export function buildVals(json) {
       const lower = name.toLowerCase();
       if (lower.includes('hh') || lower.includes('ссылк')) {
         sourceHh = pct;
+        hhSourcePct = srcPercents[i] != null ? srcPercents[i] / 100 : 0;
       } else if (lower.includes('поиск')) {
         sourceSearch = pct;
       } else if (lower.includes('внутренн')) {
@@ -238,6 +244,15 @@ export function buildVals(json) {
     vals.source_hh_pct = sourceHh;
     vals.source_search_pct = sourceSearch;
     vals.source_internal_pct = sourceInternal;
+  }
+
+  // ===== Compute hh.ru widget views (estimated) =====
+  if (ty && ty.data) {
+    const totalDjViews = ty.data.view_cnt.reduce((a, b) => a + b, 0);
+    const djFromHh = Math.round(totalDjViews * hhSourcePct);
+    const hhWidgetViews = Math.round(djFromHh / HH_WIDGET_CONVERSION_RATE);
+    vals.traffic_hh_widget_views = fmtNum(hhWidgetViews);
+    vals.traffic_total_combined = fmtNum(totalDjViews + hhWidgetViews);
   }
 
   // ===== Section 7: Summary =====
@@ -294,11 +309,10 @@ export function buildVals(json) {
     vals[`tariff_${name}_roi`] = `~${Math.round(roi)}%`;
   });
 
-  // ===== AI Conclusions (all except savings) =====
+  // ===== AI Conclusions =====
   const conclusionKeys = [
     'ai_conclusion_reputation', 'ai_conclusion_industry', 'ai_conclusion_hiring',
-    'ai_conclusion_traffic', 'ai_conclusion_sources', 'ai_conclusion_highlights',
-    'ai_conclusion_topics'
+    'ai_conclusion_traffic', 'ai_conclusion_topics'
   ];
   conclusionKeys.forEach(key => {
     vals[key] = json[key] || '';
