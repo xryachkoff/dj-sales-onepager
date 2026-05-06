@@ -859,7 +859,7 @@
   </div>
 
 
-  <!-- ========== СЕКЦИЯ 1: ПОЧЕМУ ВАЖНЫ ОТЗЫВЫ ========== -->
+  <!-- ========== СЕКЦИЯ 1: DREAM JOB И HH.RU ========== -->
   <section class="slide" id="slide-1">
     <div class="slide-header">
       <span class="slide-number">01</span>
@@ -969,10 +969,96 @@
 
   <hr class="divider">
 
-  <!-- ========== СЕКЦИЯ 3: АКТИВНОСТЬ НАЙМА ========== -->
+  <!-- ========== СЕКЦИЯ 3: ТРАФИК И ИСТОЧНИКИ ========== -->
   <section class="slide" id="slide-3">
     <div class="slide-header">
       <span class="slide-number">03</span>
+      <h2 class="slide-title">Трафик и источники</h2>
+    </div>
+    <p class="slide-subtitle">Сколько соискателей взаимодействует с отзывами о вашей компании на hh.ru и Dream Job</p>
+
+    <div class="ai-conclusion">
+      <details open>
+        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
+        <div class="ai-conclusion-body">{{ai_conclusion_traffic}}</div>
+      </details>
+    </div>
+
+    <div class="card-grid card-grid-4">
+      <div class="kpi-card">
+        <div class="kpi-icon blue"><i class="fas fa-globe"></i></div>
+        <div class="kpi-value">{{traffic_total_combined}}</div>
+        <div class="kpi-label">общий охват за год<br><span style="font-size:11px;color:var(--text-3);">(hh.ru + Dream Job)</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon amber"><i class="fas fa-external-link-alt"></i></div>
+        <div class="kpi-value">{{traffic_hh_widget_views}}</div>
+        <div class="kpi-label tooltip-cell">просмотров виджета на hh.ru <i class="fas fa-question-circle" style="font-size:11px;color:var(--text-3);cursor:help;"></i><span class="tooltip-text" style="white-space:normal;width:260px;left:0;right:auto;">Расчётная оценка: количество пользователей, которые увидели виджет с отзывами в вакансиях на hh.ru (конверсия из просмотра виджета в переход на DJ ~10%)</span></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon green"><i class="fas fa-eye"></i></div>
+        <div class="kpi-value">{{traffic_dj_views}}</div>
+        <div class="kpi-label">просмотров на Dream Job</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon blue"><i class="fas fa-layer-group"></i></div>
+        <div class="kpi-value">{{traffic_depth}}</div>
+        <div class="kpi-label tooltip-cell">страниц за посещение <i class="fas fa-question-circle" style="font-size:11px;color:var(--text-3);cursor:help;"></i><span class="tooltip-text" style="white-space:normal;width:240px;left:0;right:auto;">Количество просмотренных страниц на сайте (конкуренты или доп. вкладки о компании: о компании / зарплаты / собеседования / блоги)</span></div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text-3);background:rgba(255,255,255,0.04);padding:4px 10px;border-radius:6px;display:inline-block;">среднее по DJ: {{traffic_depth_avg}}</div>
+      </div>
+    </div>
+
+    <details style="margin-top:20px;">
+      <summary style="cursor:pointer;font-size:13px;color:var(--text-2);margin-bottom:12px;display:flex;align-items:center;gap:8px;"><i class="fas fa-chart-area" style="font-size:12px;"></i> Динамика трафика по месяцам <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px;"></i></summary>
+      <div class="chart-container">
+        <div id="chart-traffic" class="chart-box"></div>
+      </div>
+    </details>
+
+    <!-- Источники трафика -->
+    <div style="font-size:15px;font-weight:600;margin-top:24px;margin-bottom:12px;">Источники трафика</div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div class="source-card">
+        <div class="source-pct">{{source_hh_pct}}</div>
+        <div class="source-info">
+          <h4>Переходы с hh.ru и по ссылкам</h4>
+          <p>Кандидаты, которым понравилась вакансия на hh.ru, переходят на Dream Job, чтобы изучить отзывы и принять решение об отклике. Самая горячая аудитория.</p>
+        </div>
+      </div>
+      <div class="source-card">
+        <div class="source-pct" style="color:var(--green);">{{source_search_pct}}</div>
+        <div class="source-info">
+          <h4>Из поисковых систем</h4>
+          <p>Кандидаты ищут информацию о компании в Яндекс или Google — например, «{{company_name}} отзывы сотрудников» или «работа в {{company_name}}».</p>
+        </div>
+      </div>
+      <div class="source-card">
+        <div class="source-pct" style="color:var(--amber);">{{source_internal_pct}}</div>
+        <div class="source-info">
+          <h4>Внутренние переходы</h4>
+          <p>Навигация внутри Dream Job — например, переход через блок «Похожие компании» или сравнение работодателей.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Widget callout -->
+    <div class="card" style="margin-top:16px;border-left:3px solid var(--blue);display:flex;align-items:center;gap:16px;">
+      <div style="flex-shrink:0;width:44px;height:44px;border-radius:12px;background:var(--blue-glow);display:flex;align-items:center;justify-content:center;"><i class="fas fa-award" style="color:var(--blue);font-size:18px;"></i></div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2px;">Расширенный виджет на hh.ru</div>
+        <div style="font-size:13px;color:var(--text-2);">Награды, ответы на отзывы и медиа-контент усиливают доверие и улучшают образ компании для соискателей в самой критичной точке принятия решения.</div>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ========== СЕКЦИЯ 4: АКТИВНОСТЬ НАЙМА ========== -->
+  <section class="slide" id="slide-4">
+    <div class="slide-header">
+      <span class="slide-number">04</span>
       <h2 class="slide-title">Активность найма на hh.ru</h2>
     </div>
     <p class="slide-subtitle">Растёт конкуренция за найм ключевых специалистов</p>
@@ -1018,206 +1104,10 @@
 
   <hr class="divider">
 
-  <!-- ========== СЕКЦИЯ 4: ОТВЕТЫ НА ОТЗЫВЫ ========== -->
-  <section class="slide" id="slide-4">
-    <div class="slide-header">
-      <span class="slide-number">04</span>
-      <h2 class="slide-title">Ответы на отзывы</h2>
-    </div>
-    <p class="slide-subtitle">Как ваша компания работает с обратной связью — и как это влияет на кандидатов</p>
-
-    <!-- Static: research block (like the screenshot) -->
-    <div class="card-grid card-grid-2" style="margin-bottom:20px;">
-      <div class="kpi-card" style="text-align:center;">
-        <div class="kpi-value" style="color:var(--blue);font-size:36px;">62%</div>
-        <div style="font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:8px;">Влияние на будущий отклик</div>
-        <div style="font-size:13px;color:var(--text-3);line-height:1.5;">авторов согласны, что ответ работодателя может повлиять на желание откликнуться в эту компанию в будущем</div>
-      </div>
-      <div class="kpi-card" style="text-align:center;">
-        <div class="kpi-value" style="color:var(--green);font-size:36px;">49%</div>
-        <div style="font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:8px;">Влияние на текущее удержание</div>
-        <div style="font-size:13px;color:var(--text-3);line-height:1.5;">сотрудников говорят, что реакция на отзыв могла бы повлиять на их желание остаться в компании</div>
-      </div>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
-      <div class="card" style="border-left:3px solid var(--blue);display:flex;align-items:flex-start;gap:14px;padding:14px 18px;">
-        <div style="flex-shrink:0;margin-top:2px;color:var(--blue);"><i class="fas fa-arrow-right"></i></div>
-        <div style="font-size:13px;line-height:1.6;color:var(--text);"><strong>Отзыв — точка входа, ответ — точка возврата.</strong> Кандидаты читают отзывы и видят, как компания реагирует. Грамотный ответ превращает критику в доказательство зрелости HR-бренда.</div>
-      </div>
-      <div class="card" style="border-left:3px solid var(--blue);display:flex;align-items:flex-start;gap:14px;padding:14px 18px;">
-        <div style="flex-shrink:0;margin-top:2px;color:var(--blue);"><i class="fas fa-arrow-right"></i></div>
-        <div style="font-size:13px;line-height:1.6;color:var(--text);"><strong>Ответ работает на аудиторию шире автора.</strong> Каждый ответ на отзыв виден потенциальным кандидатам. Это не переписка один-на-один — это публичная демонстрация корпоративной культуры.</div>
-      </div>
-    </div>
-
-    <!-- Dynamic: company response stats -->
-    <div style="font-size:15px;font-weight:600;margin-bottom:12px;">Ваша статистика ответов</div>
-
-    <div class="card-grid card-grid-3" style="margin-bottom:16px;">
-      <div class="kpi-card">
-        <div class="kpi-icon blue"><i class="fas fa-reply"></i></div>
-        <div class="kpi-value">{{resp_comp_pct}}</div>
-        <div class="kpi-label">отзывов с ответом</div>
-        <div style="margin-top:6px;font-size:12px;color:var(--text-3);">{{resp_comp_abs}} из {{resp_comp_total}} отзывов</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon amber"><i class="fas fa-building"></i></div>
-        <div class="kpi-value">{{resp_rivals_avg_pct}}</div>
-        <div class="kpi-label">среднее у конкурентов</div>
-        <div style="margin-top:6px;font-size:12px;color:var(--text-3);">в среднем по выборке</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon {{resp_delta_icon_class}}"><i class="fas {{resp_delta_icon}}"></i></div>
-        <div class="kpi-value"><span class="{{resp_delta_class}}">{{resp_delta}}</span></div>
-        <div class="kpi-label">разница</div>
-        <div style="margin-top:6px;font-size:12px;color:var(--text-3);">компания vs конкуренты</div>
-      </div>
-    </div>
-
-    <!-- Detailed comparison table -->
-    <div class="data-table">
-      <div class="data-row header-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
-        <div class="data-cell">Компания</div>
-        <div class="data-cell">Отзывов</div>
-        <div class="data-cell">% ответов</div>
-        <div class="data-cell">Ответов</div>
-      </div>
-      <div class="data-row company-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
-        <div class="data-cell"><strong>{{company_name}}</strong></div>
-        <div class="data-cell">{{resp_comp_total}}</div>
-        <div class="data-cell"><strong>{{resp_comp_pct}}</strong></div>
-        <div class="data-cell">{{resp_comp_abs}}</div>
-      </div>
-      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
-        <div class="data-cell">{{rival1_name}}</div>
-        <div class="data-cell">{{resp_rival1_total}}</div>
-        <div class="data-cell">{{resp_rival1_pct}}</div>
-        <div class="data-cell">{{resp_rival1_abs}}</div>
-      </div>
-      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
-        <div class="data-cell">{{rival2_name}}</div>
-        <div class="data-cell">{{resp_rival2_total}}</div>
-        <div class="data-cell">{{resp_rival2_pct}}</div>
-        <div class="data-cell">{{resp_rival2_abs}}</div>
-      </div>
-      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
-        <div class="data-cell">{{rival3_name}}</div>
-        <div class="data-cell">{{resp_rival3_total}}</div>
-        <div class="data-cell">{{resp_rival3_pct}}</div>
-        <div class="data-cell">{{resp_rival3_abs}}</div>
-      </div>
-      <div class="data-row industry-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
-        <div class="data-cell">Индустрия в среднем</div>
-        <div class="data-cell">—</div>
-        <div class="data-cell">{{industry_answered_pct}}</div>
-        <div class="data-cell">—</div>
-      </div>
-    </div>
-
-  </section>
-
-  <hr class="divider">
-
-  <!-- ========== СЕКЦИЯ 5: ТРАФИК ========== -->
+  <!-- ========== СЕКЦИЯ 5: ТОПИКИ И ДОЛЖНОСТИ ========== -->
   <section class="slide" id="slide-5">
     <div class="slide-header">
       <span class="slide-number">05</span>
-      <h2 class="slide-title">Трафик</h2>
-    </div>
-    <p class="slide-subtitle">Сколько соискателей взаимодействует с отзывами о вашей компании на hh.ru и Dream Job</p>
-
-    <div class="ai-conclusion">
-      <details open>
-        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
-        <div class="ai-conclusion-body">{{ai_conclusion_traffic}}</div>
-      </details>
-    </div>
-
-    <div class="card-grid card-grid-4">
-      <div class="kpi-card">
-        <div class="kpi-icon blue"><i class="fas fa-globe"></i></div>
-        <div class="kpi-value">{{traffic_total_combined}}</div>
-        <div class="kpi-label">общий охват за год<br><span style="font-size:11px;color:var(--text-3);">(hh.ru + Dream Job)</span></div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon amber"><i class="fas fa-external-link-alt"></i></div>
-        <div class="kpi-value">{{traffic_hh_widget_views}}</div>
-        <div class="kpi-label tooltip-cell">просмотров виджета на hh.ru <i class="fas fa-question-circle" style="font-size:11px;color:var(--text-3);cursor:help;"></i><span class="tooltip-text" style="white-space:normal;width:260px;left:0;right:auto;">Расчётная оценка: количество пользователей, которые увидели виджет с отзывами в вакансиях на hh.ru (конверсия из просмотра виджета в переход на DJ ~10%)</span></div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon green"><i class="fas fa-eye"></i></div>
-        <div class="kpi-value">{{traffic_dj_views}}</div>
-        <div class="kpi-label">просмотров на Dream Job</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon blue"><i class="fas fa-layer-group"></i></div>
-        <div class="kpi-value">{{traffic_depth}}</div>
-        <div class="kpi-label tooltip-cell">страниц за посещение <i class="fas fa-question-circle" style="font-size:11px;color:var(--text-3);cursor:help;"></i><span class="tooltip-text" style="white-space:normal;width:240px;left:0;right:auto;">Количество просмотренных страниц на сайте (конкуренты или доп. вкладки о компании: о компании / зарплаты / собеседования / блоги)</span></div>
-        <div style="margin-top:8px;font-size:11px;color:var(--text-3);background:rgba(255,255,255,0.04);padding:4px 10px;border-radius:6px;display:inline-block;">среднее по DJ: {{traffic_depth_avg}}</div>
-      </div>
-    </div>
-
-    <details style="margin-top:20px;">
-      <summary style="cursor:pointer;font-size:13px;color:var(--text-2);margin-bottom:12px;display:flex;align-items:center;gap:8px;"><i class="fas fa-chart-area" style="font-size:12px;"></i> Динамика трафика по месяцам <i class="fas fa-chevron-down" style="font-size:10px;margin-left:4px;"></i></summary>
-      <div class="chart-container">
-        <div id="chart-traffic" class="chart-box"></div>
-      </div>
-    </details>
-
-  </section>
-
-  <hr class="divider">
-
-  <!-- ========== СЕКЦИЯ 6: ИСТОЧНИКИ ТРАФИКА ========== -->
-  <section class="slide" id="slide-6">
-    <div class="slide-header">
-      <span class="slide-number">06</span>
-      <h2 class="slide-title">Источники трафика</h2>
-    </div>
-    <p class="slide-subtitle">На Dream Job формируется мнение о компании и принимается решение об отклике</p>
-
-    <div style="display:flex;flex-direction:column;gap:12px;">
-      <div class="source-card">
-        <div class="source-pct">{{source_hh_pct}}</div>
-        <div class="source-info">
-          <h4>Переходы с hh.ru и по ссылкам</h4>
-          <p>Кандидаты, которым понравилась вакансия на hh.ru, переходят на Dream Job, чтобы изучить отзывы и принять решение об отклике. Самая горячая аудитория.</p>
-        </div>
-      </div>
-      <div class="source-card">
-        <div class="source-pct" style="color:var(--green);">{{source_search_pct}}</div>
-        <div class="source-info">
-          <h4>Из поисковых систем</h4>
-          <p>Кандидаты ищут информацию о компании в Яндекс или Google — например, «{{company_name}} отзывы сотрудников» или «работа в {{company_name}}».</p>
-        </div>
-      </div>
-      <div class="source-card">
-        <div class="source-pct" style="color:var(--amber);">{{source_internal_pct}}</div>
-        <div class="source-info">
-          <h4>Внутренние переходы</h4>
-          <p>Навигация внутри Dream Job — например, переход через блок «Похожие компании» или сравнение работодателей.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Widget callout -->
-    <div class="card" style="margin-top:16px;border-left:3px solid var(--blue);display:flex;align-items:center;gap:16px;">
-      <div style="flex-shrink:0;width:44px;height:44px;border-radius:12px;background:var(--blue-glow);display:flex;align-items:center;justify-content:center;"><i class="fas fa-award" style="color:var(--blue);font-size:18px;"></i></div>
-      <div>
-        <div style="font-weight:600;font-size:14px;margin-bottom:2px;">Расширенный виджет на hh.ru</div>
-        <div style="font-size:13px;color:var(--text-2);">Награды, ответы на отзывы и медиа-контент усиливают доверие и улучшают образ компании для соискателей в самой критичной точке принятия решения.</div>
-      </div>
-    </div>
-
-  </section>
-
-  <hr class="divider">
-
-  <!-- ========== СЕКЦИЯ 7: ТОПИКИ И ДОЛЖНОСТИ ========== -->
-  <section class="slide" id="slide-7">
-    <div class="slide-header">
-      <span class="slide-number">07</span>
       <h2 class="slide-title">О чём говорят сотрудники в открытых отзывах</h2>
     </div>
     <p class="slide-subtitle">Семантический анализ негативных отзывов · топ-3 темы по каждой должности</p>
@@ -1371,10 +1261,111 @@
 
   <hr class="divider">
 
-  <!-- ========== СЕКЦИЯ 8: КЛЮЧЕВЫЕ ТОЧКИ ВНИМАНИЯ ========== -->
-  <section class="slide" id="slide-8">
+  <!-- ========== СЕКЦИЯ 6: ОТВЕТЫ НА ОТЗЫВЫ ========== -->
+  <section class="slide" id="slide-6">
     <div class="slide-header">
-      <span class="slide-number">08</span>
+      <span class="slide-number">06</span>
+      <h2 class="slide-title">Ответы на отзывы</h2>
+    </div>
+    <p class="slide-subtitle">Как ваша компания работает с обратной связью — и как это влияет на кандидатов</p>
+
+    <!-- Static: research block (like the screenshot) -->
+    <div class="card-grid card-grid-2" style="margin-bottom:20px;">
+      <div class="kpi-card" style="text-align:center;">
+        <div class="kpi-value" style="color:var(--blue);font-size:36px;">62%</div>
+        <div style="font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:8px;">Влияние на будущий отклик</div>
+        <div style="font-size:13px;color:var(--text-3);line-height:1.5;">авторов согласны, что ответ работодателя может повлиять на желание откликнуться в эту компанию в будущем</div>
+      </div>
+      <div class="kpi-card" style="text-align:center;">
+        <div class="kpi-value" style="color:var(--green);font-size:36px;">49%</div>
+        <div style="font-size:12px;font-weight:600;color:var(--text-2);margin-bottom:8px;">Влияние на текущее удержание</div>
+        <div style="font-size:13px;color:var(--text-3);line-height:1.5;">сотрудников говорят, что реакция на отзыв могла бы повлиять на их желание остаться в компании</div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px;">
+      <div class="card" style="border-left:3px solid var(--blue);display:flex;align-items:flex-start;gap:14px;padding:14px 18px;">
+        <div style="flex-shrink:0;margin-top:2px;color:var(--blue);"><i class="fas fa-arrow-right"></i></div>
+        <div style="font-size:13px;line-height:1.6;color:var(--text);"><strong>Отзыв — точка входа, ответ — точка возврата.</strong> Кандидаты читают отзывы и видят, как компания реагирует. Грамотный ответ превращает критику в доказательство зрелости HR-бренда.</div>
+      </div>
+      <div class="card" style="border-left:3px solid var(--blue);display:flex;align-items:flex-start;gap:14px;padding:14px 18px;">
+        <div style="flex-shrink:0;margin-top:2px;color:var(--blue);"><i class="fas fa-arrow-right"></i></div>
+        <div style="font-size:13px;line-height:1.6;color:var(--text);"><strong>Ответ работает на аудиторию шире автора.</strong> Каждый ответ на отзыв виден потенциальным кандидатам. Это не переписка один-на-один — это публичная демонстрация корпоративной культуры.</div>
+      </div>
+    </div>
+
+    <!-- Dynamic: company response stats -->
+    <div style="font-size:15px;font-weight:600;margin-bottom:12px;">Ваша статистика ответов</div>
+
+    <div class="card-grid card-grid-3" style="margin-bottom:16px;">
+      <div class="kpi-card">
+        <div class="kpi-icon blue"><i class="fas fa-reply"></i></div>
+        <div class="kpi-value">{{resp_comp_pct}}</div>
+        <div class="kpi-label">отзывов с ответом</div>
+        <div style="margin-top:6px;font-size:12px;color:var(--text-3);">{{resp_comp_abs}} из {{resp_comp_total}} отзывов</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon amber"><i class="fas fa-building"></i></div>
+        <div class="kpi-value">{{resp_rivals_avg_pct}}</div>
+        <div class="kpi-label">среднее у конкурентов</div>
+        <div style="margin-top:6px;font-size:12px;color:var(--text-3);">в среднем по выборке</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon {{resp_delta_icon_class}}"><i class="fas {{resp_delta_icon}}"></i></div>
+        <div class="kpi-value"><span class="{{resp_delta_class}}">{{resp_delta}}</span></div>
+        <div class="kpi-label">разница</div>
+        <div style="margin-top:6px;font-size:12px;color:var(--text-3);">компания vs конкуренты</div>
+      </div>
+    </div>
+
+    <!-- Detailed comparison table -->
+    <div class="data-table">
+      <div class="data-row header-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
+        <div class="data-cell">Компания</div>
+        <div class="data-cell">Отзывов</div>
+        <div class="data-cell">% ответов</div>
+        <div class="data-cell">Ответов</div>
+      </div>
+      <div class="data-row company-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
+        <div class="data-cell"><strong>{{company_name}}</strong></div>
+        <div class="data-cell">{{resp_comp_total}}</div>
+        <div class="data-cell"><strong>{{resp_comp_pct}}</strong></div>
+        <div class="data-cell">{{resp_comp_abs}}</div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
+        <div class="data-cell">{{rival1_name}}</div>
+        <div class="data-cell">{{resp_rival1_total}}</div>
+        <div class="data-cell">{{resp_rival1_pct}}</div>
+        <div class="data-cell">{{resp_rival1_abs}}</div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
+        <div class="data-cell">{{rival2_name}}</div>
+        <div class="data-cell">{{resp_rival2_total}}</div>
+        <div class="data-cell">{{resp_rival2_pct}}</div>
+        <div class="data-cell">{{resp_rival2_abs}}</div>
+      </div>
+      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
+        <div class="data-cell">{{rival3_name}}</div>
+        <div class="data-cell">{{resp_rival3_total}}</div>
+        <div class="data-cell">{{resp_rival3_pct}}</div>
+        <div class="data-cell">{{resp_rival3_abs}}</div>
+      </div>
+      <div class="data-row industry-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
+        <div class="data-cell">Индустрия в среднем</div>
+        <div class="data-cell">—</div>
+        <div class="data-cell">{{industry_answered_pct}}</div>
+        <div class="data-cell">—</div>
+      </div>
+    </div>
+
+  </section>
+
+  <hr class="divider">
+
+  <!-- ========== СЕКЦИЯ 7: КЛЮЧЕВЫЕ ТОЧКИ ВНИМАНИЯ ========== -->
+  <section class="slide" id="slide-7">
+    <div class="slide-header">
+      <span class="slide-number">07</span>
       <h2 class="slide-title">Ключевые точки внимания</h2>
     </div>
     <p class="slide-subtitle">Сводка главных факторов риска из анализа выше</p>
@@ -1402,10 +1393,10 @@
 
   <hr class="divider">
 
-  <!-- ========== СЕКЦИЯ 9: АРГУМЕНТАЦИЯ ========== -->
-  <section class="slide" id="slide-9">
+  <!-- ========== СЕКЦИЯ 8: АРГУМЕНТАЦИЯ ========== -->
+  <section class="slide" id="slide-8">
     <div class="slide-header">
-      <span class="slide-number">09</span>
+      <span class="slide-number">08</span>
       <h2 class="slide-title">Почему стоит работать с отзывами</h2>
     </div>
     <p class="slide-subtitle">Исследования и опыт клиентов Dream Job</p>
@@ -1451,10 +1442,10 @@
 
   <hr class="divider">
 
-  <!-- ========== СЕКЦИЯ 10: ПРОГНОЗ ЭКОНОМИИ ========== -->
-  <section class="slide" id="slide-10">
+  <!-- ========== СЕКЦИЯ 9: ПРОГНОЗ ЭКОНОМИИ ========== -->
+  <section class="slide" id="slide-9">
     <div class="slide-header">
-      <span class="slide-number">10</span>
+      <span class="slide-number">09</span>
       <h2 class="slide-title">Примерный прогноз</h2>
     </div>
     <p class="slide-subtitle">Данные основаны на публичной информации о штате, количестве вакансий и исследованиях Dream Job</p>
@@ -1510,10 +1501,10 @@
 
   <hr class="divider">
 
-  <!-- ========== СЕКЦИЯ 11: ИТОГИ И CTA ========== -->
-  <section class="slide" id="slide-11">
+  <!-- ========== СЕКЦИЯ 10: ИТОГИ И CTA ========== -->
+  <section class="slide" id="slide-10">
     <div class="slide-header">
-      <span class="slide-number">11</span>
+      <span class="slide-number">10</span>
       <h2 class="slide-title">Что даст работа с Dream Job</h2>
     </div>
     <p class="slide-subtitle">Профессиональная работа с Dream Job позволяет добиться следующих результатов</p>
