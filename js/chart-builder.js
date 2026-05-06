@@ -323,16 +323,6 @@ function initChartWithRetry(el, optionBuilder, chartData, charts, maxRetries = 1
 export function initCharts(chartData) {
   const charts = [];
 
-  const radarEl = document.getElementById('chart-industry-radar');
-  if (radarEl) {
-    initChartWithRetry(radarEl, buildRadarOption, chartData, charts);
-  }
-
-  const criteriaRadarEl = document.getElementById('chart-criteria-radar');
-  if (criteriaRadarEl) {
-    initChartWithRetry(criteriaRadarEl, buildCriteriaRadarOption, chartData, charts);
-  }
-
   const hiringEl = document.getElementById('chart-hiring-dynamics');
   if (hiringEl) {
     initChartWithRetry(hiringEl, buildHiringOption, chartData, charts);
@@ -354,8 +344,6 @@ export function initCharts(chartData) {
  * Generate the chart initialization script for export (self-contained HTML).
  */
 export function generateChartScript(chartData, lightTheme = false) {
-  const radarOpt = JSON.stringify(buildRadarOption(chartData));
-  const criteriaRadarOpt = JSON.stringify(buildCriteriaRadarOption(chartData));
   const hiringOpt = JSON.stringify(buildHiringOption(chartData));
 
   let trafficInit = '';
@@ -373,7 +361,6 @@ export function generateChartScript(chartData, lightTheme = false) {
     if (opt.legend) { opt.legend.textStyle = { color: '#5a5a6c', fontSize: 11 }; }
     if (opt.xAxis) { opt.xAxis.axisLabel = { color: '#5a5a6c', fontSize: 11 }; opt.xAxis.splitLine = { lineStyle: { color: 'rgba(0,0,0,0.06)' } }; opt.xAxis.axisLine = { lineStyle: { color: 'rgba(0,0,0,0.06)' } }; }
     if (opt.yAxis) { opt.yAxis.axisLabel = { color: '#5a5a6c', fontSize: 11 }; opt.yAxis.splitLine = { lineStyle: { color: 'rgba(0,0,0,0.06)' } }; opt.yAxis.axisLine = { lineStyle: { color: 'rgba(0,0,0,0.06)' } }; }
-    if (opt.radar) { opt.radar.axisName = { color: '#5a5a6c' }; opt.radar.splitLine = { lineStyle: { color: 'rgba(0,0,0,0.08)' } }; opt.radar.splitArea = { areaStyle: { color: ['rgba(0,0,0,0.02)', 'rgba(0,0,0,0.04)'] } }; }
     return opt;
   }` : '';
 
@@ -397,8 +384,6 @@ document.addEventListener('DOMContentLoaded', function() {${lightPatch}
     }
     tryInit();
   }
-  initWhenReady(document.getElementById('chart-industry-radar'), ${radarOpt});
-  initWhenReady(document.getElementById('chart-criteria-radar'), ${criteriaRadarOpt});
   initWhenReady(document.getElementById('chart-hiring-dynamics'), ${hiringOpt});${trafficInit}
 });
 <\/script>`;

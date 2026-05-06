@@ -128,7 +128,39 @@ export function buildVals(json) {
   vals.industry_answered_pct = fmtPct(repCat[repCatFeedbackKey][0]);
   vals.industry_notrec_pct = fmtPct(repCat.unrecommend_percent[0]);
 
-  // ===== Section 3: Industry comparison =====
+  // ===== Section 4: Responses stats =====
+  const compReviews = rep.reviews_count[targetIdx] || 0;
+  const compFeedbackPct = rep[feedbackKey][targetIdx] || 0;
+  const compAnswered = Math.round(compReviews * compFeedbackPct / 100);
+  vals.resp_comp_pct = fmtPct(compFeedbackPct);
+  vals.resp_comp_abs = fmtNum(compAnswered);
+  vals.resp_comp_total = fmtNum(compReviews);
+
+  // Rivals response stats
+  const rivalPcts = [];
+  rivalIndices.forEach((ri, idx) => {
+    const i = idx + 1;
+    const rReviews = rep.reviews_count[ri] || 0;
+    const rPct = rep[feedbackKey][ri] || 0;
+    const rAnswered = Math.round(rReviews * rPct / 100);
+    vals[`resp_rival${i}_total`] = fmtNum(rReviews);
+    vals[`resp_rival${i}_pct`] = fmtPct(rPct);
+    vals[`resp_rival${i}_abs`] = fmtNum(rAnswered);
+    rivalPcts.push(rPct);
+  });
+
+  // Average rivals response %
+  const avgRivalPct = rivalPcts.length > 0 ? rivalPcts.reduce((a, b) => a + b, 0) / rivalPcts.length : 0;
+  vals.resp_rivals_avg_pct = fmtPct(avgRivalPct);
+
+  // Delta: company vs rivals average
+  const respDelta = compFeedbackPct - avgRivalPct;
+  vals.resp_delta = `${respDelta >= 0 ? '+' : ''}${respDelta.toFixed(1)} п.п.`;
+  vals.resp_delta_class = respDelta > 0 ? 'delta-pos' : respDelta < 0 ? 'delta-neg' : 'delta-neutral';
+  vals.resp_delta_icon_class = respDelta >= 0 ? 'green' : 'red';
+  vals.resp_delta_icon = respDelta >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+
+  // ===== Industry comparison (kept for data, section removed from template) =====
   // Rating alltime
   vals.ind_rating_alltime_comp = fmtRating(ratings.total_rating[0]);
   vals.ind_rating_alltime_ind = fmtRating(ratings.total_rating[1]);
@@ -311,7 +343,7 @@ export function buildVals(json) {
 
   // ===== AI Conclusions =====
   const conclusionKeys = [
-    'ai_conclusion_reputation', 'ai_conclusion_industry', 'ai_conclusion_hiring',
+    'ai_conclusion_reputation', 'ai_conclusion_hiring',
     'ai_conclusion_traffic', 'ai_conclusion_topics'
   ];
   conclusionKeys.forEach(key => {
