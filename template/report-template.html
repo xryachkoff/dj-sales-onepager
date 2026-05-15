@@ -377,6 +377,49 @@
     opacity: 1;
   }
 
+  /* ===== METHOD HINT (?) ===== */
+  .method-hint {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    color: var(--text-3);
+    font-size: 10px;
+    cursor: help;
+    position: relative;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .method-tooltip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    background: var(--card2);
+    color: var(--text-2);
+    padding: 16px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    width: 360px;
+    z-index: 30;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .method-tooltip strong { color: var(--text); font-weight: 600; }
+  .method-hint:hover .method-tooltip {
+    visibility: visible;
+    opacity: 1;
+  }
+  .light-theme .method-hint { display: none; }
+
   /* ===== DELTA BADGES ===== */
   .delta-badge {
     display: inline-block;
@@ -864,6 +907,7 @@
     <div class="slide-header">
       <span class="slide-number">01</span>
       <h2 class="slide-title">Dream Job и hh.ru</h2>
+      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Источники данных</strong><br>«9 из 10» — опросы соискателей.<br>hh.ru — Dream Job интегрирован в hh.ru, виджет с отзывами отображается в ~60% вакансий.<br>«18 млн+» — совокупная аудитория DJ и hh.ru, видящая отзывы. Из них ~6 млн пользователей в месяц — только на Dream Job.<br>«+23%» — данные исследования Dream Job о влиянии работы с репутацией на конверсию в отклик.</span></span>
     </div>
     <p class="slide-subtitle">Репутация работодателя напрямую влияет на эффективность найма</p>
 
@@ -898,6 +942,7 @@
     <div class="slide-header">
       <span class="slide-number">02</span>
       <h2 class="slide-title">Ваша ситуация с репутацией</h2>
+      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Методология</strong><br>Данные актуальны на текущий момент.<br><strong>Вакансии hh.ru</strong> — активные вакансии на дату формирования отчёта.<br><strong>Рейтинг</strong> — общий рейтинг компании (total_rating) за всё время.<br><strong>Отзывы</strong> — общее количество отзывов на текущий момент.<br><strong>Работа с отзывами</strong> — статус клиента Dream Job.<br><strong>% ответов</strong> — доля отзывов, на которые работодатель дал ответ.<br><strong>% не рекомендуют</strong> — доля авторов, указавших что не рекомендуют компанию.</span></span>
     </div>
     <p class="slide-subtitle">Сравнение с ключевыми конкурентами и индустрией</p>
 
@@ -908,7 +953,7 @@
       </details>
     </div>
 
-    <div class="data-table">
+    <div class="data-table" style="margin-top:20px;">
       <div class="data-row header-row">
         <div class="data-cell">Компания</div>
         <div class="data-cell">Вакансии hh.ru</div>
@@ -974,6 +1019,7 @@
     <div class="slide-header">
       <span class="slide-number">03</span>
       <h2 class="slide-title">Трафик и источники</h2>
+      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Методология · Период: 12 месяцев</strong><br><strong>Общий охват</strong> — суммарная аудитория, видевшая отзывы о компании на Dream Job и hh.ru.<br><strong>Просмотры виджета на hh.ru</strong> — расчётная оценка пользователей, увидевших виджет с отзывами в вакансиях на hh.ru.<br><strong>Просмотры на DJ</strong> — аудитория страницы компании на Dream Job.<br><strong>Страниц за посещение</strong> — среднее количество страниц за один визит на DJ.<br>Источник: внутренняя статистика Dream Job, Яндекс.Метрика, собственная система логирования. Источники трафика также замеряются по данным Яндекс.Метрики и внутренних логов.</span></span>
     </div>
     <p class="slide-subtitle">Сколько соискателей взаимодействует с отзывами о вашей компании на hh.ru и Dream Job</p>
 
@@ -1060,6 +1106,7 @@
     <div class="slide-header">
       <span class="slide-number">04</span>
       <h2 class="slide-title">Активность найма на hh.ru</h2>
+      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Методология · Период: 12 месяцев</strong><br><strong>Открытые вакансии</strong> и <strong>отклики</strong> — данные hh.ru.<br><strong>Индустрия</strong> — средние значения по отрасли.<br><strong>DJ клиенты</strong> — средние значения среди клиентов Dream Job.<br><strong>Разница</strong> — отклонение компании от среднего по индустрии.<br>Источник: данные Dream Job и hh.ru по открытым вакансиям.</span></span>
     </div>
     <p class="slide-subtitle">Растёт конкуренция за найм ключевых специалистов</p>
 
@@ -1071,7 +1118,7 @@
     </div>
 
     <!-- Comparison table -->
-    <div class="data-table">
+    <div class="data-table" style="margin-top:20px;">
       <div class="data-row header-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
         <div class="data-cell">Показатель</div>
         <div class="data-cell">Компания</div>
@@ -1109,6 +1156,7 @@
     <div class="slide-header">
       <span class="slide-number">05</span>
       <h2 class="slide-title">О чём говорят сотрудники в открытых отзывах</h2>
+      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Методология · Период: 12 месяцев</strong><br>Анализируются тексты отзывов сотрудников. С помощью машинного обучения из них извлекаются ключевые темы.<br>Оценивается общий тон отзывов (негативный/позитивный), выделяются топ-темы по каждой должности.<br>Показатели отражают долю упоминания темы среди негативных отзывов по конкретной позиции.</span></span>
     </div>
     <p class="slide-subtitle">Семантический анализ негативных отзывов · топ-3 темы по каждой должности</p>
     <p class="topic-avg-line"><strong>{{topic_avg_rating}}</strong> рейтинг DJ у ваших открытых вакансий</p>
@@ -1266,6 +1314,7 @@
     <div class="slide-header">
       <span class="slide-number">06</span>
       <h2 class="slide-title">Ответы на отзывы</h2>
+      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Источники данных</strong><br><strong>62% и 49%</strong> — внутреннее исследование Dream Job: опрос текущих и бывших сотрудников о влиянии ответов работодателя.<br><strong>Статистика ответов</strong> — текущие показатели вовлечённости работодателей на платформе Dream Job. Сравнение с конкурентами по доле отзывов, получивших ответ.</span></span>
     </div>
     <p class="slide-subtitle">Как ваша компания работает с обратной связью — и как это влияет на кандидатов</p>
 
@@ -1367,6 +1416,7 @@
     <div class="slide-header">
       <span class="slide-number">07</span>
       <h2 class="slide-title">Ключевые точки внимания</h2>
+      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Методология</strong><br>Сводка ключевых факторов риска, сформированная на основе методологии Dream Job по работе с отзывами и текущей ситуации компании по всем показателям отчёта.</span></span>
     </div>
     <p class="slide-subtitle">Сводка главных факторов риска из анализа выше</p>
 
@@ -1398,6 +1448,7 @@
     <div class="slide-header">
       <span class="slide-number">08</span>
       <h2 class="slide-title">Почему стоит работать с отзывами</h2>
+      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Источники данных</strong><br>Данные исследований Dream Job о влиянии отзывов и репутации работодателя на привлечение и удержание сотрудников.</span></span>
     </div>
     <p class="slide-subtitle">Исследования и опыт клиентов Dream Job</p>
 
@@ -1447,6 +1498,7 @@
     <div class="slide-header">
       <span class="slide-number">09</span>
       <h2 class="slide-title">Примерный прогноз</h2>
+      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Методология</strong><br>Расчёт на основе калькулятора Dream Job, который учитывает стоимость удержания и привлечения сотрудников, средний период найма и текущий масштаб рекрутинга компании.</span></span>
     </div>
     <p class="slide-subtitle">Данные основаны на публичной информации о штате, количестве вакансий и исследованиях Dream Job</p>
 

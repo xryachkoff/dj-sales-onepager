@@ -172,11 +172,9 @@ export function buildCriteriaRadarOption(chartData) {
  * Build hiring dynamics chart option for Section 4.
  */
 export function buildHiringOption(chartData) {
-  const { vacancy, hh } = chartData;
+  const { vacancy } = chartData;
   const months = vacancy.month_period.map(fmtMonth);
   const companyData = vacancy.vacancy_count.map(v => Math.round(v));
-  const indAvg = Math.round(hh.open_vacancies[1]);
-  const industryData = months.map(() => indAvg);
 
   return {
     tooltip: {
@@ -185,30 +183,16 @@ export function buildHiringOption(chartData) {
       borderColor: 'rgba(255,255,255,0.1)',
       textStyle: { color: colors.text }
     },
-    legend: {
-      top: 0,
-      textStyle: { color: colors.text2, fontSize: 11 },
-      data: ['Компания', 'Индустрия (средн.)']
-    },
-    grid: { top: 40, bottom: 30, left: 50, right: 20 },
+    grid: { top: 20, bottom: 30, left: 50, right: 20 },
     xAxis: { type: 'category', data: months, ...baseAxisStyle },
     yAxis: { type: 'value', ...baseAxisStyle },
     series: [
       {
-        name: 'Компания',
+        name: 'Вакансии',
         type: 'bar',
         data: companyData,
         itemStyle: { color: colors.blue, borderRadius: [4, 4, 0, 0] },
-        barWidth: '35%'
-      },
-      {
-        name: 'Индустрия (средн.)',
-        type: 'line',
-        data: industryData,
-        lineStyle: { color: colors.amber, width: 2, type: 'dashed' },
-        itemStyle: { color: colors.amber },
-        symbol: 'none',
-        smooth: false
+        barWidth: '40%'
       }
     ]
   };
