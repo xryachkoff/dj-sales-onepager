@@ -275,6 +275,172 @@ export function buildTrafficOption(chartData) {
 }
 
 /**
+ * Merge traffic + vacancy data by month key.
+ * Returns aligned arrays: months[], views[], vacancies[].
+ */
+function mergeMonthlyData(tyData, vacancy) {
+  const trafficMap = {};
+  tyData.month.forEach((m, i) => {
+    trafficMap[fmtMonth(m)] = Math.round(tyData.view_cnt[i]);
+  });
+
+  const vacancyMap = {};
+  vacancy.month_period.forEach((m, i) => {
+    vacancyMap[fmtMonth(m)] = Math.round(vacancy.vacancy_count[i]);
+  });
+
+  const allMonths = [...new Set([
+    ...Object.keys(trafficMap),
+    ...Object.keys(vacancyMap)
+  ])].sort();
+
+  return {
+    months: allMonths,
+    views: allMonths.map(m => trafficMap[m] || 0),
+    vacancies: allMonths.map(m => vacancyMap[m] || 0)
+  };
+}
+
+/**
+ * Build combined traffic + vacancy dual-axis chart.
+ * Left Y: traffic (area), Right Y: vacancies (bars).
+ */
+export function buildTrafficVacancyOption(chartData) {
+  const { tyData, vacancy } = chartData;
+  const merged = mergeMonthlyData(tyData, vacancy);
+
+  return {
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: '#1c1c22',
+      borderColor: 'rgba(255,255,255,0.1)',
+      textStyle: { color: colors.text }
+    },
+    legend: {
+      top: 0,
+      textStyle: { color: colors.text2, fontSize: 11 },
+      data: ['Просмотры', 'Вакансии']
+    },
+    grid: { top: 45, bottom: 30, left: 55, right: 55 },
+    xAxis: { type: 'category', data: merged.months, ...baseAxisStyle },
+    yAxis: [
+      {
+        type: 'value',
+        name: 'Просмотры',
+        nameTextStyle: { color: colors.text3, fontSize: 11 },
+        ...baseAxisStyle
+      },
+      {
+        type: 'value',
+        name: 'Вакансии',
+        nameTextStyle: { color: colors.text3, fontSize: 11 },
+        axisLine: { lineStyle: { color: colors.grid } },
+        axisTick: { show: false },
+        axisLabel: { color: colors.amber, fontSize: 11 },
+        splitLine: { show: false }
+      }
+    ],
+    series: [
+      {
+        name: 'Просмотры',
+        type: 'line',
+        yAxisIndex: 0,
+        data: merged.views,
+        lineStyle: { color: colors.blue, width: 2 },
+        areaStyle: {
+          color: {
+            type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+            colorStops: [
+              { offset: 0, color: 'rgba(59,130,246,0.18)' },
+              { offset: 1, color: 'rgba(59,130,246,0)' }
+            ]
+          }
+        },
+        itemStyle: { color: colors.blue },
+        symbol: 'circle',
+        symbolSize: 5,
+        smooth: true
+      },
+      {
+        name: 'Вакансии',
+        type: 'bar',
+        yAxisIndex: 1,
+        data: merged.vacancies,
+        itemStyle: { color: colors.amber, borderRadius: [3, 3, 0, 0] },
+        barWidth: '30%',
+        opacity: 0.85
+      }
+    ]
+  };
+}
+
+/**
+ * Build visits-per-vacancy ratio chart.
+ */
+export function buildVisitsPerVacancyOption(chartData) {
+  const { tyData, vacancy } = chartData;
+  const merged = mergeMonthlyData(tyData, vacancy);
+
+  const ratio = merged.months.map((m, i) => {
+    const vac = merged.vacancies[i];
+    if (vac === 0) return 0;
+    return +(merged.views[i] / vac).toFixed(1);
+  });
+
+  const avgRatio = ratio.length > 0
+    ? +(ratio.reduce((a, b) => a + b, 0) / ratio.length).toFixed(1)
+    : 0;
+
+  return {
+    tooltip: {
+      trigger: 'axis',
+      backgroundColor: '#1c1c22',
+      borderColor: 'rgba(255,255,255,0.1)',
+      textStyle: { color: colors.text },
+      formatter: '{b}<br/>{a}: <strong>{c}</strong> просмотров / вакансию'
+    },
+    grid: { top: 20, bottom: 30, left: 55, right: 20 },
+    xAxis: { type: 'category', data: merged.months, ...baseAxisStyle },
+    yAxis: {
+      type: 'value',
+      ...baseAxisStyle
+    },
+    series: [
+      {
+        name: 'Просмотров на вакансию',
+        type: 'line',
+        data: ratio,
+        lineStyle: { color: colors.green, width: 2.5 },
+        areaStyle: {
+          color: {
+            type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+            colorStops: [
+              { offset: 0, color: 'rgba(34,197,94,0.15)' },
+              { offset: 1, color: 'rgba(34,197,94,0)' }
+            ]
+          }
+        },
+        itemStyle: { color: colors.green },
+        symbol: 'circle',
+        symbolSize: 6,
+        smooth: true,
+        markLine: {
+          silent: true,
+          symbol: 'none',
+          lineStyle: { color: colors.text3, type: 'dashed', width: 1 },
+          label: {
+            formatter: 'среднее: ' + avgRatio,
+            color: colors.text3,
+            fontSize: 11
+          },
+          data: [{ yAxis: avgRatio }]
+        }
+      }
+    ]
+  };
+}
+
+/**
  * Initialize a single chart with retry logic.
  * Waits until the container has visible dimensions before initializing.
  */
@@ -312,9 +478,14 @@ export function initCharts(chartData) {
     initChartWithRetry(hiringEl, buildHiringOption, chartData, charts);
   }
 
-  const trafficEl = document.getElementById('chart-traffic');
-  if (trafficEl && chartData.tyData) {
-    initChartWithRetry(trafficEl, buildTrafficOption, chartData, charts);
+  const tvEl = document.getElementById('chart-traffic-vacancy');
+  if (tvEl && chartData.tyData && chartData.vacancy) {
+    initChartWithRetry(tvEl, buildTrafficVacancyOption, chartData, charts);
+  }
+
+  const vrEl = document.getElementById('chart-visits-ratio');
+  if (vrEl && chartData.tyData && chartData.vacancy) {
+    initChartWithRetry(vrEl, buildVisitsPerVacancyOption, chartData, charts);
   }
 
   // Resize handler
@@ -330,21 +501,25 @@ export function initCharts(chartData) {
 export function generateChartScript(chartData, lightTheme = false) {
   const hiringOpt = JSON.stringify(buildHiringOption(chartData));
 
-  let trafficInit = '';
-  if (chartData.tyData) {
-    const trafficOpt = JSON.stringify(buildTrafficOption(chartData));
-    trafficInit = `
-  var trafficEl = document.getElementById('chart-traffic');
-  if (trafficEl) { var c3 = echarts.init(trafficEl); c3.setOption(${trafficOpt}); window.addEventListener('resize', function() { c3.resize(); }); }`;
+  let trafficVacancyInit = '';
+  let visitsRatioInit = '';
+  if (chartData.tyData && chartData.vacancy) {
+    const tvOpt = JSON.stringify(buildTrafficVacancyOption(chartData));
+    const vrOpt = JSON.stringify(buildVisitsPerVacancyOption(chartData));
+    trafficVacancyInit = `
+  initWhenReady(document.getElementById('chart-traffic-vacancy'), ${tvOpt});`;
+    visitsRatioInit = `
+  initWhenReady(document.getElementById('chart-visits-ratio'), ${vrOpt});`;
   }
 
   // Light theme: patch tooltip and axis colors in the generated script
   const lightPatch = lightTheme ? `
+  function patchAxis(a) { a.axisLabel = Object.assign(a.axisLabel||{},{color:'#5a5a6c',fontSize:11}); a.splitLine = {lineStyle:{color:'rgba(0,0,0,0.06)'}}; a.axisLine = {lineStyle:{color:'rgba(0,0,0,0.06)'}}; }
   function patchLight(opt) {
     if (opt.tooltip) { opt.tooltip.backgroundColor = '#ffffff'; opt.tooltip.borderColor = 'rgba(0,0,0,0.1)'; opt.tooltip.textStyle = { color: '#1a1a2e' }; }
     if (opt.legend) { opt.legend.textStyle = { color: '#5a5a6c', fontSize: 11 }; }
-    if (opt.xAxis) { opt.xAxis.axisLabel = { color: '#5a5a6c', fontSize: 11 }; opt.xAxis.splitLine = { lineStyle: { color: 'rgba(0,0,0,0.06)' } }; opt.xAxis.axisLine = { lineStyle: { color: 'rgba(0,0,0,0.06)' } }; }
-    if (opt.yAxis) { opt.yAxis.axisLabel = { color: '#5a5a6c', fontSize: 11 }; opt.yAxis.splitLine = { lineStyle: { color: 'rgba(0,0,0,0.06)' } }; opt.yAxis.axisLine = { lineStyle: { color: 'rgba(0,0,0,0.06)' } }; }
+    if (opt.xAxis) { patchAxis(opt.xAxis); }
+    if (Array.isArray(opt.yAxis)) { opt.yAxis.forEach(patchAxis); } else if (opt.yAxis) { patchAxis(opt.yAxis); }
     return opt;
   }` : '';
 
@@ -368,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function() {${lightPatch}
     }
     tryInit();
   }
-  initWhenReady(document.getElementById('chart-hiring-dynamics'), ${hiringOpt});${trafficInit}
+  initWhenReady(document.getElementById('chart-hiring-dynamics'), ${hiringOpt});${trafficVacancyInit}${visitsRatioInit}
 });
 <\/script>`;
 }
