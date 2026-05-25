@@ -335,7 +335,6 @@ export function buildVals(json) {
   // ===== Section 9: Tariffs =====
   ['standard', 'optimum', 'premium'].forEach((name, i) => {
     vals[`tariff_${name}_price`] = fmtNum(price.price[i]);
-    vals[`tariff_${name}_price_09`] = fmtNum(Math.round(price.price[i] * 0.9));
     const savings = price.hr[i] + price.hold[i];
     vals[`tariff_${name}_savings`] = fmtNum(savings);
     const roi = savings / price.price[i] * 100;
