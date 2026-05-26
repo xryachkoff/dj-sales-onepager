@@ -978,33 +978,7 @@
         <div class="data-cell">{{comp_answered_pct}}</div>
         <div class="data-cell">{{comp_notrec_pct}}</div>
       </div>
-      <div class="data-row">
-        <div class="data-cell"><a href="{{rival1_url}}" target="_blank" class="dj-link">{{rival1_name}}</a></div>
-        <div class="data-cell">{{rival1_vacancies}}</div>
-        <div class="data-cell">{{rival1_rating}}</div>
-        <div class="data-cell">{{rival1_reviews}}</div>
-        <div class="data-cell"><span class="{{rival1_dj_class}}">{{rival1_dj}}</span></div>
-        <div class="data-cell">{{rival1_answered_pct}}</div>
-        <div class="data-cell">{{rival1_notrec_pct}}</div>
-      </div>
-      <div class="data-row">
-        <div class="data-cell"><a href="{{rival2_url}}" target="_blank" class="dj-link">{{rival2_name}}</a></div>
-        <div class="data-cell">{{rival2_vacancies}}</div>
-        <div class="data-cell">{{rival2_rating}}</div>
-        <div class="data-cell">{{rival2_reviews}}</div>
-        <div class="data-cell"><span class="{{rival2_dj_class}}">{{rival2_dj}}</span></div>
-        <div class="data-cell">{{rival2_answered_pct}}</div>
-        <div class="data-cell">{{rival2_notrec_pct}}</div>
-      </div>
-      <div class="data-row">
-        <div class="data-cell"><a href="{{rival3_url}}" target="_blank" class="dj-link">{{rival3_name}}</a></div>
-        <div class="data-cell">{{rival3_vacancies}}</div>
-        <div class="data-cell">{{rival3_rating}}</div>
-        <div class="data-cell">{{rival3_reviews}}</div>
-        <div class="data-cell"><span class="{{rival3_dj_class}}">{{rival3_dj}}</span></div>
-        <div class="data-cell">{{rival3_answered_pct}}</div>
-        <div class="data-cell">{{rival3_notrec_pct}}</div>
-      </div>
+      {{rivals_rows_reputation}}
       <div class="data-row industry-row">
         <div class="data-cell">Индустрия в среднем</div>
         <div class="data-cell">—</div>
@@ -1394,24 +1368,7 @@
         <div class="data-cell"><strong>{{resp_comp_pct}}</strong></div>
         <div class="data-cell">{{resp_comp_abs}}</div>
       </div>
-      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
-        <div class="data-cell">{{rival1_name}}</div>
-        <div class="data-cell">{{resp_rival1_total}}</div>
-        <div class="data-cell">{{resp_rival1_pct}}</div>
-        <div class="data-cell">{{resp_rival1_abs}}</div>
-      </div>
-      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
-        <div class="data-cell">{{rival2_name}}</div>
-        <div class="data-cell">{{resp_rival2_total}}</div>
-        <div class="data-cell">{{resp_rival2_pct}}</div>
-        <div class="data-cell">{{resp_rival2_abs}}</div>
-      </div>
-      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
-        <div class="data-cell">{{rival3_name}}</div>
-        <div class="data-cell">{{resp_rival3_total}}</div>
-        <div class="data-cell">{{resp_rival3_pct}}</div>
-        <div class="data-cell">{{resp_rival3_abs}}</div>
-      </div>
+      {{rivals_rows_responses}}
       <div class="data-row industry-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
         <div class="data-cell">Индустрия в среднем</div>
         <div class="data-cell">—</div>

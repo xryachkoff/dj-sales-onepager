@@ -110,18 +110,42 @@ export function buildVals(json) {
   vals.comp_answered_pct = fmtPct(rep[feedbackKey][targetIdx]);
   vals.comp_notrec_pct = fmtPct(rep.unrecommend_percent[targetIdx]);
 
+  const rivalsRepRowsHtml = [];
   rivalIndices.forEach((ri, idx) => {
     const i = idx + 1;
-    vals[`rival${i}_name`] = rep.name[ri];
-    vals[`rival${i}_url`] = `https://dreamjob.ru/employers/${rep.employer_id[ri]}`;
-    vals[`rival${i}_vacancies`] = fmtNum(rep.open_vacancies[ri]);
-    vals[`rival${i}_rating`] = fmtRating(rep.total_rating[ri]);
-    vals[`rival${i}_reviews`] = fmtNum(rep.reviews_count[ri]);
-    vals[`rival${i}_dj`] = rep.work[ri] === 1 ? 'Да' : 'Нет';
-    vals[`rival${i}_dj_class`] = rep.work[ri] === 1 ? 'badge-yes' : 'badge-no';
-    vals[`rival${i}_answered_pct`] = fmtPct(rep[feedbackKey][ri]);
-    vals[`rival${i}_notrec_pct`] = fmtPct(rep.unrecommend_percent[ri]);
+    const rivalName = rep.name[ri];
+    const rivalUrl = `https://dreamjob.ru/employers/${rep.employer_id[ri]}`;
+    const rivalVacancies = fmtNum(rep.open_vacancies[ri]);
+    const rivalRating = fmtRating(rep.total_rating[ri]);
+    const rivalReviews = fmtNum(rep.reviews_count[ri]);
+    const rivalDj = rep.work[ri] === 1 ? 'Да' : 'Нет';
+    const rivalDjClass = rep.work[ri] === 1 ? 'badge-yes' : 'badge-no';
+    const rivalAnsweredPct = fmtPct(rep[feedbackKey][ri]);
+    const rivalNotrecPct = fmtPct(rep.unrecommend_percent[ri]);
+    // Keep legacy per-index placeholders (in case used elsewhere)
+    vals[`rival${i}_name`] = rivalName;
+    vals[`rival${i}_url`] = rivalUrl;
+    vals[`rival${i}_vacancies`] = rivalVacancies;
+    vals[`rival${i}_rating`] = rivalRating;
+    vals[`rival${i}_reviews`] = rivalReviews;
+    vals[`rival${i}_dj`] = rivalDj;
+    vals[`rival${i}_dj_class`] = rivalDjClass;
+    vals[`rival${i}_answered_pct`] = rivalAnsweredPct;
+    vals[`rival${i}_notrec_pct`] = rivalNotrecPct;
+    // Build HTML row
+    rivalsRepRowsHtml.push(
+      `<div class="data-row">
+        <div class="data-cell"><a href="${rivalUrl}" target="_blank" class="dj-link">${rivalName}</a></div>
+        <div class="data-cell">${rivalVacancies}</div>
+        <div class="data-cell">${rivalRating}</div>
+        <div class="data-cell">${rivalReviews}</div>
+        <div class="data-cell"><span class="${rivalDjClass}">${rivalDj}</span></div>
+        <div class="data-cell">${rivalAnsweredPct}</div>
+        <div class="data-cell">${rivalNotrecPct}</div>
+      </div>`
+    );
   });
+  vals.rivals_rows_reputation = rivalsRepRowsHtml.join('\n      ');
 
   vals.industry_rating = fmtRating(repCat.total_rating[0]);
   vals.industry_reviews = fmtNum(repCat.reviews_count[0]);
@@ -138,16 +162,29 @@ export function buildVals(json) {
 
   // Rivals response stats
   const rivalPcts = [];
+  const rivalsRespRowsHtml = [];
   rivalIndices.forEach((ri, idx) => {
     const i = idx + 1;
     const rReviews = rep.reviews_count[ri] || 0;
     const rPct = rep[feedbackKey][ri] || 0;
     const rAnswered = Math.round(rReviews * rPct / 100);
-    vals[`resp_rival${i}_total`] = fmtNum(rReviews);
-    vals[`resp_rival${i}_pct`] = fmtPct(rPct);
-    vals[`resp_rival${i}_abs`] = fmtNum(rAnswered);
+    const rTotalFmt = fmtNum(rReviews);
+    const rPctFmt = fmtPct(rPct);
+    const rAbsFmt = fmtNum(rAnswered);
+    vals[`resp_rival${i}_total`] = rTotalFmt;
+    vals[`resp_rival${i}_pct`] = rPctFmt;
+    vals[`resp_rival${i}_abs`] = rAbsFmt;
     rivalPcts.push(rPct);
+    rivalsRespRowsHtml.push(
+      `<div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
+        <div class="data-cell">${rep.name[ri]}</div>
+        <div class="data-cell">${rTotalFmt}</div>
+        <div class="data-cell">${rPctFmt}</div>
+        <div class="data-cell">${rAbsFmt}</div>
+      </div>`
+    );
   });
+  vals.rivals_rows_responses = rivalsRespRowsHtml.join('\n      ');
 
   // Average rivals response %
   const avgRivalPct = rivalPcts.length > 0 ? rivalPcts.reduce((a, b) => a + b, 0) / rivalPcts.length : 0;
