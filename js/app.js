@@ -99,6 +99,16 @@ const reportCompanyName = document.getElementById('reportCompanyName');
 const backBtn = document.getElementById('backBtn');
 const exportBtn = document.getElementById('exportBtn');
 const exportPdfBtn = document.getElementById('exportPdfBtn');
+const exportModal = document.getElementById('exportModal');
+const exportSectionList = document.getElementById('exportSectionList');
+const exportModalClose = document.getElementById('exportModalClose');
+const exportModalCancel = document.getElementById('exportModalCancel');
+const exportModalConfirm = document.getElementById('exportModalConfirm');
+const exportSelectAll = document.getElementById('exportSelectAll');
+const exportSelectNone = document.getElementById('exportSelectNone');
+
+// Pending export mode: 'html' or 'pdf'
+let pendingExportMode = null;
 
 // ==================== FILE UPLOAD ====================
 
@@ -287,11 +297,143 @@ backBtn.addEventListener('click', () => {
   window.scrollTo(0, 0);
 });
 
+// ==================== EXPORT MODAL ====================
+
+/**
+ * Read sections from the currently rendered report.
+ * Returns array of { id, num, title } for each .slide.
+ */
+function getReportSections() {
+  const sections = [];
+  reportContainer.querySelectorAll('.slide').forEach(slide => {
+    const id = slide.id;
+    const numEl = slide.querySelector('.slide-number');
+    const titleEl = slide.querySelector('.slide-title');
+    if (!id || !numEl || !titleEl) return;
+    sections.push({
+      id,
+      num: numEl.textContent.trim(),
+      title: titleEl.textContent.trim()
+    });
+  });
+  return sections;
+}
+
+/**
+ * Populate modal with checkboxes for all sections (all checked by default).
+ */
+function populateExportModal() {
+  const sections = getReportSections();
+  exportSectionList.innerHTML = '';
+  sections.forEach(s => {
+    const item = document.createElement('label');
+    item.className = 'export-section-item';
+    item.innerHTML = `
+      <input type="checkbox" data-section-id="${s.id}" checked>
+      <span class="section-num">${s.num}</span>
+      <span class="section-title">${s.title}</span>
+    `;
+    exportSectionList.appendChild(item);
+  });
+}
+
+function openExportModal(mode) {
+  pendingExportMode = mode;
+  populateExportModal();
+  exportModal.classList.add('visible');
+}
+
+function closeExportModal() {
+  exportModal.classList.remove('visible');
+  pendingExportMode = null;
+}
+
+/**
+ * Get array of section IDs that are CHECKED (to keep).
+ */
+function getSelectedSectionIds() {
+  const ids = [];
+  exportSectionList.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+    ids.push(cb.dataset.sectionId);
+  });
+  return ids;
+}
+
+/**
+ * Remove unselected <section.slide> elements + adjacent <hr.divider>,
+ * then renumber the remaining .slide-number elements 01..NN.
+ */
+function filterAndRenumberSections(html, keepIds) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, 'text/html');
+
+  const allSlides = Array.from(doc.querySelectorAll('section.slide'));
+  allSlides.forEach(slide => {
+    if (keepIds.includes(slide.id)) return;
+    // Remove the following <hr class="divider">, if any
+    const nextSibling = slide.nextElementSibling;
+    if (nextSibling && nextSibling.tagName === 'HR' && nextSibling.classList.contains('divider')) {
+      nextSibling.remove();
+    }
+    slide.remove();
+  });
+
+  // Renumber remaining slides
+  const remaining = Array.from(doc.querySelectorAll('section.slide'));
+  remaining.forEach((slide, idx) => {
+    const newNum = String(idx + 1).padStart(2, '0');
+    slide.id = `slide-${idx + 1}`;
+    const numEl = slide.querySelector('.slide-number');
+    if (numEl) numEl.textContent = newNum;
+  });
+
+  // Trailing divider cleanup: if last child of .page is <hr.divider>, remove it
+  const page = doc.querySelector('.page');
+  if (page) {
+    let last = page.lastElementChild;
+    while (last && last.tagName === 'HR' && last.classList.contains('divider')) {
+      last.remove();
+      last = page.lastElementChild;
+    }
+  }
+
+  return '<!DOCTYPE html>' + doc.documentElement.outerHTML;
+}
+
+// Modal event handlers
+exportModalClose.addEventListener('click', closeExportModal);
+exportModalCancel.addEventListener('click', closeExportModal);
+exportModal.querySelector('.export-modal-backdrop').addEventListener('click', closeExportModal);
+exportSelectAll.addEventListener('click', () => {
+  exportSectionList.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
+});
+exportSelectNone.addEventListener('click', () => {
+  exportSectionList.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+});
+
+exportModalConfirm.addEventListener('click', async () => {
+  const keepIds = getSelectedSectionIds();
+  if (keepIds.length === 0) {
+    alert('Выберите хотя бы один блок для выгрузки.');
+    return;
+  }
+  const mode = pendingExportMode;
+  closeExportModal();
+  if (mode === 'html') {
+    await doExportHtml(keepIds);
+  } else if (mode === 'pdf') {
+    await doExportPdf(keepIds);
+  }
+});
+
 // ==================== EXPORT ====================
 
-exportBtn.addEventListener('click', async () => {
+exportBtn.addEventListener('click', () => {
   if (!filledHtml || !chartData) return;
+  openExportModal('html');
+});
 
+async function doExportHtml(keepIds) {
   exportBtn.disabled = true;
   exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i>Сборка...';
 
@@ -307,6 +449,9 @@ exportBtn.addEventListener('click', async () => {
     template = fillTemplate(template, vals);
     const cleaned = cleanUnfilledPlaceholders(template);
     template = cleaned.html;
+
+    // Filter selected sections + renumber
+    template = filterAndRenumberSections(template, keepIds);
 
     // Embed all resources inline (fonts, CSS, JS — fully self-contained)
     template = await injectResourcesInline(template);
@@ -332,13 +477,16 @@ exportBtn.addEventListener('click', async () => {
     exportBtn.disabled = false;
     exportBtn.innerHTML = '<i class="fas fa-download" style="margin-right:6px;"></i>Скачать HTML';
   }
-});
+}
 
 // ==================== PDF EXPORT ====================
 
-exportPdfBtn.addEventListener('click', async () => {
+exportPdfBtn.addEventListener('click', () => {
   if (!filledHtml || !chartData) return;
+  openExportModal('pdf');
+});
 
+async function doExportPdf(keepIds) {
   exportPdfBtn.disabled = true;
   exportPdfBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i>Сборка PDF...';
 
@@ -354,6 +502,9 @@ exportPdfBtn.addEventListener('click', async () => {
     template = fillTemplate(template, vals);
     const cleaned = cleanUnfilledPlaceholders(template);
     template = cleaned.html;
+
+    // Filter selected sections + renumber
+    template = filterAndRenumberSections(template, keepIds);
 
     // Embed all resources inline
     template = await injectResourcesInline(template);
@@ -387,7 +538,7 @@ exportPdfBtn.addEventListener('click', async () => {
     exportPdfBtn.disabled = false;
     exportPdfBtn.innerHTML = '<i class="fas fa-file-pdf" style="margin-right:6px;"></i>Скачать PDF';
   }
-});
+}
 
 // ==================== HELPERS ====================
 

@@ -70,6 +70,30 @@
     <div id="reportContainer" class="report-container"></div>
   </div>
 
+  <!-- ========== EXPORT MODAL ========== -->
+  <div id="exportModal" class="export-modal">
+    <div class="export-modal-backdrop"></div>
+    <div class="export-modal-content">
+      <div class="export-modal-header">
+        <h3>Выберите блоки для выгрузки</h3>
+        <button id="exportModalClose" class="export-modal-close" aria-label="Закрыть"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="export-modal-subtitle">По умолчанию выгружаются все блоки. Снимите галочки, чтобы исключить ненужные.</div>
+
+      <div class="export-modal-actions-top">
+        <button id="exportSelectAll" class="export-modal-link">Выбрать все</button>
+        <button id="exportSelectNone" class="export-modal-link">Снять все</button>
+      </div>
+
+      <div id="exportSectionList" class="export-section-list"></div>
+
+      <div class="export-modal-footer">
+        <button id="exportModalCancel" class="toolbar-btn">Отмена</button>
+        <button id="exportModalConfirm" class="toolbar-btn primary">Скачать</button>
+      </div>
+    </div>
+  </div>
+
   <div class="version-tag">Обновлено: 14.04.2026 18:41 MSK</div>
 
   <script src="vendor/echarts.min.js"></script>
