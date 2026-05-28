@@ -262,21 +262,9 @@ export function buildVals(json) {
   vals.delta_former_rating = safeDelta(d, 2);
   vals.delta_former_rating_class = deltaClass(d);
 
-  // ===== Section 4: Hiring =====
-  vals.hire_open_vac_comp = fmtNum(hh.open_vacancies[0]);
-  vals.hire_open_vac_ind = fmtNum(hh.open_vacancies[1]);
-  vals.hire_open_vac_payed = fmtNum(hh.open_vacancies[2]);
-  d = hh.open_vacancies[0] - hh.open_vacancies[1];
-  vals.hire_delta_vac = d >= 0 ? `+${fmtNum(d)}` : fmtNum(d);
-  vals.hire_delta_vac_class = 'delta-neutral';
-  vals.hire_response_comp = safeFix(hh.response_stat[0], 2);
-  vals.hire_response_ind = safeFix(hh.response_stat[1], 2);
-  vals.hire_response_payed = safeFix(hh.response_stat[2], 2);
-  d = hh.response_stat[0] - hh.response_stat[1];
-  vals.hire_delta_response = safeDelta(d, 2);
-  vals.hire_delta_response_class = deltaClass(d);
+  // ===== Section "Hiring" removed (April 2026) — vacancies now shown only in Traffic combined chart =====
 
-  // ===== Section 5: Traffic =====
+  // ===== Traffic =====
   if (ty && ty.data) {
     const tyData = ty.data;
     const totalViews = tyData.view_cnt.reduce((a, b) => a + b, 0);
@@ -380,11 +368,57 @@ export function buildVals(json) {
 
   // ===== AI Conclusions =====
   const conclusionKeys = [
-    'ai_conclusion_reputation', 'ai_conclusion_hiring',
+    'ai_conclusion_reputation',
     'ai_conclusion_traffic', 'ai_conclusion_topics'
   ];
   conclusionKeys.forEach(key => {
     vals[key] = json[key] || '';
+  });
+
+  // Auto-link company mentions in AI text to their Dream Job pages.
+  // Builds a list of (name, url) pairs from target + all rivals,
+  // sorts by name length DESC so longer names match before shorter substrings,
+  // and wraps each free-standing name in <a href="...">...</a> if not already linked.
+  const linkPairs = [{
+    name: companyName,
+    url: `https://dreamjob.ru/employers/${targetId}`
+  }];
+  rivalIndices.forEach((ri) => {
+    linkPairs.push({
+      name: rep.name[ri],
+      url: `https://dreamjob.ru/employers/${rep.employer_id[ri]}`
+    });
+  });
+  linkPairs.sort((a, b) => b.name.length - a.name.length);
+
+  function escapeRegex(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+  function autoLinkCompanies(html) {
+    if (!html) return html;
+    let out = html;
+    linkPairs.forEach(({ name, url }) => {
+      if (!name) return;
+      // Match the name only when NOT already inside an <a>...</a> tag
+      // Approach: split by existing <a> tags, process only non-link parts
+      const parts = out.split(/(<a\b[^>]*>[\s\S]*?<\/a>)/i);
+      for (let i = 0; i < parts.length; i++) {
+        if (i % 2 === 1) continue; // skip <a>...</a>
+        // Use word boundary substitute via lookahead/lookbehind for non-word chars or string start/end
+        const re = new RegExp(`(^|[^\\wА-Яа-яЁё])(${escapeRegex(name)})(?=[^\\wА-Яа-яЁё]|$)`, 'g');
+        parts[i] = parts[i].replace(re, (_, pre, m) =>
+          `${pre}<a href="${url}" target="_blank" class="dj-link">${m}</a>`
+        );
+      }
+      out = parts.join('');
+    });
+    return out;
+  }
+
+  // Apply to all AI conclusions and summary cards
+  conclusionKeys.forEach(key => { vals[key] = autoLinkCompanies(vals[key]); });
+  ['summary_reputation', 'summary_hiring', 'summary_traffic', 'summary_negative'].forEach(key => {
+    if (vals[key]) vals[key] = autoLinkCompanies(vals[key]);
   });
 
   // ===== Chart Data =====

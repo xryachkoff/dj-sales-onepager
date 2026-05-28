@@ -168,35 +168,8 @@ export function buildCriteriaRadarOption(chartData) {
   };
 }
 
-/**
- * Build hiring dynamics chart option for Section 4.
- */
-export function buildHiringOption(chartData) {
-  const { vacancy } = chartData;
-  const months = vacancy.month_period.map(fmtMonth);
-  const companyData = vacancy.vacancy_count.map(v => Math.round(v));
-
-  return {
-    tooltip: {
-      trigger: 'axis',
-      backgroundColor: '#1c1c22',
-      borderColor: 'rgba(255,255,255,0.1)',
-      textStyle: { color: colors.text }
-    },
-    grid: { top: 20, bottom: 30, left: 50, right: 20 },
-    xAxis: { type: 'category', data: months, ...baseAxisStyle },
-    yAxis: { type: 'value', ...baseAxisStyle },
-    series: [
-      {
-        name: 'Вакансии',
-        type: 'bar',
-        data: companyData,
-        itemStyle: { color: colors.blue, borderRadius: [4, 4, 0, 0] },
-        barWidth: '40%'
-      }
-    ]
-  };
-}
+// `buildHiringOption` removed (April 2026) — section "Активность найма" was deleted.
+// Vacancy dynamics are now shown in the combined Traffic+Vacancy chart in the Traffic section.
 
 /**
  * Build traffic area chart option for Section 5.
@@ -473,11 +446,6 @@ function initChartWithRetry(el, optionBuilder, chartData, charts, maxRetries = 1
 export function initCharts(chartData) {
   const charts = [];
 
-  const hiringEl = document.getElementById('chart-hiring-dynamics');
-  if (hiringEl) {
-    initChartWithRetry(hiringEl, buildHiringOption, chartData, charts);
-  }
-
   const tvEl = document.getElementById('chart-traffic-vacancy');
   if (tvEl && chartData.tyData && chartData.vacancy) {
     initChartWithRetry(tvEl, buildTrafficVacancyOption, chartData, charts);
@@ -499,8 +467,6 @@ export function initCharts(chartData) {
  * Generate the chart initialization script for export (self-contained HTML).
  */
 export function generateChartScript(chartData, lightTheme = false) {
-  const hiringOpt = JSON.stringify(buildHiringOption(chartData));
-
   let trafficVacancyInit = '';
   let visitsRatioInit = '';
   if (chartData.tyData && chartData.vacancy) {
@@ -543,7 +509,7 @@ document.addEventListener('DOMContentLoaded', function() {${lightPatch}
     }
     tryInit();
   }
-  initWhenReady(document.getElementById('chart-hiring-dynamics'), ${hiringOpt});${trafficVacancyInit}${visitsRatioInit}
+  ${trafficVacancyInit}${visitsRatioInit}
 });
 <\/script>`;
 }

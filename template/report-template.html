@@ -1192,64 +1192,14 @@
 
   <hr class="divider">
 
-  <!-- ========== СЕКЦИЯ 4: АКТИВНОСТЬ НАЙМА ========== -->
+  <!-- ========== СЕКЦИЯ 4: ТОПИКИ И ДОЛЖНОСТИ ========== -->
   <section class="slide" id="slide-4">
     <div class="slide-header">
       <span class="slide-number">04</span>
-      <h2 class="slide-title">Активность найма на hh.ru</h2>
-      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Методология · Период: 12 месяцев</strong><br><strong>Открытые вакансии</strong> и <strong>отклики</strong> — данные hh.ru.<br><strong>Индустрия</strong> — средние значения по отрасли.<br><strong>DJ клиенты</strong> — средние значения среди клиентов Dream Job.<br><strong>Разница</strong> — отклонение компании от среднего по индустрии.<br>Источник: данные Dream Job и hh.ru по открытым вакансиям.</span></span>
+      <h2 class="slide-title">О чём говорят сотрудники в открытых вакансиях</h2>
+      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Методология · Период: 12 месяцев</strong><br>Анализируются тексты отзывов сотрудников по открытым вакансиям компании. С помощью машинного обучения из них извлекаются ключевые темы.<br>Оценивается общий тон отзывов (негативный/позитивный), выделяются топ-темы по каждой должности.<br>Показатели отражают долю упоминания темы среди негативных отзывов по конкретной позиции.</span></span>
     </div>
-    <p class="slide-subtitle">Растёт конкуренция за найм ключевых специалистов</p>
-
-    <div class="ai-conclusion">
-      <details open>
-        <summary class="ai-conclusion-header"><i class="fas fa-sparkles"></i> Ключевые инсайты <i class="fas fa-chevron-up ai-toggle-icon"></i></summary>
-        <div class="ai-conclusion-body">{{ai_conclusion_hiring}}</div>
-      </details>
-    </div>
-
-    <!-- Comparison table -->
-    <div class="data-table" style="margin-top:20px;">
-      <div class="data-row header-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
-        <div class="data-cell">Показатель</div>
-        <div class="data-cell">Компания</div>
-        <div class="data-cell">Индустрия</div>
-        <div class="data-cell">DJ клиенты</div>
-        <div class="data-cell tooltip-cell">Разница <span class="tooltip-hint-print" style="display:none;font-size:10px;font-weight:400;color:var(--text-3);">(vs срез индустрии)</span><span class="tooltip-text">Разница между вашей компанией и средним по индустрии</span></div>
-      </div>
-      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
-        <div class="data-cell">Открытые вакансии сейчас</div>
-        <div class="data-cell"><strong>{{hire_open_vac_comp}}</strong></div>
-        <div class="data-cell">{{hire_open_vac_ind}}</div>
-        <div class="data-cell">{{hire_open_vac_payed}}</div>
-        <div class="data-cell"><span class="delta-badge {{hire_delta_vac_class}}">{{hire_delta_vac}}</span></div>
-      </div>
-      <div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr 1fr;">
-        <div class="data-cell">Откликов на вакансию</div>
-        <div class="data-cell"><strong>{{hire_response_comp}}</strong></div>
-        <div class="data-cell">{{hire_response_ind}}</div>
-        <div class="data-cell">{{hire_response_payed}}</div>
-        <div class="data-cell"><span class="delta-badge {{hire_delta_response_class}}">{{hire_delta_response}}</span></div>
-      </div>
-    </div>
-
-    <div class="chart-container" style="margin-top:20px;">
-      <div style="font-size:13px;color:var(--text-2);margin-bottom:12px;">Динамика вакансий за последние 12 месяцев</div>
-      <div id="chart-hiring-dynamics" class="chart-box"></div>
-    </div>
-
-  </section>
-
-  <hr class="divider">
-
-  <!-- ========== СЕКЦИЯ 5: ТОПИКИ И ДОЛЖНОСТИ ========== -->
-  <section class="slide" id="slide-5">
-    <div class="slide-header">
-      <span class="slide-number">05</span>
-      <h2 class="slide-title">О чём говорят сотрудники в открытых отзывах</h2>
-      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Методология · Период: 12 месяцев</strong><br>Анализируются тексты отзывов сотрудников. С помощью машинного обучения из них извлекаются ключевые темы.<br>Оценивается общий тон отзывов (негативный/позитивный), выделяются топ-темы по каждой должности.<br>Показатели отражают долю упоминания темы среди негативных отзывов по конкретной позиции.</span></span>
-    </div>
-    <p class="slide-subtitle">Семантический анализ негативных отзывов · топ-3 темы по каждой должности</p>
+    <p class="slide-subtitle">Анализ негативных отзывов по вашим открытым позициям — основные поинты, почему к вам не идут на эти должности</p>
     <p class="topic-avg-line"><strong>{{topic_avg_rating}}</strong> рейтинг DJ у ваших открытых вакансий</p>
 
     <div class="ai-conclusion">
@@ -1400,10 +1350,10 @@
 
   <hr class="divider">
 
-  <!-- ========== СЕКЦИЯ 6: ОТВЕТЫ НА ОТЗЫВЫ ========== -->
-  <section class="slide" id="slide-6">
+  <!-- ========== СЕКЦИЯ 5: ОТВЕТЫ НА ОТЗЫВЫ ========== -->
+  <section class="slide" id="slide-5">
     <div class="slide-header">
-      <span class="slide-number">06</span>
+      <span class="slide-number">05</span>
       <h2 class="slide-title">Ответы на отзывы</h2>
       <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Источники данных</strong><br><strong>62% и 49%</strong> — внутреннее исследование Dream Job: опрос текущих и бывших сотрудников о влиянии ответов работодателя.<br><strong>Статистика ответов</strong> — текущие показатели вовлечённости работодателей на платформе Dream Job. Сравнение с конкурентами по доле отзывов, получивших ответ.</span></span>
     </div>
@@ -1485,10 +1435,10 @@
 
   <hr class="divider">
 
-  <!-- ========== СЕКЦИЯ 7: КЛЮЧЕВЫЕ ТОЧКИ ВНИМАНИЯ ========== -->
-  <section class="slide" id="slide-7">
+  <!-- ========== СЕКЦИЯ 6: КЛЮЧЕВЫЕ ТОЧКИ ВНИМАНИЯ ========== -->
+  <section class="slide" id="slide-6">
     <div class="slide-header">
-      <span class="slide-number">07</span>
+      <span class="slide-number">06</span>
       <h2 class="slide-title">Ключевые точки внимания</h2>
       <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Методология</strong><br>Сводка ключевых факторов риска, сформированная на основе методологии Dream Job по работе с отзывами и текущей ситуации компании по всем показателям отчёта.</span></span>
     </div>
@@ -1517,49 +1467,56 @@
 
   <hr class="divider">
 
-  <!-- ========== СЕКЦИЯ 8: АРГУМЕНТАЦИЯ ========== -->
-  <section class="slide" id="slide-8">
+  <!-- ========== СЕКЦИЯ 7: КЕЙСЫ И РЕЗУЛЬТАТЫ ========== -->
+  <section class="slide" id="slide-7">
     <div class="slide-header">
-      <span class="slide-number">08</span>
-      <h2 class="slide-title">Почему стоит работать с отзывами</h2>
-      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Источники данных</strong><br>Данные исследований Dream Job о влиянии отзывов и репутации работодателя на привлечение и удержание сотрудников.</span></span>
+      <span class="slide-number">07</span>
+      <h2 class="slide-title">Что даст работа с Dream Job</h2>
+      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Источники данных</strong><br>Результаты подтверждены опубликованными кейсами клиентов Dream Job на hh.ru. По ссылкам — подробные разборы каждого кейса.</span></span>
     </div>
-    <p class="slide-subtitle">Исследования и опыт клиентов Dream Job</p>
+    <p class="slide-subtitle">Кейсы клиентов и результаты системной работы с репутацией</p>
 
-    <!-- Research arguments -->
-    <div class="card-grid card-grid-3" style="margin-bottom:20px;">
-      <div class="kpi-card" style="text-align:left;">
-        <div class="kpi-icon green" style="margin-bottom:12px;"><i class="fas fa-reply"></i></div>
-        <div style="font-weight:600;font-size:14px;margin-bottom:6px;">Ответы влияют на отклик</div>
-        <div style="font-size:13px;color:var(--text-2);line-height:1.5;">Ответ работодателя на отзыв влияет на желание откликнуться на вакансию даже спустя длительное время после публикации отзыва.</div>
+    <div class="card-grid card-grid-4">
+      <div class="result-card">
+        <div class="result-value">x3</div>
+        <div class="result-label">Отклики через отзывы</div>
+        <a href="https://hh.ru/article/kak-prokachat-najm-cherez-otzyvy-i-uvelichit-kolichestvo-otklikov-v-3-raza" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;color:var(--blue-bright);text-decoration:none;opacity:0.8;">кейс ТЛК-Групп &rarr;</a>
       </div>
-      <div class="kpi-card" style="text-align:left;">
-        <div class="kpi-icon blue" style="margin-bottom:12px;"><i class="fas fa-star"></i></div>
-        <div style="font-weight:600;font-size:14px;margin-bottom:6px;">Рейтинг = воронка найма</div>
-        <div style="font-size:13px;color:var(--text-2);line-height:1.5;">Компании с рейтингом ниже 3.5 теряют до 40% потенциальных кандидатов на этапе изучения отзывов перед откликом.</div>
+      <div class="result-card">
+        <div class="result-value">+47%</div>
+        <div class="result-label">Конверсия в отклик</div>
+        <a href="https://hh.ru/article/kak-otzyvy-pomogli-strahovoj-kompanii-soglasie-uvelichit-konversiyu-prosmotrov-v-otkliki-na-47" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;color:var(--blue-bright);text-decoration:none;opacity:0.8;">кейс Согласие &rarr;</a>
       </div>
-      <div class="kpi-card" style="text-align:left;">
-        <div class="kpi-icon amber" style="margin-bottom:12px;"><i class="fas fa-chart-line"></i></div>
-        <div style="font-weight:600;font-size:14px;margin-bottom:6px;">Системная работа окупается</div>
-        <div style="font-size:13px;color:var(--text-2);line-height:1.5;">Компании, которые системно отвечают на отзывы и работают с репутацией, наблюдают рост конверсии в отклик и снижение стоимости найма.</div>
+      <div class="result-card">
+        <div class="result-value">+34%</div>
+        <div class="result-label">Принятые офферы</div>
+        <a href="https://astrakhan.hh.ru/article/kak-kompaniya-dorogi-i-mosty-za-6-mesyacev-uvelichila-kolichestvo-prinyatyh-oferov-na-34" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;color:var(--blue-bright);text-decoration:none;opacity:0.8;">кейс Дороги и Мосты &rarr;</a>
+      </div>
+      <div class="result-card">
+        <div class="result-value">20%</div>
+        <div class="result-label">Влияния в рейтинге<br>работодателей hh.ru</div>
       </div>
     </div>
 
-    <!-- Client cases -->
-    <div style="font-size:15px;font-weight:600;margin-bottom:12px;">Опыт клиентов</div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      <div class="card" style="border-left:3px solid var(--green);display:flex;align-items:center;gap:16px;">
-        <div style="flex-shrink:0;width:40px;height:40px;border-radius:10px;background:var(--green-dim);display:flex;align-items:center;justify-content:center;"><i class="fas fa-quote-left" style="color:var(--green);font-size:14px;"></i></div>
+    <div class="card" style="margin-top:24px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
         <div>
-          <div style="font-size:13px;line-height:1.5;color:var(--text);">Рост числа релевантных кандидатов и повышение конверсии в отклик после начала системной работы с отзывами на Dream Job.</div>
-          <div style="font-size:11px;color:var(--text-3);margin-top:4px;">— Из кейсов клиентов DJ</div>
+          <div style="font-size:13px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Проблемы сейчас</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="pain-item"><i class="fas fa-xmark"></i> Конкуренты работают с репутацией</div>
+            <div class="pain-item"><i class="fas fa-xmark"></i> HR-бренд ниже рынка</div>
+            <div class="pain-item"><i class="fas fa-xmark"></i> Высокая конкуренция за отклики</div>
+            <div class="pain-item"><i class="fas fa-xmark"></i> Риски негативного восприятия</div>
+          </div>
         </div>
-      </div>
-      <div class="card" style="border-left:3px solid var(--blue);display:flex;align-items:center;gap:16px;">
-        <div style="flex-shrink:0;width:40px;height:40px;border-radius:10px;background:var(--blue-glow);display:flex;align-items:center;justify-content:center;"><i class="fas fa-quote-left" style="color:var(--blue);font-size:14px;"></i></div>
         <div>
-          <div style="font-size:13px;line-height:1.5;color:var(--text);">Снижение доли негативных отзывов и улучшение восприятия бренда работодателя среди соискателей за 6 месяцев активной работы.</div>
-          <div style="font-size:11px;color:var(--text-3);margin-top:4px;">— Из кейсов клиентов DJ</div>
+          <div style="font-size:13px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">После работы с Dream Job</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div class="pain-result"><i class="fas fa-check"></i> Сильный HR-бренд в индустрии</div>
+            <div class="pain-result"><i class="fas fa-check"></i> Больше релевантных откликов</div>
+            <div class="pain-result"><i class="fas fa-check"></i> Более эффективный и быстрый найм</div>
+            <div class="pain-result"><i class="fas fa-check"></i> Системная работа с репутацией</div>
+          </div>
         </div>
       </div>
     </div>
@@ -1567,10 +1524,10 @@
 
   <hr class="divider">
 
-  <!-- ========== СЕКЦИЯ 9: ТАРИФЫ ========== -->
-  <section class="slide" id="slide-9">
+  <!-- ========== СЕКЦИЯ 8: ТАРИФЫ ========== -->
+  <section class="slide" id="slide-8">
     <div class="slide-header">
-      <span class="slide-number">09</span>
+      <span class="slide-number">08</span>
       <h2 class="slide-title">Стоимость</h2>
     </div>
     <p class="slide-subtitle">Тарифы Dream Job для управления репутацией работодателя</p>
@@ -1680,65 +1637,12 @@
 
   <hr class="divider">
 
-  <!-- ========== СЕКЦИЯ 10: ИТОГИ И CTA ========== -->
-  <section class="slide" id="slide-10">
-    <div class="slide-header">
-      <span class="slide-number">10</span>
-      <h2 class="slide-title">Что даст работа с Dream Job</h2>
-    </div>
-    <p class="slide-subtitle">Профессиональная работа с Dream Job позволяет добиться следующих результатов</p>
-
-    <div class="card-grid card-grid-4">
-      <div class="result-card">
-        <div class="result-value">x3</div>
-        <div class="result-label">Отклики через отзывы</div>
-        <a href="https://hh.ru/article/kak-prokachat-najm-cherez-otzyvy-i-uvelichit-kolichestvo-otklikov-v-3-raza" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;color:var(--blue-bright);text-decoration:none;opacity:0.8;">кейс ТЛК-Групп &rarr;</a>
-      </div>
-      <div class="result-card">
-        <div class="result-value">+47%</div>
-        <div class="result-label">Конверсия в отклик</div>
-        <a href="https://hh.ru/article/kak-otzyvy-pomogli-strahovoj-kompanii-soglasie-uvelichit-konversiyu-prosmotrov-v-otkliki-na-47" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;color:var(--blue-bright);text-decoration:none;opacity:0.8;">кейс Согласие &rarr;</a>
-      </div>
-      <div class="result-card">
-        <div class="result-value">+34%</div>
-        <div class="result-label">Принятые офферы</div>
-        <a href="https://astrakhan.hh.ru/article/kak-kompaniya-dorogi-i-mosty-za-6-mesyacev-uvelichila-kolichestvo-prinyatyh-oferov-na-34" target="_blank" style="display:inline-block;margin-top:10px;font-size:11px;color:var(--blue-bright);text-decoration:none;opacity:0.8;">кейс Дороги и Мосты &rarr;</a>
-      </div>
-      <div class="result-card">
-        <div class="result-value">20%</div>
-        <div class="result-label">Влияния в рейтинге<br>работодателей hh.ru</div>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top:24px;">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-        <div>
-          <div style="font-size:13px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Проблемы сейчас</div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div class="pain-item"><i class="fas fa-xmark"></i> Конкуренты работают с репутацией</div>
-            <div class="pain-item"><i class="fas fa-xmark"></i> HR-бренд ниже рынка</div>
-            <div class="pain-item"><i class="fas fa-xmark"></i> Высокая конкуренция за отклики</div>
-            <div class="pain-item"><i class="fas fa-xmark"></i> Риски негативного восприятия</div>
-          </div>
-        </div>
-        <div>
-          <div style="font-size:13px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">После работы с Dream Job</div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <div class="pain-result"><i class="fas fa-check"></i> Сильный HR-бренд в индустрии</div>
-            <div class="pain-result"><i class="fas fa-check"></i> Больше релевантных откликов</div>
-            <div class="pain-result"><i class="fas fa-check"></i> Более эффективный и быстрый найм</div>
-            <div class="pain-result"><i class="fas fa-check"></i> Системная работа с репутацией</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="cta-section">
-      <h3>Готовы усилить свой HR-бренд?</h3>
-      <p>Напишите персональному менеджеру или свяжитесь с нами</p>
-      <a href="mailto:clients@dreamjob.ru" class="cta-btn">clients@dreamjob.ru</a>
-    </div>
-  </section>
+  <!-- ========== ФИНАЛЬНЫЙ CTA ========== -->
+  <div class="cta-section">
+    <h3>Готовы усилить свой HR-бренд?</h3>
+    <p>Напишите персональному менеджеру или свяжитесь с нами</p>
+    <a href="mailto:clients@dreamjob.ru" class="cta-btn">clients@dreamjob.ru</a>
+  </div>
 
 </div>
 
