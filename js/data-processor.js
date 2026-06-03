@@ -110,25 +110,94 @@ export function buildVals(json) {
   vals.comp_answered_pct = fmtPct(rep[feedbackKey][targetIdx]);
   vals.comp_notrec_pct = fmtPct(rep.unrecommend_percent[targetIdx]);
 
+  const rivalsRepRowsHtml = [];
   rivalIndices.forEach((ri, idx) => {
     const i = idx + 1;
-    vals[`rival${i}_name`] = rep.name[ri];
-    vals[`rival${i}_url`] = `https://dreamjob.ru/employers/${rep.employer_id[ri]}`;
-    vals[`rival${i}_vacancies`] = fmtNum(rep.open_vacancies[ri]);
-    vals[`rival${i}_rating`] = fmtRating(rep.total_rating[ri]);
-    vals[`rival${i}_reviews`] = fmtNum(rep.reviews_count[ri]);
-    vals[`rival${i}_dj`] = rep.work[ri] === 1 ? 'Да' : 'Нет';
-    vals[`rival${i}_dj_class`] = rep.work[ri] === 1 ? 'badge-yes' : 'badge-no';
-    vals[`rival${i}_answered_pct`] = fmtPct(rep[feedbackKey][ri]);
-    vals[`rival${i}_notrec_pct`] = fmtPct(rep.unrecommend_percent[ri]);
+    const rivalName = rep.name[ri];
+    const rivalUrl = `https://dreamjob.ru/employers/${rep.employer_id[ri]}`;
+    const rivalVacancies = fmtNum(rep.open_vacancies[ri]);
+    const rivalRating = fmtRating(rep.total_rating[ri]);
+    const rivalReviews = fmtNum(rep.reviews_count[ri]);
+    const rivalDj = rep.work[ri] === 1 ? 'Да' : 'Нет';
+    const rivalDjClass = rep.work[ri] === 1 ? 'badge-yes' : 'badge-no';
+    const rivalAnsweredPct = fmtPct(rep[feedbackKey][ri]);
+    const rivalNotrecPct = fmtPct(rep.unrecommend_percent[ri]);
+    // Keep legacy per-index placeholders (in case used elsewhere)
+    vals[`rival${i}_name`] = rivalName;
+    vals[`rival${i}_url`] = rivalUrl;
+    vals[`rival${i}_vacancies`] = rivalVacancies;
+    vals[`rival${i}_rating`] = rivalRating;
+    vals[`rival${i}_reviews`] = rivalReviews;
+    vals[`rival${i}_dj`] = rivalDj;
+    vals[`rival${i}_dj_class`] = rivalDjClass;
+    vals[`rival${i}_answered_pct`] = rivalAnsweredPct;
+    vals[`rival${i}_notrec_pct`] = rivalNotrecPct;
+    // Build HTML row
+    rivalsRepRowsHtml.push(
+      `<div class="data-row">
+        <div class="data-cell"><a href="${rivalUrl}" target="_blank" class="dj-link">${rivalName}</a></div>
+        <div class="data-cell">${rivalVacancies}</div>
+        <div class="data-cell">${rivalRating}</div>
+        <div class="data-cell">${rivalReviews}</div>
+        <div class="data-cell"><span class="${rivalDjClass}">${rivalDj}</span></div>
+        <div class="data-cell">${rivalAnsweredPct}</div>
+        <div class="data-cell">${rivalNotrecPct}</div>
+      </div>`
+    );
   });
+  vals.rivals_rows_reputation = rivalsRepRowsHtml.join('\n      ');
 
   vals.industry_rating = fmtRating(repCat.total_rating[0]);
   vals.industry_reviews = fmtNum(repCat.reviews_count[0]);
   vals.industry_answered_pct = fmtPct(repCat[repCatFeedbackKey][0]);
   vals.industry_notrec_pct = fmtPct(repCat.unrecommend_percent[0]);
 
-  // ===== Section 3: Industry comparison =====
+  // ===== Section 4: Responses stats =====
+  const compReviews = rep.reviews_count[targetIdx] || 0;
+  const compFeedbackPct = rep[feedbackKey][targetIdx] || 0;
+  const compAnswered = Math.round(compReviews * compFeedbackPct / 100);
+  vals.resp_comp_pct = fmtPct(compFeedbackPct);
+  vals.resp_comp_abs = fmtNum(compAnswered);
+  vals.resp_comp_total = fmtNum(compReviews);
+
+  // Rivals response stats
+  const rivalPcts = [];
+  const rivalsRespRowsHtml = [];
+  rivalIndices.forEach((ri, idx) => {
+    const i = idx + 1;
+    const rReviews = rep.reviews_count[ri] || 0;
+    const rPct = rep[feedbackKey][ri] || 0;
+    const rAnswered = Math.round(rReviews * rPct / 100);
+    const rTotalFmt = fmtNum(rReviews);
+    const rPctFmt = fmtPct(rPct);
+    const rAbsFmt = fmtNum(rAnswered);
+    vals[`resp_rival${i}_total`] = rTotalFmt;
+    vals[`resp_rival${i}_pct`] = rPctFmt;
+    vals[`resp_rival${i}_abs`] = rAbsFmt;
+    rivalPcts.push(rPct);
+    rivalsRespRowsHtml.push(
+      `<div class="data-row" style="grid-template-columns: 2.5fr 1fr 1fr 1fr;">
+        <div class="data-cell">${rep.name[ri]}</div>
+        <div class="data-cell">${rTotalFmt}</div>
+        <div class="data-cell">${rPctFmt}</div>
+        <div class="data-cell">${rAbsFmt}</div>
+      </div>`
+    );
+  });
+  vals.rivals_rows_responses = rivalsRespRowsHtml.join('\n      ');
+
+  // Average rivals response %
+  const avgRivalPct = rivalPcts.length > 0 ? rivalPcts.reduce((a, b) => a + b, 0) / rivalPcts.length : 0;
+  vals.resp_rivals_avg_pct = fmtPct(avgRivalPct);
+
+  // Delta: company vs rivals average
+  const respDelta = compFeedbackPct - avgRivalPct;
+  vals.resp_delta = `${respDelta >= 0 ? '+' : ''}${respDelta.toFixed(1)} п.п.`;
+  vals.resp_delta_class = respDelta > 0 ? 'delta-pos' : respDelta < 0 ? 'delta-neg' : 'delta-neutral';
+  vals.resp_delta_icon_class = respDelta >= 0 ? 'green' : 'red';
+  vals.resp_delta_icon = respDelta >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+
+  // ===== Industry comparison (kept for data, section removed from template) =====
   // Rating alltime
   vals.ind_rating_alltime_comp = fmtRating(ratings.total_rating[0]);
   vals.ind_rating_alltime_ind = fmtRating(ratings.total_rating[1]);
@@ -193,25 +262,14 @@ export function buildVals(json) {
   vals.delta_former_rating = safeDelta(d, 2);
   vals.delta_former_rating_class = deltaClass(d);
 
-  // ===== Section 4: Hiring =====
-  vals.hire_open_vac_comp = fmtNum(hh.open_vacancies[0]);
-  vals.hire_open_vac_ind = fmtNum(hh.open_vacancies[1]);
-  vals.hire_open_vac_payed = fmtNum(hh.open_vacancies[2]);
-  d = hh.open_vacancies[0] - hh.open_vacancies[1];
-  vals.hire_delta_vac = d >= 0 ? `+${fmtNum(d)}` : fmtNum(d);
-  vals.hire_delta_vac_class = 'delta-neutral';
-  vals.hire_response_comp = safeFix(hh.response_stat[0], 2);
-  vals.hire_response_ind = safeFix(hh.response_stat[1], 2);
-  vals.hire_response_payed = safeFix(hh.response_stat[2], 2);
-  d = hh.response_stat[0] - hh.response_stat[1];
-  vals.hire_delta_response = safeDelta(d, 2);
-  vals.hire_delta_response_class = deltaClass(d);
+  // ===== Section "Hiring" removed (April 2026) — vacancies now shown only in Traffic combined chart =====
 
-  // ===== Section 5: Traffic =====
+  // ===== Traffic =====
   if (ty && ty.data) {
     const tyData = ty.data;
     const totalViews = tyData.view_cnt.reduce((a, b) => a + b, 0);
     vals.traffic_views_year = fmtNum(totalViews);
+    vals.traffic_dj_views = fmtNum(totalViews);
     vals.traffic_new_pct = fmtPct(ty.new_users_percent);
     vals.traffic_depth = safeFix(ty.depth, 2);
     vals.traffic_depth_avg = safeFix(cy.depth, 2);
@@ -220,6 +278,10 @@ export function buildVals(json) {
   }
 
   // ===== Section 6: Sources =====
+  // Conversion rate from hh.ru widget view to DJ click (~10%)
+  const HH_WIDGET_CONVERSION_RATE = 0.10;
+  let hhSourcePct = 0;
+
   if (ysrc) {
     const srcPercents = ysrc.percent;
     const srcNames = ysrc.source_category;
@@ -229,6 +291,7 @@ export function buildVals(json) {
       const lower = name.toLowerCase();
       if (lower.includes('hh') || lower.includes('ссылк')) {
         sourceHh = pct;
+        hhSourcePct = srcPercents[i] != null ? srcPercents[i] / 100 : 0;
       } else if (lower.includes('поиск')) {
         sourceSearch = pct;
       } else if (lower.includes('внутренн')) {
@@ -238,6 +301,15 @@ export function buildVals(json) {
     vals.source_hh_pct = sourceHh;
     vals.source_search_pct = sourceSearch;
     vals.source_internal_pct = sourceInternal;
+  }
+
+  // ===== Compute hh.ru widget views (estimated) =====
+  if (ty && ty.data) {
+    const totalDjViews = ty.data.view_cnt.reduce((a, b) => a + b, 0);
+    const djFromHh = Math.round(totalDjViews * hhSourcePct);
+    const hhWidgetViews = Math.round(djFromHh / HH_WIDGET_CONVERSION_RATE);
+    vals.traffic_hh_widget_views = fmtNum(hhWidgetViews);
+    vals.traffic_total_combined = fmtNum(totalDjViews + hhWidgetViews);
   }
 
   // ===== Section 7: Summary =====
@@ -294,14 +366,59 @@ export function buildVals(json) {
     vals[`tariff_${name}_roi`] = `~${Math.round(roi)}%`;
   });
 
-  // ===== AI Conclusions (all except savings) =====
+  // ===== AI Conclusions =====
   const conclusionKeys = [
-    'ai_conclusion_reputation', 'ai_conclusion_industry', 'ai_conclusion_hiring',
-    'ai_conclusion_traffic', 'ai_conclusion_sources', 'ai_conclusion_highlights',
-    'ai_conclusion_topics'
+    'ai_conclusion_reputation',
+    'ai_conclusion_traffic', 'ai_conclusion_topics'
   ];
   conclusionKeys.forEach(key => {
     vals[key] = json[key] || '';
+  });
+
+  // Auto-link company mentions in AI text to their Dream Job pages.
+  // Builds a list of (name, url) pairs from target + all rivals,
+  // sorts by name length DESC so longer names match before shorter substrings,
+  // and wraps each free-standing name in <a href="...">...</a> if not already linked.
+  const linkPairs = [{
+    name: companyName,
+    url: `https://dreamjob.ru/employers/${targetId}`
+  }];
+  rivalIndices.forEach((ri) => {
+    linkPairs.push({
+      name: rep.name[ri],
+      url: `https://dreamjob.ru/employers/${rep.employer_id[ri]}`
+    });
+  });
+  linkPairs.sort((a, b) => b.name.length - a.name.length);
+
+  function escapeRegex(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+  function autoLinkCompanies(html) {
+    if (!html) return html;
+    let out = html;
+    linkPairs.forEach(({ name, url }) => {
+      if (!name) return;
+      // Match the name only when NOT already inside an <a>...</a> tag
+      // Approach: split by existing <a> tags, process only non-link parts
+      const parts = out.split(/(<a\b[^>]*>[\s\S]*?<\/a>)/i);
+      for (let i = 0; i < parts.length; i++) {
+        if (i % 2 === 1) continue; // skip <a>...</a>
+        // Use word boundary substitute via lookahead/lookbehind for non-word chars or string start/end
+        const re = new RegExp(`(^|[^\\wА-Яа-яЁё])(${escapeRegex(name)})(?=[^\\wА-Яа-яЁё]|$)`, 'g');
+        parts[i] = parts[i].replace(re, (_, pre, m) =>
+          `${pre}<a href="${url}" target="_blank" class="dj-link">${m}</a>`
+        );
+      }
+      out = parts.join('');
+    });
+    return out;
+  }
+
+  // Apply to all AI conclusions and summary cards
+  conclusionKeys.forEach(key => { vals[key] = autoLinkCompanies(vals[key]); });
+  ['summary_reputation', 'summary_hiring', 'summary_traffic', 'summary_negative'].forEach(key => {
+    if (vals[key]) vals[key] = autoLinkCompanies(vals[key]);
   });
 
   // ===== Chart Data =====

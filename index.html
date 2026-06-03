@@ -22,11 +22,11 @@
       <p>Отправьте команду в боте <a href="https://t.me/DJSales_bot" target="_blank">@DJSales_bot</a>:</p>
       <code>/onepager
 Работодатель: dj_id_работодателя
-Конкуренты: dj_id_1, dj_id_2, dj_id_3
+Конкуренты: dj_id_1, dj_id_2, dj_id_3, dj_id_4, dj_id_5
 Квантиль:
 Группа:</code>
-      <p><strong>4 ID компаний:</strong> 1 целевая (на которую делаем отчёт) + 3 конкурента.</p>
-      <p>Конкуренты желательно платящие клиенты DJ — по ним больше данных для сравнения.</p>
+      <p><strong>До 6 ID компаний:</strong> 1 целевая (на которую делаем отчёт) + от 1 до 5 конкурентов.</p>
+      <p>Конкуренты желательно платящие клиенты DJ — по ним больше данных для сравнения. Можно указывать меньше 5, верстка адаптируется.</p>
       <p class="note">Квантиль/Группа — необязательные поля. G1 = 10, G5 = 50, G5.5 = 55</p>
       <div class="warning"><i class="fas fa-triangle-exclamation"></i> Указывайте <strong>или</strong> Квантиль, <strong>или</strong> Группу — не оба сразу. Если заполнили Квантиль — удалите строку Группа, и наоборот.</div>
     </div>
@@ -70,7 +70,31 @@
     <div id="reportContainer" class="report-container"></div>
   </div>
 
-  <div class="version-tag">Обновлено: 14.04.2026 18:45 MSK</div>
+  <!-- ========== EXPORT MODAL ========== -->
+  <div id="exportModal" class="export-modal">
+    <div class="export-modal-backdrop"></div>
+    <div class="export-modal-content">
+      <div class="export-modal-header">
+        <h3>Выберите блоки для выгрузки</h3>
+        <button id="exportModalClose" class="export-modal-close" aria-label="Закрыть"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="export-modal-subtitle">По умолчанию выгружаются все блоки. Снимите галочки, чтобы исключить ненужные.</div>
+
+      <div class="export-modal-actions-top">
+        <button id="exportSelectAll" class="export-modal-link">Выбрать все</button>
+        <button id="exportSelectNone" class="export-modal-link">Снять все</button>
+      </div>
+
+      <div id="exportSectionList" class="export-section-list"></div>
+
+      <div class="export-modal-footer">
+        <button id="exportModalCancel" class="toolbar-btn">Отмена</button>
+        <button id="exportModalConfirm" class="toolbar-btn primary">Скачать</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="version-tag">Обновлено: 14.04.2026 18:41 MSK</div>
 
   <script src="vendor/echarts.min.js"></script>
   <script type="module" src="js/app.js"></script>
