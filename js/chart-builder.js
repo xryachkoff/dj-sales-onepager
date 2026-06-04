@@ -453,7 +453,28 @@ export function initCharts(chartData) {
 
   const vrEl = document.getElementById('chart-visits-ratio');
   if (vrEl && chartData.tyData && chartData.vacancy) {
-    initChartWithRetry(vrEl, buildVisitsPerVacancyOption, chartData, charts);
+    // The visits-per-vacancy chart is inside a collapsed <details>.
+    // It has zero dimensions until opened, so we defer init to first toggle.
+    const detailsParent = vrEl.closest('details');
+    if (detailsParent && !detailsParent.open) {
+      let initialized = false;
+      const onToggle = () => {
+        if (!detailsParent.open) return;
+        if (initialized) {
+          // already initialized — just trigger resize in case container size changed
+          const c = charts.find(ch => ch.getDom && ch.getDom() === vrEl);
+          if (c) requestAnimationFrame(() => c.resize());
+          return;
+        }
+        initialized = true;
+        // Now element should have non-zero size — use the standard retry helper
+        initChartWithRetry(vrEl, buildVisitsPerVacancyOption, chartData, charts);
+      };
+      detailsParent.addEventListener('toggle', onToggle);
+    } else {
+      // No details wrapper, or details already open — init immediately
+      initChartWithRetry(vrEl, buildVisitsPerVacancyOption, chartData, charts);
+    }
   }
 
   // Resize handler
@@ -474,8 +495,9 @@ export function generateChartScript(chartData, lightTheme = false) {
     const vrOpt = JSON.stringify(buildVisitsPerVacancyOption(chartData));
     trafficVacancyInit = `
   initWhenReady(document.getElementById('chart-traffic-vacancy'), ${tvOpt});`;
+    // visits-ratio chart lives inside a collapsed <details> — defer init to first open
     visitsRatioInit = `
-  initWhenReady(document.getElementById('chart-visits-ratio'), ${vrOpt});`;
+  initOnDetailsOpen(document.getElementById('chart-visits-ratio'), ${vrOpt});`;
   }
 
   // Light theme: patch tooltip and axis colors in the generated script
@@ -508,6 +530,17 @@ document.addEventListener('DOMContentLoaded', function() {${lightPatch}
       }
     }
     tryInit();
+  }
+  function initOnDetailsOpen(el, opt) {
+    if (!el) return;
+    var d = el.closest('details');
+    if (!d || d.open) { initWhenReady(el, opt); return; }
+    var done = false;
+    d.addEventListener('toggle', function() {
+      if (!d.open || done) return;
+      done = true;
+      requestAnimationFrame(function() { initWhenReady(el, opt); });
+    });
   }
   ${trafficVacancyInit}${visitsRatioInit}
 });

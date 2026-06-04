@@ -339,6 +339,37 @@
     height: 320px;
   }
 
+  /* ===== COLLAPSIBLE CHART ===== */
+  .chart-collapse {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 0;
+  }
+  .chart-collapse > summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    user-select: none;
+  }
+  .chart-collapse > summary::-webkit-details-marker { display: none; }
+  .chart-collapse > summary:hover { background: rgba(255,255,255,0.02); border-radius: var(--radius) var(--radius) 0 0; }
+  .chart-collapse[open] > summary { border-bottom: 1px solid var(--border); border-radius: var(--radius) var(--radius) 0 0; }
+  .chart-collapse-icon { transition: transform 0.2s; font-size: 12px; color: var(--text-3); }
+  .chart-collapse[open] .chart-collapse-icon { transform: rotate(180deg); }
+  .chart-collapse > .chart-container {
+    border: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    margin-top: 0 !important;
+  }
+  .light-theme .chart-collapse > summary { font-size: 11px; padding: 8px 12px; }
+
   /* ===== DJ LINKS ===== */
   .dj-link {
     color: var(--text);
@@ -1145,12 +1176,15 @@
       </div>
     </div>
 
-    <div style="margin-top:20px;">
-      <div style="font-size:15px;font-weight:600;margin-bottom:12px;">Просмотров на вакансию</div>
-      <div class="chart-container">
+    <details class="chart-collapse" style="margin-top:20px;">
+      <summary class="chart-collapse-summary">
+        <span><i class="fas fa-chart-line" style="margin-right:8px;color:var(--green);"></i>Просмотров на вакансию</span>
+        <i class="fas fa-chevron-down chart-collapse-icon"></i>
+      </summary>
+      <div class="chart-container" style="margin-top:12px;">
         <div id="chart-visits-ratio" class="chart-box"></div>
       </div>
-    </div>
+    </details>
 
     <!-- Источники трафика -->
     <div style="font-size:15px;font-weight:600;margin-top:24px;margin-bottom:12px;">Источники трафика</div>
