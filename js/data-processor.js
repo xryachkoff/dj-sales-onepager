@@ -285,22 +285,29 @@ export function buildVals(json) {
   if (ysrc) {
     const srcPercents = ysrc.percent;
     const srcNames = ysrc.source_category;
-    let sourceHh = '0%', sourceSearch = '0%', sourceInternal = '0%';
+    let sourceHh = 0, sourceSearch = 0, sourceInternal = 0;
     srcNames.forEach((name, i) => {
-      const pct = srcPercents[i] != null ? `${srcPercents[i].toFixed(1)}%` : '0%';
+      const pct = srcPercents[i] != null ? srcPercents[i] : 0;
       const lower = name.toLowerCase();
       if (lower.includes('hh') || lower.includes('ссылк')) {
         sourceHh = pct;
-        hhSourcePct = srcPercents[i] != null ? srcPercents[i] / 100 : 0;
+        hhSourcePct = pct / 100;
       } else if (lower.includes('поиск')) {
         sourceSearch = pct;
       } else if (lower.includes('внутренн')) {
         sourceInternal = pct;
       }
     });
-    vals.source_hh_pct = sourceHh;
-    vals.source_search_pct = sourceSearch;
-    vals.source_internal_pct = sourceInternal;
+    // Всё, что не разложилось по трём известным категориям, показываем как «Другое».
+    // Считаем остатком от 100%, а не суммой нераспознанных строк: так карточка
+    // остаётся верной, если бот однажды добавит ещё категорий.
+    const other = Math.max(0, 100 - (sourceHh + sourceSearch + sourceInternal));
+    vals.source_hh_pct = fmtPct(sourceHh);
+    vals.source_search_pct = fmtPct(sourceSearch);
+    vals.source_internal_pct = fmtPct(sourceInternal);
+    vals.source_other_pct = fmtPct(other);
+    // прячем карточку, когда остатка практически нет — иначе получится «0.0% Другое»
+    vals.source_other_display = other >= 0.5 ? '' : 'display:none';
   }
 
   // ===== Compute hh.ru widget views (estimated) =====
@@ -343,9 +350,13 @@ export function buildVals(json) {
         if (j <= sorted.length) {
           vals[`pos${i}_topic${j}_name`] = sorted[j-1][0].charAt(0).toUpperCase() + sorted[j-1][0].slice(1);
           vals[`pos${i}_topic${j}_pct`] = String(Math.round(sorted[j-1][1]));
+          vals[`pos${i}_topic${j}_display`] = '';
         } else {
+          // У должности меньше трёх тем — прячем лишний слот, иначе в карточке
+          // висит пустая строка «— 0%» с нулевой полоской.
           vals[`pos${i}_topic${j}_name`] = '—';
           vals[`pos${i}_topic${j}_pct`] = '0';
+          vals[`pos${i}_topic${j}_display`] = 'display:none';
         }
       }
       vals[`pos${i}_more_count`] = String(Math.max(0, sorted.length - 3));
