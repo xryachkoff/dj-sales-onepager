@@ -190,9 +190,14 @@ export function buildVals(json) {
   const avgRivalPct = rivalPcts.length > 0 ? rivalPcts.reduce((a, b) => a + b, 0) / rivalPcts.length : 0;
   vals.resp_rivals_avg_pct = fmtPct(avgRivalPct);
 
-  // Delta: company vs rivals average
+  // Delta: company vs rivals average.
+  // Показываем относительную разницу («на сколько процентов меньше, чем у
+  // конкурентов»), а не разницу в процентных пунктах — так понятнее продажнику.
   const respDelta = compFeedbackPct - avgRivalPct;
-  vals.resp_delta = `${respDelta >= 0 ? '+' : ''}${respDelta.toFixed(1)} п.п.`;
+  const respRel = avgRivalPct > 0 ? (respDelta / avgRivalPct) * 100 : null;
+  vals.resp_delta = respRel === null
+    ? '—'
+    : `${respRel >= 0 ? '+' : ''}${Math.round(respRel)}%`;
   vals.resp_delta_class = respDelta > 0 ? 'delta-pos' : respDelta < 0 ? 'delta-neg' : 'delta-neutral';
   vals.resp_delta_icon_class = respDelta >= 0 ? 'green' : 'red';
   vals.resp_delta_icon = respDelta >= 0 ? 'fa-arrow-up' : 'fa-arrow-down';

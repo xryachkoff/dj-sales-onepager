@@ -481,10 +481,11 @@
   /* ===== AI CONCLUSION ===== */
   .ai-conclusion {
     margin-top: 24px;
+    margin-bottom: 24px;
     background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(34,197,94,0.05));
     border: 1px solid rgba(59,130,246,0.2);
     border-radius: var(--radius);
-    padding: 24px;
+    padding: 20px 24px;
   }
   .ai-conclusion details { border: none; }
   .ai-conclusion details summary { list-style: none; cursor: pointer; }
@@ -500,6 +501,9 @@
     user-select: none;
   }
   .ai-conclusion-header i { font-size: 16px; }
+  /* В свёрнутом виде заголовок — единственное содержимое блока, поэтому
+     нижний отступ убираем: иначе он смещает строку вверх от центра. */
+  .ai-conclusion details:not([open]) .ai-conclusion-header { margin-bottom: 0; }
   .ai-toggle-icon {
     margin-left: auto;
     transition: transform 0.2s;
@@ -1134,7 +1138,7 @@
     <div class="slide-header">
       <span class="slide-number">03</span>
       <h2 class="slide-title">Трафик и источники</h2>
-      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Методология · Период: 12 месяцев</strong><br><strong>Общий охват</strong> — суммарная аудитория, видевшая отзывы о компании на Dream Job и hh.ru.<br><strong>Просмотры виджета на hh.ru</strong> — расчётная оценка пользователей, увидевших виджет с отзывами в вакансиях на hh.ru.<br><strong>Просмотры на DJ</strong> — аудитория страницы компании на Dream Job.<br><strong>Страниц за посещение</strong> — среднее количество страниц за один визит на DJ.<br>Источник: внутренняя статистика Dream Job, Яндекс.Метрика, собственная система логирования. Источники трафика также замеряются по данным Яндекс.Метрики и внутренних логов.</span></span>
+      <span class="method-hint"><i class="fas fa-question"></i><span class="method-tooltip"><strong>Методология · Период: 12 месяцев</strong><br><strong>Общий охват</strong> — суммарная аудитория, видевшая отзывы о компании на Dream Job и hh.ru.<br><strong>Просмотры виджета на hh.ru</strong> — расчётная оценка пользователей, увидевших виджет с отзывами в вакансиях на hh.ru.<br><strong>Просмотры на DJ</strong> — аудитория страницы компании на Dream Job.<br><strong>Источники трафика</strong> — распределение переходов на страницу компании; категории не пересекаются и в сумме дают 100%.<br>Источник: внутренняя статистика Dream Job, Яндекс.Метрика, собственная система логирования.</span></span>
     </div>
     <p class="slide-subtitle">Сколько соискателей взаимодействует с отзывами о вашей компании на hh.ru и Dream Job</p>
 
@@ -1145,7 +1149,7 @@
       </details>
     </div>
 
-    <div class="card-grid card-grid-4">
+    <div class="card-grid card-grid-3">
       <div class="kpi-card">
         <div class="kpi-icon blue"><i class="fas fa-globe"></i></div>
         <div class="kpi-value">{{traffic_total_combined}}</div>
@@ -1160,12 +1164,6 @@
         <div class="kpi-icon green"><i class="fas fa-eye"></i></div>
         <div class="kpi-value">{{traffic_dj_views}}</div>
         <div class="kpi-label">просмотров на Dream Job</div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon blue"><i class="fas fa-layer-group"></i></div>
-        <div class="kpi-value">{{traffic_depth}}</div>
-        <div class="kpi-label tooltip-cell">страниц за посещение <i class="fas fa-question-circle" style="font-size:11px;color:var(--text-3);cursor:help;"></i><span class="tooltip-text" style="white-space:normal;width:240px;left:0;right:auto;">Количество просмотренных страниц на сайте (конкуренты или доп. вкладки о компании: о компании / зарплаты / собеседования / блоги)</span></div>
-        <div style="margin-top:8px;font-size:11px;color:var(--text-3);background:rgba(255,255,255,0.04);padding:4px 10px;border-radius:6px;display:inline-block;">среднее по DJ: {{traffic_depth_avg}}</div>
       </div>
     </div>
 
@@ -1193,29 +1191,29 @@
       <div class="source-card">
         <div class="source-pct">{{source_hh_pct}}</div>
         <div class="source-info">
-          <h4>Переходы с hh.ru и по ссылкам</h4>
-          <p>Кандидаты, которым понравилась вакансия на hh.ru, переходят на Dream Job, чтобы изучить отзывы и принять решение об отклике. Самая горячая аудитория.</p>
+          <h4>С hh.ru</h4>
+          <p>Кандидат смотрел вакансию или страницу компании на hh.ru и перешёл на Dream Job изучить отзывы перед откликом. Самая горячая аудитория.</p>
         </div>
       </div>
       <div class="source-card">
         <div class="source-pct" style="color:var(--green);">{{source_search_pct}}</div>
         <div class="source-info">
           <h4>Из поисковых систем</h4>
-          <p>Кандидаты ищут информацию о компании в Яндекс или Google — например, «{{company_name}} отзывы сотрудников» или «работа в {{company_name}}».</p>
+          <p>Кандидат искал компанию в Яндексе или Google — например, «{{company_name}} отзывы сотрудников» — и попал на страницу из результатов поиска.</p>
         </div>
       </div>
       <div class="source-card">
         <div class="source-pct" style="color:var(--amber);">{{source_internal_pct}}</div>
         <div class="source-info">
-          <h4>Внутренние переходы</h4>
-          <p>Навигация внутри Dream Job — например, переход через блок «Похожие компании» или сравнение работодателей.</p>
+          <h4>Внутри Dream Job</h4>
+          <p>Кандидат уже был на Dream Job и пришёл с другой его страницы — через поиск по сайту, блок «Похожие компании» или сравнение работодателей.</p>
         </div>
       </div>
       <div class="source-card" style="{{source_other_display}}">
         <div class="source-pct" style="color:var(--text-2);">{{source_other_pct}}</div>
         <div class="source-info">
-          <h4>Другое</h4>
-          <p>Прямые заходы — открытие страницы без явного источника: из закладок, по вводу адреса вручную, переходы из мессенджеров и мобильных приложений. Сюда же попадают мелкие источники вроде соцсетей и внешних ссылок.</p>
+          <h4>Прямые заходы и прочее</h4>
+          <p>Переход без определяемого источника: из закладок, по набранному вручную адресу, из мессенджера или почты. Сюда же попадает мелочь вроде соцсетей.</p>
         </div>
       </div>
     </div>
@@ -1224,8 +1222,8 @@
     <div class="card" style="margin-top:16px;border-left:3px solid var(--blue);display:flex;align-items:center;gap:16px;">
       <div style="flex-shrink:0;width:44px;height:44px;border-radius:12px;background:var(--blue-glow);display:flex;align-items:center;justify-content:center;"><i class="fas fa-award" style="color:var(--blue);font-size:18px;"></i></div>
       <div>
-        <div style="font-weight:600;font-size:14px;margin-bottom:2px;">Расширенный виджет на hh.ru</div>
-        <div style="font-size:13px;color:var(--text-2);">Награды, ответы на отзывы и медиа-контент усиливают доверие и улучшают образ компании для соискателей в самой критичной точке принятия решения.</div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2px;">Расширенный виджет на hh.ru — способ увеличить трафик</div>
+        <div style="font-size:13px;color:var(--text-2);">Чем больше отзывов, наград и медиа-контента показывает виджет, тем чаще соискатель переходит с hh.ru на вашу страницу с отзывами — это напрямую растит долю «С hh.ru» выше. А ответы работодателя и награды усиливают доверие в самой критичной точке принятия решения.</div>
       </div>
     </div>
 
@@ -1444,8 +1442,8 @@
       <div class="kpi-card">
         <div class="kpi-icon {{resp_delta_icon_class}}"><i class="fas {{resp_delta_icon}}"></i></div>
         <div class="kpi-value"><span class="{{resp_delta_class}}">{{resp_delta}}</span></div>
-        <div class="kpi-label">разница</div>
-        <div style="margin-top:6px;font-size:12px;color:var(--text-3);">компания vs конкуренты</div>
+        <div class="kpi-label">разница с конкурентами</div>
+        <div style="margin-top:6px;font-size:12px;color:var(--text-3);">относительно их среднего</div>
       </div>
     </div>
 
@@ -1590,6 +1588,7 @@
           <li>Виджет Dream Job на hh.ru на странице компании и в вакансиях
             <ul>
               <li>10 отзывов о компании</li>
+              <li>Чем больше отзывов в виджете, тем больше переходов с hh.ru на вашу страницу с отзывами</li>
             </ul>
           </li>
           <li>Аналитика отзывов в личном кабинете и 4 отчёта
@@ -1648,7 +1647,7 @@
         <div class="tariff-tagline">Выделяйтесь среди других — 72% сотрудников сравнивают работодателей</div>
         <ul class="tariff-features">
           <li>Всё из тарифов «Стандарт» и «Оптимум»</li>
-          <li>Премиум-виджет Dream Job на hh.ru</li>
+          <li>Премиум-виджет Dream Job на hh.ru<span class="tariff-sub">Самый заметный формат виджета — максимально увеличивает переходы с hh.ru на вашу страницу с отзывами</span></li>
           <li>Брендированные ответы на отзывы</li>
           <li>В центре внимания — скрывает упоминания других работодателей на вашей странице</li>
           <li>Детализация оценки по департаментам — у каждого подразделения компании своя оценка и отзывы</li>
