@@ -270,16 +270,27 @@ export function buildVals(json) {
   // ===== Section "Hiring" removed (April 2026) — vacancies now shown only in Traffic combined chart =====
 
   // ===== Traffic =====
+  // depth / avg_time / new_users_percent приходят в двух вариантах: у JSON из
+  // бота они лежат на уровне блока (target_yandex.depth), а в массовой выгрузке
+  // из БД — внутри data (target_yandex.data.depth). Читаем оба места.
+  const metric = (block, name) => {
+    if (!block) return undefined;
+    if (block[name] != null) return block[name];
+    return block.data ? block.data[name] : undefined;
+  };
+
   if (ty && ty.data) {
     const tyData = ty.data;
     const totalViews = tyData.view_cnt.reduce((a, b) => a + b, 0);
     vals.traffic_views_year = fmtNum(totalViews);
     vals.traffic_dj_views = fmtNum(totalViews);
-    vals.traffic_new_pct = fmtPct(ty.new_users_percent);
-    vals.traffic_depth = safeFix(ty.depth, 2);
-    vals.traffic_depth_avg = safeFix(cy.depth, 2);
-    vals.traffic_avg_time = ty.avg_time != null ? `${ty.avg_time.toFixed(1)} мин` : '—';
-    vals.traffic_avg_time_avg = cy.avg_time != null ? `${cy.avg_time.toFixed(1)} мин` : '—';
+    vals.traffic_new_pct = fmtPct(metric(ty, 'new_users_percent'));
+    vals.traffic_depth = safeFix(metric(ty, 'depth'), 2);
+    vals.traffic_depth_avg = safeFix(metric(cy, 'depth'), 2);
+    const tyTime = metric(ty, 'avg_time');
+    const cyTime = metric(cy, 'avg_time');
+    vals.traffic_avg_time = tyTime != null ? `${tyTime.toFixed(1)} мин` : '—';
+    vals.traffic_avg_time_avg = cyTime != null ? `${cyTime.toFixed(1)} мин` : '—';
   }
 
   // ===== Section 6: Sources =====
