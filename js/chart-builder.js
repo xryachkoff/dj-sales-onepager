@@ -416,6 +416,8 @@ export function buildVisitsPerVacancyOption(chartData) {
 /**
  * Initialize a single chart with retry logic.
  * Waits until the container has visible dimensions before initializing.
+ * Retries via setTimeout, not requestAnimationFrame — rAF is frozen in
+ * background tabs and headless renderers, which would strand the chart.
  */
 function initChartWithRetry(el, optionBuilder, chartData, charts, maxRetries = 10) {
   let attempts = 0;
@@ -430,7 +432,7 @@ function initChartWithRetry(el, optionBuilder, chartData, charts, maxRetries = 1
         console.warn('Chart init error:', e);
       }
     } else if (attempts < maxRetries) {
-      requestAnimationFrame(tryInit);
+      setTimeout(tryInit, 50);
     } else {
       console.warn('Chart container not visible after retries:', el.id);
     }
@@ -463,7 +465,7 @@ export function initCharts(chartData) {
         if (initialized) {
           // already initialized — just trigger resize in case container size changed
           const c = charts.find(ch => ch.getDom && ch.getDom() === vrEl);
-          if (c) requestAnimationFrame(() => c.resize());
+          if (c) setTimeout(() => c.resize(), 0);
           return;
         }
         initialized = true;
@@ -526,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function() {${lightPatch}
         c.setOption(opt);
         window.addEventListener('resize', function() { c.resize(); });
       } else if (attempts < 20) {
-        requestAnimationFrame(tryInit);
+        setTimeout(tryInit, 50);
       }
     }
     tryInit();
@@ -539,7 +541,7 @@ document.addEventListener('DOMContentLoaded', function() {${lightPatch}
     d.addEventListener('toggle', function() {
       if (!d.open || done) return;
       done = true;
-      requestAnimationFrame(function() { initWhenReady(el, opt); });
+      setTimeout(function() { initWhenReady(el, opt); }, 0);
     });
   }
   ${trafficVacancyInit}${visitsRatioInit}
