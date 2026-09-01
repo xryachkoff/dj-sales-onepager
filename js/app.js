@@ -1,10 +1,10 @@
 ﻿/**
  * App.js — Main application module: upload, report generation, export.
  */
-import { buildVals } from './data-processor.js?v=20260605';
-import { fillTemplate, cleanUnfilledPlaceholders, injectResources, injectResourcesInline } from './template-engine.js?v=20260605';
-import { initCharts, generateChartScript } from './chart-builder.js?v=20260605';
-import { convertGridsToTables } from './pdf-layout.js?v=20260605';
+import { buildVals } from './data-processor.js?v=20260605-2';
+import { fillTemplate, cleanUnfilledPlaceholders, injectResources, injectResourcesInline } from './template-engine.js?v=20260605-2';
+import { initCharts, generateChartScript } from './chart-builder.js?v=20260605-2';
+import { convertGridsToTables } from './pdf-layout.js?v=20260605-2';
 
 // State
 let parsedData = null;
@@ -152,7 +152,7 @@ generateBtn.addEventListener('click', async () => {
 
   try {
     // Fetch template
-    const response = await fetch('template/report-template.html?v=20260605');
+    const response = await fetch('template/report-template.html?v=20260605-2');
     if (!response.ok) throw new Error('Не удалось загрузить шаблон');
     let template = await response.text();
 
@@ -370,7 +370,7 @@ async function doExportHtml(keepIds) {
 
   try {
     // Re-fetch template and fill
-    const response = await fetch('template/report-template.html?v=20260605');
+    const response = await fetch('template/report-template.html?v=20260605-2');
     if (!response.ok) throw new Error('Не удалось загрузить шаблон');
     let template = await response.text();
 
@@ -423,7 +423,7 @@ async function doExportPdf(keepIds) {
 
   try {
     // Re-fetch template and fill
-    const response = await fetch('template/report-template.html?v=20260605');
+    const response = await fetch('template/report-template.html?v=20260605-2');
     if (!response.ok) throw new Error('Не удалось загрузить шаблон');
     let template = await response.text();
 
