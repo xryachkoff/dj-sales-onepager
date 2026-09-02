@@ -253,13 +253,15 @@ export function buildTrafficOption(chartData) {
  */
 function mergeMonthlyData(tyData, vacancy) {
   const trafficMap = {};
-  tyData.month.forEach((m, i) => {
-    trafficMap[fmtMonth(m)] = Math.round(tyData.view_cnt[i]);
+  (tyData.month || []).forEach((m, i) => {
+    const v = tyData.view_cnt ? tyData.view_cnt[i] : null;
+    if (v != null) trafficMap[fmtMonth(m)] = Math.round(v);
   });
 
   const vacancyMap = {};
-  vacancy.month_period.forEach((m, i) => {
-    vacancyMap[fmtMonth(m)] = Math.round(vacancy.vacancy_count[i]);
+  (vacancy.month_period || []).forEach((m, i) => {
+    const v = vacancy.vacancy_count ? vacancy.vacancy_count[i] : null;
+    if (v != null) vacancyMap[fmtMonth(m)] = Math.round(v);
   });
 
   const allMonths = [...new Set([
@@ -267,10 +269,16 @@ function mergeMonthlyData(tyData, vacancy) {
     ...Object.keys(vacancyMap)
   ])].sort();
 
+  // Месяцы, которых нет в источнике, отдаём как null, а не 0: диапазоны трафика
+  // и вакансий часто не совпадают, и нолик читался бы как «был ноль просмотров»
+  // — линия падала в пол и тянулась по оси, будто данные оборвались.
+  // null ECharts просто не рисует, поэтому виден реальный период наблюдения.
+  const pick = (map, m) => (Object.prototype.hasOwnProperty.call(map, m) ? map[m] : null);
+
   return {
     months: allMonths,
-    views: allMonths.map(m => trafficMap[m] || 0),
-    vacancies: allMonths.map(m => vacancyMap[m] || 0)
+    views: allMonths.map(m => pick(trafficMap, m)),
+    vacancies: allMonths.map(m => pick(vacancyMap, m))
   };
 }
 
@@ -354,14 +362,18 @@ export function buildVisitsPerVacancyOption(chartData) {
   const { tyData, vacancy } = chartData;
   const merged = mergeMonthlyData(tyData, vacancy);
 
+  // Соотношение считаем только там, где есть обе величины. Нет трафика или
+  // нет вакансий за месяц — точки быть не должно, иначе получится ложный ноль.
   const ratio = merged.months.map((m, i) => {
     const vac = merged.vacancies[i];
-    if (vac === 0) return 0;
-    return +(merged.views[i] / vac).toFixed(1);
+    const views = merged.views[i];
+    if (vac == null || views == null || vac === 0) return null;
+    return +(views / vac).toFixed(1);
   });
 
-  const avgRatio = ratio.length > 0
-    ? +(ratio.reduce((a, b) => a + b, 0) / ratio.length).toFixed(1)
+  const real = ratio.filter(v => v != null);
+  const avgRatio = real.length > 0
+    ? +(real.reduce((a, b) => a + b, 0) / real.length).toFixed(1)
     : 0;
 
   return {
@@ -397,7 +409,8 @@ export function buildVisitsPerVacancyOption(chartData) {
         symbol: 'circle',
         symbolSize: 6,
         smooth: true,
-        markLine: {
+        // линию среднего показываем, только если есть из чего считать
+        markLine: real.length === 0 ? undefined : {
           silent: true,
           symbol: 'none',
           lineStyle: { color: colors.text3, type: 'dashed', width: 1 },
