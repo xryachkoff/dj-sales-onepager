@@ -502,7 +502,7 @@ export function initCharts(chartData) {
 /**
  * Generate the chart initialization script for export (self-contained HTML).
  */
-export function generateChartScript(chartData, lightTheme = false) {
+export function generateChartScript(chartData, lightTheme = false, noAnimation = lightTheme) {
   let trafficVacancyInit = '';
   let visitsRatioInit = '';
   if (chartData.tyData && chartData.vacancy) {
@@ -526,11 +526,21 @@ export function generateChartScript(chartData, lightTheme = false) {
     return opt;
   }` : '';
 
-  const patchCall = lightTheme ? 'opt = patchLight(opt); ' : '';
+  // При печати Chrome переключает media на print, контейнер меняет ширину,
+  // echarts перерисовывается — и page.pdf() снимает кадр посреди анимации.
+  // Для PDF анимацию выключаем совсем.
+  const animPatch = noAnimation ? `
+  function killAnim(opt) {
+    opt.animation = false;
+    if (Array.isArray(opt.series)) opt.series.forEach(function(s) { s.animation = false; });
+    return opt;
+  }` : '';
+
+  const patchCall = (lightTheme ? 'opt = patchLight(opt); ' : '') + (noAnimation ? 'opt = killAnim(opt); ' : '');
 
   return `
 <script>
-document.addEventListener('DOMContentLoaded', function() {${lightPatch}
+document.addEventListener('DOMContentLoaded', function() {${lightPatch}${animPatch}
   function initWhenReady(el, opt) {
     if (!el) return;
     ${patchCall}var attempts = 0;
