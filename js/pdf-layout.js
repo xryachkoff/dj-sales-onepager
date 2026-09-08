@@ -211,7 +211,9 @@ export function preparePosterHtml(html) {
     }
     var st = document.createElement('style');
     st.textContent = '@page { size: ' + Math.round(W * scale) + 'px ' + (h + SLACK) + 'px; margin: 0 !important; }';
-    (document.head || root).appendChild(st);
+    // в самый конец документа: стили шаблона лежат в <body>, и правило в <head>
+    // проигрывает их @page { size: A4 landscape } по порядку каскада
+    (document.body || root).appendChild(st);
     window.__posterHeight = h + SLACK;
     window.__posterScale = scale;
     window.__posterReady = true;
