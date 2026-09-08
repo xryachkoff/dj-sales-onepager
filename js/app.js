@@ -1,10 +1,10 @@
 ﻿/**
  * App.js — Main application module: upload, report generation, export.
  */
-import { buildVals } from './data-processor.js?v=20260907-1';
-import { fillTemplate, cleanUnfilledPlaceholders, injectResources, injectResourcesInline } from './template-engine.js?v=20260907-1';
-import { initCharts, generateChartScript } from './chart-builder.js?v=20260907-1';
-import { convertGridsToTables } from './pdf-layout.js?v=20260907-1';
+import { buildVals } from './data-processor.js?v=20260908-1';
+import { fillTemplate, cleanUnfilledPlaceholders, injectResources, injectResourcesInline } from './template-engine.js?v=20260908-1';
+import { initCharts, generateChartScript } from './chart-builder.js?v=20260908-1';
+import { preparePosterHtml } from './pdf-layout.js?v=20260908-1';
 
 // State
 let parsedData = null;
@@ -152,7 +152,7 @@ generateBtn.addEventListener('click', async () => {
 
   try {
     // Fetch template
-    const response = await fetch('template/report-template.html?v=20260907-1');
+    const response = await fetch('template/report-template.html?v=20260908-1');
     if (!response.ok) throw new Error('Не удалось загрузить шаблон');
     let template = await response.text();
 
@@ -370,7 +370,7 @@ async function doExportHtml(keepIds) {
 
   try {
     // Re-fetch template and fill
-    const response = await fetch('template/report-template.html?v=20260907-1');
+    const response = await fetch('template/report-template.html?v=20260908-1');
     if (!response.ok) throw new Error('Не удалось загрузить шаблон');
     let template = await response.text();
 
@@ -423,7 +423,7 @@ async function doExportPdf(keepIds) {
 
   try {
     // Re-fetch template and fill
-    const response = await fetch('template/report-template.html?v=20260907-1');
+    const response = await fetch('template/report-template.html?v=20260908-1');
     if (!response.ok) throw new Error('Не удалось загрузить шаблон');
     let template = await response.text();
 
@@ -440,15 +440,12 @@ async function doExportPdf(keepIds) {
     // Embed all resources inline
     template = await injectResourcesInline(template);
 
-    // Inject chart scripts with light theme colors
-    const chartScript = generateChartScript(chartData, true);
-    template = template.replace('{{CHART_SCRIPTS}}', chartScript);
+    // Графики для полотна: цвета как на экране, без анимации, SVG — вектор в PDF
+    const chartScript = generateChartScript(chartData, false, true, 'svg');
+    template = template.replace('{{CHART_SCRIPTS}}', () => chartScript);
 
-    // Add light-theme class to body
-    template = template.replace('<body>', '<body class="light-theme">');
-
-    // Convert CSS grids to HTML tables for reliable print layout
-    template = convertGridsToTables(template);
+    // Единое полотно: один лист по высоте контента, тёмная тема, всё раскрыто
+    template = preparePosterHtml(template);
 
     // Open in full-size window
     const printWindow = window.open('', '_blank', `width=${screen.width},height=${screen.height}`);
@@ -456,12 +453,16 @@ async function doExportPdf(keepIds) {
     printWindow.document.close();
     printWindow.document.title = `${companyName} - Sales One Pager`;
 
-    // Wait for charts to render, then print
-    printWindow.onload = () => {
-      setTimeout(() => {
+    // Документ сам раскрывает блоки, рисует графики и выставляет размер листа,
+    // после чего поднимает __posterReady — ждём его, а не фиксированную паузу
+    const waitPoster = (attemptsLeft) => {
+      if (printWindow.__posterReady || attemptsLeft <= 0) {
         printWindow.print();
-      }, 1500);
+        return;
+      }
+      setTimeout(() => waitPoster(attemptsLeft - 1), 100);
     };
+    waitPoster(200);
   } catch (err) {
     console.error('PDF export error:', err);
     alert('Ошибка при экспорте PDF: ' + err.message);

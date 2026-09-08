@@ -502,7 +502,14 @@ export function initCharts(chartData) {
 /**
  * Generate the chart initialization script for export (self-contained HTML).
  */
-export function generateChartScript(chartData, lightTheme = false, noAnimation = lightTheme) {
+/**
+ * @param lightTheme   светлые цвета осей/легенды (старый постраничный PDF)
+ * @param noAnimation  отключить анимацию — обязательно для любого PDF: Chrome
+ *                     при печати перерисовывает графики, и кадр попадает в PDF
+ *                     на середине анимации
+ * @param renderer     'canvas' (экран) или 'svg' — вектор, не мылится в PDF
+ */
+export function generateChartScript(chartData, lightTheme = false, noAnimation = lightTheme, renderer = 'canvas') {
   let trafficVacancyInit = '';
   let visitsRatioInit = '';
   if (chartData.tyData && chartData.vacancy) {
@@ -547,7 +554,7 @@ document.addEventListener('DOMContentLoaded', function() {${lightPatch}${animPat
     function tryInit() {
       attempts++;
       if (el.offsetWidth > 0 && el.offsetHeight > 0) {
-        var c = echarts.init(el);
+        var c = echarts.init(el, null, { renderer: '${renderer === 'svg' ? 'svg' : 'canvas'}' });
         c.setOption(opt);
         window.addEventListener('resize', function() { c.resize(); });
       } else if (attempts < 20) {
